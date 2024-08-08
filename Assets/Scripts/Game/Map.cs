@@ -11,6 +11,7 @@ public class Map : MonoBehaviour
 
 		[SerializeField] private GameManager _manager;
 		public Vector2Int size;
+		public float cellSize = 10f;
 
 
 		private Grid<GridCell> _mapGrid;
@@ -19,6 +20,7 @@ public class Map : MonoBehaviour
 
 
 		[SerializeField] private GameObject _selectedIndicator;
+		[SerializeField] private LocationDetailsPanel _locationDetailsPanel;
 
 		#endregion
 
@@ -35,7 +37,7 @@ public class Map : MonoBehaviour
       _mapGrid = new Grid<GridCell>(
 				(int) size.x, 
 				(int) size.y, 
-				10f, 
+				cellSize, 
 				new Vector2(-size.x * 5, -size.y * 5),
 				(Grid<GridCell> g, int x, int y) => new GridCell(g, new Vector2Int(x, y))
 			);
@@ -59,13 +61,25 @@ public class Map : MonoBehaviour
 			}
 
 			if (Input.GetMouseButtonDown(1)) {
-				_selectedIndicator.SetActive(false);
+				Deselect();
 			}
     }
+
+		private void Deselect() {
+			_selectedIndicator.SetActive(false);
+			_locationDetailsPanel.gameObject.SetActive(false);
+		}
 
 		private void SelectCell(GridCell cell) {
 			_selectedIndicator.transform.position = _mapGrid.GetCenteredCellPosition(cell.Coordinates.x, cell.Coordinates.y);
 			_selectedIndicator.SetActive(true);
+
+			if (cell.Location) {
+				_locationDetailsPanel.SetLocationData(cell.Location);
+				_locationDetailsPanel.gameObject.SetActive(true);
+			} else {
+				_locationDetailsPanel.gameObject.SetActive(false);
+			}
 		}
 
 		public void PlaceLocation(GridCell cell, MapLocation locationPrefab) {
@@ -73,9 +87,11 @@ public class Map : MonoBehaviour
 			if (!cell?.Location) {
 				// Create the actual location object to display (visual layer)
 				MapLocation newPlacement = CreateLocationObject(locationPrefab, cell);
+				newPlacement.SetSpriteSize((float) cellSize / 2, (float) cellSize / 2);
 				// Keep track of the placed object in the grid (data later)
 				cell.PlaceLocation(newPlacement);
 				// Todo: Trigger grid update event
+				_mapGrid.TriggerOnChangeEvent(cell.Coordinates);
 			}
 		}
 
@@ -93,12 +109,15 @@ public class Map : MonoBehaviour
 		}
 
 		private void InitMapLocations(MapLocation[] available, int count) {
-			for (int i = 0; i < count; i++) {
-				MapLocation randLocation = GetRandomLocationPrefab(available);
+			for (int i = 0; i < count; i++) {	
+				// find empty cell			
 				GridCell cell;
 				do {
 					cell = _mapGrid.GetRandomGridObject();
 				} while (cell?.Location != null);
+
+				// init locations are random
+				MapLocation randLocation = GetRandomLocationPrefab(available);
 				PlaceLocation(cell, randLocation);
 			}
 		}

@@ -22,7 +22,6 @@ public class GridCell
 		public bool IsSelected { get { return _isSelected; } }
 		public Vector2Int Coordinates { get { return _coordinates; } }
 		public MapLocation Location { get { return _location; } }
-		// public MapLocation Location { get { return (MapLocation) _objects[0]; } }
 
 		#endregion
 
@@ -35,8 +34,15 @@ public class GridCell
 			// this._objects = new List<MapObject>;
 
 
-			// EventManager.StartListening(EventName.OnGridValueChanged, HandleGridValueChanged);
+			EventManager.StartListening(EventName.OnGridValueChanged, HandleGridValueChanged);
 
+		}
+
+		public void HandleGridValueChanged(Dictionary<string, object> data) {
+			if (data.TryGetValue("coords", out object coords)) {
+				Vector2Int vectCoords = (Vector2Int) coords;
+				_isSelected = vectCoords.x == Coordinates.x && vectCoords.y == Coordinates.y;
+			}
 		}
 
 		public void SetValue(bool isSelected) {

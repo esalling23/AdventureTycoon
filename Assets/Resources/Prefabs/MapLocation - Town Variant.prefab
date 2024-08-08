@@ -57,11 +57,20 @@ PrefabInstance:
       objectReference: {fileID: 21300000, guid: c851690b7438f41bdb3082296280a7ee, type: 3}
     - target: {fileID: 6139279377225048228, guid: a05c6e1e738724079a99bf61c16ce7eb, type: 3}
       propertyPath: m_Name
-      value: MapLocation - Town
+      value: MapLocation - Town Variant
       objectReference: {fileID: 0}
     - target: {fileID: 8474493550586513579, guid: a05c6e1e738724079a99bf61c16ce7eb, type: 3}
       propertyPath: icon
       value: 
       objectReference: {fileID: 21300000, guid: c851690b7438f41bdb3082296280a7ee, type: 3}
+    - target: {fileID: 8474493550586513579, guid: a05c6e1e738724079a99bf61c16ce7eb, type: 3}
+      propertyPath: name
+      value: Cute Lil' Town
+      objectReference: {fileID: 0}
+    - target: {fileID: 8474493550586513579, guid: a05c6e1e738724079a99bf61c16ce7eb, type: 3}
+      propertyPath: description
+      value: A lil' town that holds a few houses and maybe a bar or two. Come here
+        to do a couple things but not too many things!
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a05c6e1e738724079a99bf61c16ce7eb, type: 3}

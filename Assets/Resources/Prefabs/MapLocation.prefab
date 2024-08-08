@@ -130,7 +130,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6301f0c636b4744dabe17430e5dfb81b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: Map Location
+  type: 5
+  activities: []
+  name: Lonely Inn
+  description: A single establishment out on its own. A respite for tired adventurers
+    far away into the wilderness.
   icon: {fileID: 21300000, guid: f60c71737a0894a0cb39c5230416edfd, type: 3}
 --- !u!212 &4061182041244985963
 SpriteRenderer:

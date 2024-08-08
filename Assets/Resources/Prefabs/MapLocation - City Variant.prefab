@@ -75,5 +75,14 @@ PrefabInstance:
       propertyPath: icon
       value: 
       objectReference: {fileID: 21300000, guid: 270fe05726f384970a514a5d0f41a194, type: 3}
+    - target: {fileID: 8474493550586513579, guid: a05c6e1e738724079a99bf61c16ce7eb, type: 3}
+      propertyPath: name
+      value: A Grand City
+      objectReference: {fileID: 0}
+    - target: {fileID: 8474493550586513579, guid: a05c6e1e738724079a99bf61c16ce7eb, type: 3}
+      propertyPath: description
+      value: Big ol' bustling city filled with people and things and stuff. Go here
+        to get all the options for stuff TO DO.
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a05c6e1e738724079a99bf61c16ce7eb, type: 3}

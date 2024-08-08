@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
 
 		private int _gold;
 
-		private GameMode _mode = GameMode.Build;
+		private GameMode _mode = GameMode.Pause;
 
 		#endregion
 

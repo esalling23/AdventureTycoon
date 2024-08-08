@@ -14,7 +14,7 @@ public class MapObject : MonoBehaviour
 
 		#region Properties
 
-		public Vector2 Coordinates { get { return _cell.Coordinates; } }
+		public Vector2Int Coordinates { get { return _cell.Coordinates; } }
 
 		#endregion
 
