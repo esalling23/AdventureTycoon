@@ -4,21 +4,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using CodeMonkey.Utils;
+using System.Linq;
+using UnityEngine.EventSystems;
 
 public class Map : MonoBehaviour
 {
     #region Fields
 
 		[SerializeField] private GameManager _manager;
+
+		// Grid
 		public Vector2Int size;
 		public float cellSize = 10f;
-
-
 		private Grid<GridCell> _mapGrid;
-		[SerializeField]
-		private MapLocation[] _locationPrefabs;
 
+		// Locations
+		[SerializeField] private MapLocation[] _locationPrefabs;
 
+		// UI
 		[SerializeField] private GameObject _selectedIndicator;
 		[SerializeField] private LocationDetailsPanel _locationDetailsPanel;
 
@@ -26,7 +29,6 @@ public class Map : MonoBehaviour
 
 		#region Properties
 
-		// public string Property { get; set; }
 
 		#endregion
 
@@ -47,7 +49,7 @@ public class Map : MonoBehaviour
 
     void Update()
     {
-			if (Input.GetMouseButtonDown(0)) {
+			if (!EventSystem.current.IsPointerOverGameObject() && Input.GetMouseButtonDown(0)) {
 				GridCell cell = _mapGrid.GetGridObject(UtilsClass.GetMouseWorldPosition());
 				Debug.Log($"Clicked on cell coordinates ({cell.Coordinates.x}, {cell.Coordinates.y})");
 				switch(_manager.Mode) {
