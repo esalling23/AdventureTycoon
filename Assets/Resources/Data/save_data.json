@@ -1,0 +1,306 @@
+{
+	"locations": [
+		{
+			"name": "Lonely Inn",
+			"description": "An inn just off the road by itself",
+			"activitySlotCount": 2,
+			"type": 0,
+			"costToPlace": 500,
+			"icon": {
+				"instanceID": 0
+			}
+		},
+		{
+			"name": "Lonely Inn",
+			"description": "An inn with one room hidden off the road",
+			"activitySlotCount": 1,
+			"type": 0,
+			"costToPlace": 500,
+			"icon": {
+				"instanceID": 0
+			}
+		},
+		{
+			"name": "Gnome Inn",
+			"description": "An inn frequented by gnomes and welcome to all who abide by their customs",
+			"activitySlotCount": 3,
+			"type": 0,
+			"costToPlace": 500,
+			"icon": {
+				"instanceID": 0
+			}
+		},
+		{
+			"name": "Travelers Inn",
+			"description": "A busy spot for all sorts of traveling folk",
+			"activitySlotCount": 3,
+			"type": 0,
+			"costToPlace": 500,
+			"icon": {
+				"instanceID": 0
+			}
+		},
+		{
+			"name": "Herrington",
+			"description": "A small town on the water and known for it's fisheries",
+			"activitySlotCount": 3,
+			"type": 0,
+			"costToPlace": 500,
+			"icon": {
+				"instanceID": 0
+			}
+		},
+		{
+			"name": "Marketsville",
+			"description": "A small town with a sizeable market",
+			"activitySlotCount": 3,
+			"type": 0,
+			"costToPlace": 500,
+			"icon": {
+				"instanceID": 0
+			}
+		},
+		{
+			"name": "Dragon's Peak",
+			"description": "A mountainside village with history of dragon rulers",
+			"activitySlotCount": 4,
+			"type": 0,
+			"costToPlace": 500,
+			"icon": {
+				"instanceID": 0
+			}
+		},
+		{
+			"name": "Vendom",
+			"description": "A large city ruled by King Ven CCXIV",
+			"activitySlotCount": 10,
+			"type": 0,
+			"costToPlace": 500,
+			"icon": {
+				"instanceID": 0
+			}
+		},
+		{
+			"name": "Eldralith",
+			"description": "A city built within the roots of an ancient, sentient tree, where druids and scholars study the secrets of nature.",
+			"activitySlotCount": 8,
+			"type": 0,
+			"costToPlace": 500,
+			"icon": {
+				"instanceID": 0
+			}
+		},
+		{
+			"name": "Thornwatch",
+			"description": "A fortress city surrounded by a massive, enchanted thorny forest, serving as the last defense against an ancient curse.",
+			"activitySlotCount": 9,
+			"type": 0,
+			"costToPlace": 500,
+			"icon": {
+				"instanceID": 0
+			}
+		},
+		{
+			"name": "A New Location",
+			"description": "Some long description wow it's so long I've never seen something THIS long!",
+			"activitySlotCount": 4,
+			"type": 2,
+			"costToPlace": 500,
+			"icon": {
+				"instanceID": 0
+			}
+		}
+	],
+	"activities": [
+		{
+			"name": "Rest by the fire",
+			"description": "Rest at a campfire to regain a bit of health and happiness",
+			"failureMessage": "This adventurer has died during the quest attempt",
+			"type": 0,
+			"appearsInLocationTypes": [
+				0
+			],
+			"hasLifetime": false,
+			"lifetime": 0,
+			"power": 1,
+			"costToPlace": 30,
+			"costToUse": 0
+		},
+		{
+			"name": "Rent a room",
+			"description": "Rest a night in a bed surrounded by walls",
+			"failureMessage": "This adventurer has died during the quest attempt",
+			"type": 0,
+			"appearsInLocationTypes": [
+				0,
+				0,
+				0
+			],
+			"hasLifetime": false,
+			"lifetime": 0,
+			"power": 1,
+			"costToPlace": 60,
+			"costToUse": 10
+		},
+		{
+			"name": "Buy a round",
+			"description": "Impress local patrons by buying everyone a round of drinks",
+			"failureMessage": "This adventurer has died during the quest attempt",
+			"type": 0,
+			"appearsInLocationTypes": [
+				0,
+				0,
+				0
+			],
+			"hasLifetime": false,
+			"lifetime": 0,
+			"power": 1,
+			"costToPlace": 100,
+			"costToUse": 50
+		},
+		{
+			"name": "Visit local market",
+			"description": "Trade items found on quests for $ or other goods",
+			"failureMessage": "This adventurer has died during the quest attempt",
+			"type": 0,
+			"appearsInLocationTypes": [
+				0,
+				0,
+				0
+			],
+			"hasLifetime": false,
+			"lifetime": 0,
+			"power": 1,
+			"costToPlace": 100,
+			"costToUse": 0
+		},
+		{
+			"name": "Trade with traveling merchant",
+			"description": "Tradeable merchant passing through the area",
+			"failureMessage": "This adventurer has died during the quest attempt",
+			"type": 0,
+			"appearsInLocationTypes": [
+				0,
+				0,
+				0,
+				0
+			],
+			"hasLifetime": false,
+			"lifetime": 0,
+			"power": 1,
+			"costToPlace": 80,
+			"costToUse": 0
+		},
+		{
+			"name": "Seek quest knowledge",
+			"description": "Ask around to get your bearings before you head off to a quest",
+			"failureMessage": "This adventurer has died during the quest attempt",
+			"type": 0,
+			"appearsInLocationTypes": [
+				0,
+				0,
+				0
+			],
+			"hasLifetime": false,
+			"lifetime": 0,
+			"power": 1,
+			"costToPlace": 60,
+			"costToUse": 10
+		},
+		{
+			"name": "Dragon Spirit Path",
+			"description": "Seek the truth of the tales of dragons in this land. There may be much history not written.",
+			"failureMessage": "This adventurer has died during the quest attempt",
+			"type": 0,
+			"appearsInLocationTypes": [
+				0,
+				0,
+				0
+			],
+			"hasLifetime": false,
+			"lifetime": 0,
+			"power": 1,
+			"costToPlace": 60,
+			"costToUse": 10
+		},
+		{
+			"name": "Vendom",
+			"description": "A large city ruled by King Ven CCXIV",
+			"failureMessage": "This adventurer has died during the quest attempt",
+			"type": 0,
+			"appearsInLocationTypes": [
+				0,
+				0,
+				0
+			],
+			"hasLifetime": false,
+			"lifetime": 0,
+			"power": 1,
+			"costToPlace": 60,
+			"costToUse": 10
+		},
+		{
+			"name": "Eldralith",
+			"description": "A city built within the roots of an ancient, sentient tree, where druids and scholars study the secrets of nature.",
+			"failureMessage": "This adventurer has died during the quest attempt",
+			"type": 0,
+			"appearsInLocationTypes": [
+				0,
+				0,
+				0
+			],
+			"hasLifetime": false,
+			"lifetime": 0,
+			"power": 1,
+			"costToPlace": 60,
+			"costToUse": 10
+		},
+		{
+			"name": "Investigate Missing Farmers",
+			"description": "A group of farmers have gone missing. The only clue to their whereabouts is that they were last seen arguing in the local tavern.",
+			"failureMessage": "An adventurer fell on some sharp farm tools",
+			"type": 0,
+			"appearsInLocationTypes": [
+				0,
+				0
+			],
+			"hasLifetime": false,
+			"lifetime": 0,
+			"power": 1,
+			"costToPlace": 120,
+			"costToUse": 0
+		},
+		{
+			"name": "Investigate Missing Merchant",
+			"description": "A traveler is looking for someone to locate a merchant who went missing while making a delivery in the surrounding wilderness.",
+			"failureMessage": "This adventurer tried to lift the caravan and was crushed underneath",
+			"type": 0,
+			"appearsInLocationTypes": [
+				0,
+				0,
+				0
+			],
+			"hasLifetime": false,
+			"lifetime": 0,
+			"power": 1,
+			"costToPlace": 120,
+			"costToUse": 0
+		},
+		{
+			"name": "Investigate Missing Merchant",
+			"description": "A traveler is looking for someone to locate a merchant who went missing while making a delivery in the surrounding wilderness.",
+			"failureMessage": "This adventurer tried to lift the caravan and was crushed underneath",
+			"type": 0,
+			"appearsInLocationTypes": [
+				0,
+				0,
+				0
+			],
+			"hasLifetime": false,
+			"lifetime": 0,
+			"power": 1,
+			"costToPlace": 120,
+			"costToUse": 0
+		}
+	]
+}
