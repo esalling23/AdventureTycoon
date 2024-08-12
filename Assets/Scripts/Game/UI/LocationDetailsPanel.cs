@@ -4,15 +4,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class LocationDetailsPanel : MonoBehaviour
+public class LocationDetailsPanel : LocationDetailItem
 {
     #region Fields
 
-		[SerializeField] private Map _map;
 		private MapLocation _activeLocation;
-
-		public TMP_Text nameText;
-		public TMP_Text descriptionText;
 
 		public ActivityListItem activityListItemPrefab;
 		public GameObject activitiesContainer;
@@ -39,8 +35,7 @@ public class LocationDetailsPanel : MonoBehaviour
 		public void SetLocationData(MapLocation location) {
 			_activeLocation = location;
 
-			nameText.text = location.name;
-			descriptionText.text = location.description;
+			SetData(location.LocationData);
 
 			DisplayActivities();
 		}
@@ -52,7 +47,9 @@ public class LocationDetailsPanel : MonoBehaviour
 				Destroy(child.gameObject);
 			}
 
-			foreach(LocationActivity activity in _activeLocation.activities) {
+			Debug.Log(_activeLocation.activities);
+
+			foreach(MapActivity activity in _activeLocation.activities) {
 				ActivityListItem item = Instantiate(
 					activityListItemPrefab,
 					Vector3.zero,
