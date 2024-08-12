@@ -19,7 +19,7 @@ public struct LocationTypeData {
 	public LocationType type;
 
 	public Sprite icon;
-	public int costToPlay;
+	public int costToPlace;
 	public int baseActivitySlots;
 	// Effects likelyhood of certain activities during add rolls
 	// & maybe also should set a min % of that activity type?
