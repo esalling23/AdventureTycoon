@@ -53,12 +53,6 @@ public class GridCell
 			this._location = location;
 		}
 
-		private void HandleGridValueChanged() {
-			EventManager.TriggerEvent(EventName.OnGridValueChanged, new Dictionary<string, object> {
-				{ "coords", Coordinates },
-			});
-		}
-
 		public override string ToString() {
 			if (_location) {
 				return _location.name;

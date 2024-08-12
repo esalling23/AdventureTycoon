@@ -8,19 +8,26 @@ public class Grid<TGridObject>
 {
     #region Fields
 
-		private int width;
-		private int height;
-		private float cellSize;
-		private Vector3 originPosition;
+		private int _width;
+		private int _height;
+		private float _cellSize;
+		private Vector3 _originPosition;
 	
-		private TGridObject[,] gridArray;
-		private TextMesh[,] debugTextArray;
+		private TGridObject[,] _gridArray;
+		private TextMesh[,] _debugTextArray;
 
 		#endregion
 
 		#region Properties
 
-		// public string Property { get; set; }
+		public int TotalCellCount { 
+			get { 
+				if (_gridArray == null) {
+					return 0;
+				}
+				return _gridArray.Length; 
+			} 
+		}
 
 		#endregion
 
@@ -32,19 +39,19 @@ public class Grid<TGridObject>
 			Vector3 originPosition, 
 			System.Func<Grid<TGridObject>, int, int, TGridObject> createGridObject
 		) {
-			this.width = width;
-			this.height = height;
-			this.cellSize = cellSize;
-			this.originPosition = originPosition;
+			this._width = width;
+			this._height = height;
+			this._cellSize = cellSize;
+			this._originPosition = originPosition;
 
-			gridArray = new TGridObject[width, height];
-			debugTextArray = new TextMesh[width, height];
+			_gridArray = new TGridObject[width, height];
+			_debugTextArray = new TextMesh[width, height];
 
-			for (int x = 0; x < gridArray.GetLength(0); x++) {
-				for (int y = 0; y < gridArray.GetLength(1); y++) {
-					gridArray[x, y] = createGridObject(this, x, y);
-					debugTextArray[x, y] = UtilsClass.CreateWorldText(
-						gridArray[x, y]?.ToString(), 
+			for (int x = 0; x < _gridArray.GetLength(0); x++) {
+				for (int y = 0; y < _gridArray.GetLength(1); y++) {
+					_gridArray[x, y] = createGridObject(this, x, y);
+					_debugTextArray[x, y] = UtilsClass.CreateWorldText(
+						_gridArray[x, y]?.ToString(), 
 						null, 
 						GetCenteredCellPosition(x, y),
 						40, // font size
@@ -70,21 +77,21 @@ public class Grid<TGridObject>
 		}
 
 		public Vector3 GetCenteredCellPosition(int x, int y) {
-			return GetWorldPosition(x, y) + new Vector3(cellSize, cellSize) * 0.5f;
+			return GetWorldPosition(x, y) + new Vector3(_cellSize, _cellSize) * 0.5f;
 		}
 
 		public Vector3 GetWorldPosition(int x, int y) {
-			return new Vector3(x, y) * cellSize + originPosition;
+			return new Vector3(x, y) * _cellSize + _originPosition;
 		}
 
 		private void GetXY(Vector3 worldPosition, out int x, out int y) {
-			x = Mathf.FloorToInt((worldPosition - originPosition).x / cellSize);
-			y = Mathf.FloorToInt((worldPosition - originPosition).y / cellSize);
+			x = Mathf.FloorToInt((worldPosition - _originPosition).x / _cellSize);
+			y = Mathf.FloorToInt((worldPosition - _originPosition).y / _cellSize);
 		}
 
 		public Vector2Int GetRandomCoords() {
-			int x = Random.Range(0, width);
-			int y = Random.Range(0, height);
+			int x = Random.Range(0, _width);
+			int y = Random.Range(0, _height);
 
 			return new Vector2Int(x, y);
 		}
@@ -106,9 +113,9 @@ public class Grid<TGridObject>
 		// }
 
 		public void SetGridObject(int x, int y, TGridObject value) {
-			if (x >= 0 && y >= 0 && x < width && y < height) {
-				gridArray[x, y] = value;
-				debugTextArray[x, y].text = gridArray[x, y].ToString();
+			if (x >= 0 && y >= 0 && x < _width && y < _height) {
+				_gridArray[x, y] = value;
+				_debugTextArray[x, y].text = _gridArray[x, y].ToString();
 			}
 		}
 
@@ -119,8 +126,8 @@ public class Grid<TGridObject>
 		}
 
 		public TGridObject GetGridObject(int x, int y) {
-			if (x >= 0 && y >= 0 && x < width && y < height) {
-				return gridArray[x, y];
+			if (x >= 0 && y >= 0 && x < _width && y < _height) {
+				return _gridArray[x, y];
 			} else {
 				return default(TGridObject);
 			}
