@@ -13,6 +13,10 @@ public class ActivityListItem : MonoBehaviour
 
 		public Image typeIcon;
 
+		// to do - better visual representation of health
+		public GameObject healthBar;
+		public TMP_Text healthRemainingText;
+
 		#endregion
 
 		#region Properties
@@ -23,13 +27,16 @@ public class ActivityListItem : MonoBehaviour
 
 		#region Methods
 
-    public void SetData(LocationActivity activity)
+    public void SetData(MapActivity activity)
     {
-      titleText.text = activity.name;
-      descriptionText.text = activity.description;
+      titleText.text = activity.activityData.name;
+      descriptionText.text = activity.activityData.description;
+
+			healthBar.SetActive(activity.activityData.hasLifetime);
+			healthRemainingText.text = activity.currentHealthRemaining.ToString();
 
 			GameManager manager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
-			ActivityTypeData defaultData = manager.GetActivityTypeData(activity.type);
+			ActivityTypeData defaultData = manager.GetActivityTypeData(activity.activityData.type);
 			typeIcon.sprite = defaultData.icon;
     }
 
