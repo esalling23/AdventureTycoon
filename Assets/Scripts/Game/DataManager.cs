@@ -23,7 +23,7 @@ public class DataManager : MonoBehaviour
 
 		#region Properties
 
-		public DataManager Instance { get { return _instance; }}
+		public static DataManager Instance { get { return _instance; }}
 
 		public LocationTypeData[] LocationTypeDefaults { get { return _locationTypeDatas; } }
 		public ActivityTypeData[] ActivityTypeDefaults { get { return _activityTypeDatas; } }
