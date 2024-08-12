@@ -36,7 +36,7 @@ public class MapLocation : MapObject
 
 			_manager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
 			
-			LocationTypeData defaultData = _manager.GetLocationTypeData(data.type);
+			LocationTypeData defaultData = DataManager.Instance.GetLocationTypeData(data.type);
 
 			_spriteRenderer = GetComponent<SpriteRenderer>();
 			if (_locationData.icon) {
@@ -74,7 +74,7 @@ public class MapLocation : MapObject
 
 		public MapActivity AddRandomActivity() {
 			Debug.Log("Adding Map Location Activity");
-			Activity randActivity = _manager.GetRandomActivityData();
+			Activity randActivity = DataManager.Instance.GetRandomActivityData();
 			MapActivity activeActivity = new MapActivity(randActivity, this);
 
 			activities.Add(activeActivity);

@@ -33,8 +33,7 @@ public class LocationDetailItem : MonoBehaviour
 			nameText.text = location.name;
       descriptionText.text = location.description;
 			
-			GameManager manager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
-			LocationTypeData defaultData = manager.GetLocationTypeData(location.type);
+			LocationTypeData defaultData = DataManager.Instance.GetLocationTypeData(location.type);
 			icon.sprite = defaultData.icon;
     }
 

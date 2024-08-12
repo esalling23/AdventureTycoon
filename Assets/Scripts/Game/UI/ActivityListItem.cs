@@ -35,8 +35,7 @@ public class ActivityListItem : MonoBehaviour
 			healthBar.SetActive(activity.activityData.hasLifetime);
 			healthRemainingText.text = activity.currentHealthRemaining.ToString();
 
-			GameManager manager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
-			ActivityTypeData defaultData = manager.GetActivityTypeData(activity.activityData.type);
+			ActivityTypeData defaultData = DataManager.Instance.GetActivityTypeData(activity.activityData.type);
 			typeIcon.sprite = defaultData.icon;
     }
 
