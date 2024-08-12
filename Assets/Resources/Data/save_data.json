@@ -111,6 +111,62 @@
 			}
 		}
 	],
+	"locationTypeDefaults": [
+		{
+			"type": 0,
+			"icon": {
+				"instanceID": 22640
+			},
+			"costToPlay": 400,
+			"baseActivitySlots": 10,
+			"baseActivityType": 0
+		},
+		{
+			"type": 1,
+			"icon": {
+				"instanceID": 22642
+			},
+			"costToPlay": 200,
+			"baseActivitySlots": 5,
+			"baseActivityType": 0
+		},
+		{
+			"type": 2,
+			"icon": {
+				"instanceID": 22644
+			},
+			"costToPlay": 100,
+			"baseActivitySlots": 3,
+			"baseActivityType": 0
+		},
+		{
+			"type": 3,
+			"icon": {
+				"instanceID": 22646
+			},
+			"costToPlay": 150,
+			"baseActivitySlots": 2,
+			"baseActivityType": 2
+		},
+		{
+			"type": 4,
+			"icon": {
+				"instanceID": 22648
+			},
+			"costToPlay": 300,
+			"baseActivitySlots": 4,
+			"baseActivityType": 1
+		},
+		{
+			"type": 5,
+			"icon": {
+				"instanceID": 22650
+			},
+			"costToPlay": 800,
+			"baseActivitySlots": 8,
+			"baseActivityType": 1
+		}
+	],
 	"activities": [
 		{
 			"name": "Rest by the fire",
@@ -295,6 +351,32 @@
 			"power": 1,
 			"costToPlace": 120,
 			"costToUse": 0
+		}
+	],
+	"activityTypeDefaults": [
+		{
+			"type": 0,
+			"icon": {
+				"instanceID": 22632
+			}
+		},
+		{
+			"type": 1,
+			"icon": {
+				"instanceID": 22634
+			}
+		},
+		{
+			"type": 2,
+			"icon": {
+				"instanceID": 22638
+			}
+		},
+		{
+			"type": 3,
+			"icon": {
+				"instanceID": 22636
+			}
 		}
 	]
 }

@@ -3,8 +3,8 @@ using System.Collections;
 using UnityEditor;
 using System.IO;
 
-[CustomEditor(typeof(GameManager))]
-public class GameMangaerDataHandler : Editor
+[CustomEditor(typeof(DataManager))]
+public class LoadSaveJsonData : Editor
 {
 
 	private string Path { get { return "Data/save_data"; }}
@@ -12,13 +12,15 @@ public class GameMangaerDataHandler : Editor
 	{
 		DrawDefaultInspector();
 
-		GameManager manager = (GameManager) target;
+		DataManager manager = (DataManager) target;
 		if (GUILayout.Button("Save Data"))
 		{
 			Debug.Log(manager.WorldLocations.Length);
 			Data data = new Data(
 				manager.WorldLocations,
-				manager.WorldActivities
+				manager.LocationTypeDefaults,
+				manager.WorldActivities,
+				manager.ActivityTypeDefaults
 			);
 			string jsonData = JsonUtility.ToJson(data);
 			System.IO.File.WriteAllText(Application.dataPath + "/Resources/" + Path + ".json", jsonData);
