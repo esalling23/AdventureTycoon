@@ -7,18 +7,23 @@ using System.Linq;
 public class GameManager : MonoBehaviour
 {
     #region Fields
+		private static GameManager _instance;
 
 		private int _gold;
 		private int _currentDay;
 
+		[SerializeField] private float _minutesInDay = 0.2f;
+
 		private GameMode _mode = GameMode.Run;
 
-		private float _xpIncreaseRate = 0.3f;
 
 		#endregion
 
 		#region Properties
 
+		public static GameManager Instance { get { return _instance; }}
+
+		public float MinutesInDay { get { return _minutesInDay; } }
 		public int Gold { get { return _gold; } }
 		public GameMode Mode { get { return _mode; } }
 
@@ -27,10 +32,19 @@ public class GameManager : MonoBehaviour
 		#region Methods
 
 
-		public int GetAdventurerLevelXp(int level = 1)
-		{
-			return Mathf.FloorToInt(100 * Mathf.Pow(1 + _xpIncreaseRate, level));
-		}
+		/// <summary>
+    /// Manages singleton wakeup/destruction
+    /// </summary>
+    private void Awake()
+    {
+        // Singleton management
+        if (_instance != null && _instance != this)
+        {
+            Destroy(this.gameObject);
+        } else {
+            _instance = this;
+        }
+    }
 
 		public void SetMode(GameMode mode) {
 			_mode = mode;
