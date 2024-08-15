@@ -10,7 +10,7 @@ public static class Utils
 
 		while (time < duration)
 		{
-				transform.position = Vector3.Lerp(startPosition, targetPosition, time / duration);
+				transform.position = Vector3.LerpUnclamped(startPosition, targetPosition, time / duration);
 				time += Time.deltaTime;
 				yield return null;
 		}
