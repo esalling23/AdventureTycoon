@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Linq;
 
 [System.Serializable]
 public enum TabType {
@@ -49,8 +50,12 @@ public class LocationDetailsPanel : LocationDetailItem
 			ToggleTab(lastTabOpen);
 		}
 
-		public void HandleActivityChanged(Dictionary<string, object> _data = null) {
-			DisplayActivities();
+		public void HandleActivityChanged(Dictionary<string, object> data) {
+			if (data.TryGetValue("type", out object activityType))
+			{
+				System.Enum.TryParse(activityType.ToString(), out TabType type);
+				RefreshList(type);
+			}
 		}
 
 		public void SetLocationData(MapLocation location) {
@@ -58,24 +63,41 @@ public class LocationDetailsPanel : LocationDetailItem
 
 			SetData(location.LocationData);
 
-			DisplayActivities();
+			RefreshList(TabType.Activities);
+			RefreshList(TabType.Quests);
 		}
 
-		private void DisplayActivities() {
+		private void RefreshList(TabType tabType) {
+			Debug.Log($"Displaying list of {tabType}");
+			List<MapActivity> list = _activeLocation.activities
+				.Where((MapActivity obj) => {
+					if (tabType == TabType.Quests)
+					{
+						return obj.data is Quest;
+					}
+					return obj.data is Activity;
+				}).ToList();
+
+			GameObject container = activitiesListContainer;
+			if (tabType == TabType.Quests)
+			{
+				container = questListContainer;
+			}
+
 			// to do - don't delete all, just replace data & remove extras
-			foreach(Transform child in activitiesListContainer.transform)
+			foreach(Transform child in container.transform)
 			{
 				Destroy(child.gameObject);
 			}
 
-			Debug.Log(_activeLocation.activities);
+			Debug.Log(list.Count);
 
-			foreach(MapActivity activity in _activeLocation.activities) {
+			foreach(MapActivity activity in list) {
 				ActivityListItem item = Instantiate(
 					activityListItemPrefab,
 					Vector3.zero,
 					Quaternion.identity,
-					activitiesListContainer.transform
+					container.transform
 				);
 
 				item.SetData(activity);
@@ -98,7 +120,12 @@ public class LocationDetailsPanel : LocationDetailItem
 
 		public void HandleClickAddActivity() {
 			// to do - show a generated set of activities & allow user to pick one
-			_activeLocation.AddRandomActivity();
+			_activeLocation.AddRandomActivity(false);
+		}
+
+		public void HandleClickAddQuest() {
+			// to do - show a generated set of activities & allow user to pick one
+			_activeLocation.AddRandomQuest();
 		}
 
 		#endregion

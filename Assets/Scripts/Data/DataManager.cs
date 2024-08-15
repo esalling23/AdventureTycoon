@@ -133,5 +133,16 @@ public class DataManager : MonoBehaviour
 			return GetLocationData(index);
 		}
 
+		public Quest GetQuestData(int index) 
+		{
+			return _worldQuestData[index];
+		}
+
+		public Quest GetRandomQuestData()
+		{
+			int index = Random.Range(0, _worldQuestData.Length);
+			return GetQuestData(index);
+		}
+
 		#endregion
 }

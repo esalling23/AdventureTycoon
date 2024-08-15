@@ -102,35 +102,47 @@ public class MapLocation : MapObject
 			}
     }
 
-		public MapActivity AddRandomActivity() {
-			// Debug.Log("Adding Map Location Activity");
-			Activity randActivity = DataManager.Instance.GetRandomActivityData();
-			MapActivity activeActivity = new MapActivity(randActivity, this);
+		public MapActivity AddRandomActivity(bool isBaseActivity)
+		{
+			// Debug.Log($"Adding Activity to Location Type {location.type}");
+			Activity randActivity;
+			if (isBaseActivity)
+			{
+				LocationTypeData typeDefaults = DataManager.Instance.LocationTypeDefaults.FirstOrDefault(data => data.type == Type);
+				ActivityType baseActivityType = typeDefaults.baseActivityType;
 
+				randActivity = DataManager.Instance.GetRandomActivityData(baseActivityType);
+			}
+			else
+			{
+				randActivity = DataManager.Instance.GetRandomActivityData();
+			}
+
+			MapActivity activeActivity = new MapActivity(randActivity, this);
 			activities.Add(activeActivity);
 
-			EventManager.TriggerEvent(EventName.OnActivityChanged, null);
+			EventManager.TriggerEvent(EventName.OnActivityChanged, new Dictionary<string, object>() {
+				{ "type", TabType.Activities }
+			});
 
 			return activeActivity;
 		}
 
-		public MapActivity AddRandomActivity(Location location)
+		public MapActivity AddRandomQuest()
 		{
-			// Debug.Log($"Adding Activity to Location Type {location.type}");
+			Debug.Log($"Adding Quest to {Type} Location");
 
-			LocationTypeData typeDefaults = DataManager.Instance.LocationTypeDefaults.FirstOrDefault(data => data.type == location.type);
-			Debug.Log(typeDefaults);
+			// LocationTypeData typeDefaults = DataManager.Instance.LocationTypeDefaults.FirstOrDefault(data => data.type == location.type);
+			// ActivityType baseActivityType = typeDefaults.baseActivityType;
 
-			ActivityType baseActivityType = typeDefaults.baseActivityType;
-
-			Debug.Log(baseActivityType);
-
-			Activity randActivity = DataManager.Instance.GetRandomActivityData(baseActivityType);
-			MapActivity activeActivity = new MapActivity(randActivity, this);
+			Quest quest = DataManager.Instance.GetRandomQuestData();
+			MapActivity activeActivity = new MapActivity((IActivity) quest, this);
 
 			activities.Add(activeActivity);
 
-			EventManager.TriggerEvent(EventName.OnActivityChanged, null);
+			EventManager.TriggerEvent(EventName.OnActivityChanged, new Dictionary<string, object>() {
+				{ "type", TabType.Quests }
+			});
 
 			return activeActivity;
 		}

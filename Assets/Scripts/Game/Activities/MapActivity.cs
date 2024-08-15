@@ -30,7 +30,7 @@ public class MapActivity : UniqueObject
 		}
 	}
 
-	public MapActivity(Activity activity, MapLocation mapLocation) 
+	public MapActivity(IActivity activity, MapLocation mapLocation) 
 	{
 		this.data = activity;
 		this.locationParent = mapLocation;

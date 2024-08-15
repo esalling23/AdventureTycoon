@@ -255,13 +255,9 @@ public class Map : MonoBehaviour
 			PlaceLocation(cell, randLocation, (MapLocation newLocation) => {
 				for (int i = 0; i < 3; i++)
 				{
-					if (i == 0) {
-						// Make sure there's at least 1 activity matching 
-						// the base activity type for this location type
-						newLocation.AddRandomActivity(randLocation);
-					} else {
-						newLocation.AddRandomActivity();
-					}
+					// Make sure there's at least 1 activity matching 
+					// the base activity type for this location type
+					newLocation.AddRandomActivity(i == 0);
 				}
 			});
 		}

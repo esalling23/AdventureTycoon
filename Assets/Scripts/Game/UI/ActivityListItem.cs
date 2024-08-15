@@ -34,7 +34,7 @@ public class ActivityListItem : MonoBehaviour
       titleText.text = activity.data.Name;
       descriptionText.text = activity.data.Description;
 
-			healthBar.SetActive(false);
+			// healthBar.SetActive(false);
 			// healthBar.SetActive(activity.data.hasLifetime);
 			// healthRemainingText.text = activity.currentHealthRemaining.ToString();
 
