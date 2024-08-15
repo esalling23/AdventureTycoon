@@ -47,14 +47,32 @@ public class LocationDetailsPanel : LocationDetailItem
 		public void ToggleOpen(bool isOpen) 
 		{
 			this.gameObject.SetActive(isOpen);
-			ToggleTab(lastTabOpen);
+			if (isOpen && _activeLocation != null)
+			{
+				RefreshList(TabType.Activities);
+				RefreshList(TabType.Quests);
+
+				ToggleTab(lastTabOpen);
+			}
+			else
+			{
+				_activeLocation = null;
+			}
 		}
 
 		public void HandleActivityChanged(Dictionary<string, object> data) {
 			if (data.TryGetValue("type", out object activityType))
 			{
-				System.Enum.TryParse(activityType.ToString(), out TabType type);
-				RefreshList(type);
+				System.Enum.TryParse(activityType.ToString(), out ActivityType type);
+				
+				if (type == ActivityType.Quest)
+				{
+					RefreshList(TabType.Quests);
+				}
+				else
+				{
+					RefreshList(TabType.Activities);
+				}
 			}
 		}
 
@@ -62,13 +80,12 @@ public class LocationDetailsPanel : LocationDetailItem
 			_activeLocation = location;
 
 			SetData(location.LocationData);
-
-			RefreshList(TabType.Activities);
-			RefreshList(TabType.Quests);
 		}
 
 		private void RefreshList(TabType tabType) {
-			Debug.Log($"Displaying list of {tabType}");
+			if (!_activeLocation) return;
+
+			Debug.Log($"Refreshing list of {tabType}");
 			List<MapActivity> list = _activeLocation.activities
 				.Where((MapActivity obj) => {
 					if (tabType == TabType.Quests)
@@ -89,8 +106,6 @@ public class LocationDetailsPanel : LocationDetailItem
 			{
 				Destroy(child.gameObject);
 			}
-
-			Debug.Log(list.Count);
 
 			foreach(MapActivity activity in list) {
 				ActivityListItem item = Instantiate(

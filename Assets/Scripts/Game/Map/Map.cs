@@ -19,7 +19,6 @@ public class Map : MonoBehaviour
 
 	[SerializeField] private GameManager _manager;
 	private CameraManager _camera;
-	public float cameraMoveSpeed = 50;
 
 	// Grid
 	public Vector2Int gridSize = new Vector2Int(20, 10);
@@ -67,7 +66,7 @@ public class Map : MonoBehaviour
 
 		_activeLocationToBuild = null;
 
-		InitMapLocations(DataManager.Instance.WorldLocations, 3);
+		InitMapLocations(DataManager.Instance.WorldLocations, 1);
 		InitMapAdventurers(2);
 
 		EventManager.StartListening(EventName.OnGridValueChanged, HandleGridValueChanged);
@@ -253,7 +252,7 @@ public class Map : MonoBehaviour
 			// init locations are random
 			Location randLocation = GetRandomLocationData(available);
 			PlaceLocation(cell, randLocation, (MapLocation newLocation) => {
-				for (int i = 0; i < 3; i++)
+				for (int i = 0; i < 1; i++)
 				{
 					// Make sure there's at least 1 activity matching 
 					// the base activity type for this location type

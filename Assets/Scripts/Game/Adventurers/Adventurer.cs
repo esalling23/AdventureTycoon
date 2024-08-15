@@ -95,7 +95,6 @@ public class Adventurer : MonoBehaviour
 					yield break;  // Stop the loop if there's nothing to do
 				}
 
-
 				if (!_historyLog.ContainsKey(nextActivity.locationParent.Id)) {
 					_historyLog.Add(nextActivity.locationParent.Id, new HistoryLog(nextActivity.locationParent));
 				}
@@ -119,10 +118,18 @@ public class Adventurer : MonoBehaviour
 
 				nextActivity.adventurersPresent.Add(this);
 
+				EventManager.TriggerEvent(EventName.OnActivityChanged, new Dictionary<string, object>() {
+					{ "type", nextActivity.Type }
+				});
+
 				_activeCoroutine = StartCoroutine(PerformActivity(nextActivity));
 				yield return _activeCoroutine; // Wait for the activity to complete
 
 				nextActivity.adventurersPresent.Remove(this);
+
+				EventManager.TriggerEvent(EventName.OnActivityChanged, new Dictionary<string, object>() {
+					{ "type", nextActivity.Type }
+				});
 
 				Debug.Log($"Adventurer {Id} ready for next loop");
 

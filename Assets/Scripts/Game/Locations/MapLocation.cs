@@ -122,7 +122,7 @@ public class MapLocation : MapObject
 			activities.Add(activeActivity);
 
 			EventManager.TriggerEvent(EventName.OnActivityChanged, new Dictionary<string, object>() {
-				{ "type", TabType.Activities }
+				{ "type", activeActivity.Type }
 			});
 
 			return activeActivity;
@@ -141,7 +141,7 @@ public class MapLocation : MapObject
 			activities.Add(activeActivity);
 
 			EventManager.TriggerEvent(EventName.OnActivityChanged, new Dictionary<string, object>() {
-				{ "type", TabType.Quests }
+				{ "type", ActivityType.Quest }
 			});
 
 			return activeActivity;
