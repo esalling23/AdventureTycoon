@@ -525,7 +525,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a082b98a551040e68488f3974976a18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _minutesInDay: 2
+  _minutesInDay: 0.2
 --- !u!4 &835701169
 Transform:
   m_ObjectHideFlags: 0
@@ -648,56 +648,6 @@ MonoBehaviour:
     costToUse: 10
     appearsInLocationTypes: 000000000100000002000000
     costToPlace: 60
-  - name: Explore Ancient Dragon Tomb
-    description: Seek the truth of the tales of dragons in this land. There may be
-      much history not written.
-    type: 1
-    capacity: 5
-    costToUse: 10
-    appearsInLocationTypes: 000000000100000002000000
-    costToPlace: 60
-  - name: Explore Underneath City
-    description: A large city ruled by King Ven CCXIV
-    type: 1
-    capacity: 5
-    costToUse: 10
-    appearsInLocationTypes: 00000000
-    costToPlace: 60
-  - name: Collect Alchemy Ingredients
-    description: A city built within the roots of an ancient, sentient tree, where
-      druids and scholars study the secrets of nature.
-    type: 1
-    capacity: 5
-    costToUse: 10
-    appearsInLocationTypes: 0300000000000000
-    costToPlace: 60
-  - name: Investigate Missing Farmers
-    description: A group of farmers have gone missing. The only clue to their whereabouts
-      is that they were last seen arguing in the local tavern.
-    type: 1
-    capacity: 5
-    costToUse: 0
-    appearsInLocationTypes: 0000000001000000
-    costToPlace: 120
-  - name: Investigate Missing Merchant
-    description: A traveler is looking for someone to locate a merchant who went
-      missing while making a delivery in the surrounding wilderness.
-    type: 1
-    capacity: 5
-    costToUse: 0
-    appearsInLocationTypes: 000000000000000000000000
-    costToPlace: 120
-  - name: Investigate Missing Scholar
-    description: You've heard whispers of a renowned scholar who vanished without
-      a trace, leaving behind only cryptic notes and an unfinished tome. The air
-      around the village is thick with mystery, and as you set out to uncover the
-      truth, you can't shake the feeling that ancient secrets and hidden dangers
-      await.
-    type: 1
-    capacity: 5
-    costToUse: 0
-    appearsInLocationTypes: 010000000200000000000000
-    costToPlace: 120
   _worldLocationData:
   - name: Lonely Inn
     description: An inn just off the road by itself
@@ -769,7 +719,57 @@ MonoBehaviour:
     type: 2
     costToPlace: 500
     icon: {fileID: 0}
-  _worldQuestData: []
+  _worldQuestData:
+  - name: Explore Ancient Dragon Tomb
+    description: Seek the truth of the tales of dragons in this land. There may be
+      much history not written.
+    type: 1
+    capacity: 5
+    costToUse: 10
+    level: 1
+    reward: 100
+  - name: Explore Underneath City
+    description: A large city ruled by King Ven CCXIV
+    type: 1
+    capacity: 5
+    costToUse: 10
+    level: 1
+    reward: 100
+  - name: Collect Alchemy Ingredients
+    description: A city built within the roots of an ancient, sentient tree, where
+      druids and scholars study the secrets of nature.
+    type: 1
+    capacity: 5
+    costToUse: 10
+    level: 1
+    reward: 100
+  - name: Investigate Missing Farmers
+    description: A group of farmers have gone missing. The only clue to their whereabouts
+      is that they were last seen arguing in the local tavern.
+    type: 1
+    capacity: 5
+    costToUse: 0
+    level: 1
+    reward: 100
+  - name: Investigate Missing Merchant
+    description: A traveler is looking for someone to locate a merchant who went
+      missing while making a delivery in the surrounding wilderness.
+    type: 1
+    capacity: 5
+    costToUse: 0
+    level: 1
+    reward: 100
+  - name: Investigate Missing Scholar
+    description: You've heard whispers of a renowned scholar who vanished without
+      a trace, leaving behind only cryptic notes and an unfinished tome. The air
+      around the village is thick with mystery, and as you set out to uncover the
+      truth, you can't shake the feeling that ancient secrets and hidden dangers
+      await.
+    type: 1
+    capacity: 5
+    costToUse: 0
+    level: 1
+    reward: 100
 --- !u!1 &861122679
 GameObject:
   m_ObjectHideFlags: 0
