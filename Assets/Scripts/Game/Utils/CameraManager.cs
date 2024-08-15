@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.EventSystems;
 
 public class CameraManager : MonoBehaviour 
 {
@@ -18,6 +19,10 @@ public class CameraManager : MonoBehaviour
 
 	void Update() 
 	{
+		if (EventSystem.current.IsPointerOverGameObject())
+			return;
+
+		
 		float size = Input.GetAxis("Mouse ScrollWheel") * _scrollSpeed;
 		if (Camera.main.orthographic)
 		{
