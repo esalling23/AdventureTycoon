@@ -259,6 +259,7 @@ public class Map : MonoBehaviour
 					// the base activity type for this location type
 					newLocation.AddRandomActivity(i == 0);
 				}
+				newLocation.AddRandomQuest();
 			});
 		}
 	}
