@@ -10,10 +10,12 @@ public class ActivityListItem : MonoBehaviour
 
 		public TMP_Text titleText;
 		public TMP_Text descriptionText;
+		public TMP_Text adventurerCountText;
 
 		public Image typeIcon;
 
-		// to do - better visual representation of health
+		// VIP display
+		public Image vipIcon;
 		public GameObject healthBar;
 		public TMP_Text healthRemainingText;
 
@@ -29,13 +31,16 @@ public class ActivityListItem : MonoBehaviour
 
     public void SetData(MapActivity activity)
     {
-      titleText.text = activity.activityData.name;
-      descriptionText.text = activity.activityData.description;
+      titleText.text = activity.data.Name;
+      descriptionText.text = activity.data.Description;
 
-			healthBar.SetActive(activity.activityData.hasLifetime);
-			healthRemainingText.text = activity.currentHealthRemaining.ToString();
+			healthBar.SetActive(false);
+			// healthBar.SetActive(activity.data.hasLifetime);
+			// healthRemainingText.text = activity.currentHealthRemaining.ToString();
 
-			ActivityTypeData defaultData = DataManager.Instance.GetActivityTypeData(activity.activityData.type);
+			adventurerCountText.text = activity.adventurersPresent.Count.ToString();
+
+			ActivityTypeData defaultData = DataManager.Instance.GetActivityTypeData(activity.data.Type);
 			typeIcon.sprite = defaultData.icon;
     }
 

@@ -405,11 +405,9 @@ MonoBehaviour:
   icon: {fileID: 4602026310458919508}
   activityListItemPrefab: {fileID: 6426276871493616106, guid: 338a1b1cfa7974c4095297c055895979, type: 3}
   activitiesListContainer: {fileID: 7545741692364888197}
-  activitiesTabButton: {fileID: 0}
-  activitiesPanel: {fileID: 0}
-  questListContainer: {fileID: 0}
-  questTabButton: {fileID: 0}
-  questPanel: {fileID: 0}
+  activitiesTab: {fileID: 2998604612155407082}
+  questListContainer: {fileID: 7967285654611289320}
+  questTab: {fileID: 7708559416689350099}
 --- !u!1 &3969425920235617223
 GameObject:
   m_ObjectHideFlags: 0
@@ -555,6 +553,7 @@ GameObject:
   m_Component:
   - component: {fileID: 582256466756949759}
   - component: {fileID: 1357905652894870390}
+  - component: {fileID: 7708559416689350099}
   m_Layer: 5
   m_Name: Quests
   m_TagString: Untagged
@@ -613,6 +612,24 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &7708559416689350099
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4668821683873167078}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4aaad59370dcf40c28fe5d2d11691d69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _detailsPanel: {fileID: 7797983158128610782}
+  tabType: 1
+  tabButton: {fileID: 5223636017275919380}
+  tabSprite: {fileID: 0}
+  tabButtonSpriteBase: {fileID: 0}
+  toggledTabButtonSprite: {fileID: 0}
 --- !u!1 &5002878997005313616
 GameObject:
   m_ObjectHideFlags: 0
@@ -624,7 +641,7 @@ GameObject:
   - component: {fileID: 35999405536688704}
   - component: {fileID: 8176569714716855403}
   m_Layer: 0
-  m_Name: Tabs
+  m_Name: TabButtons
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -764,6 +781,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4624609141935549800}
   - component: {fileID: 5649217741681534358}
+  - component: {fileID: 2998604612155407082}
   m_Layer: 5
   m_Name: Activities
   m_TagString: Untagged
@@ -822,6 +840,24 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &2998604612155407082
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6604084491832287038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4aaad59370dcf40c28fe5d2d11691d69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _detailsPanel: {fileID: 7797983158128610782}
+  tabType: 0
+  tabButton: {fileID: 5223636017275919380}
+  tabSprite: {fileID: 0}
+  tabButtonSpriteBase: {fileID: 0}
+  toggledTabButtonSprite: {fileID: 0}
 --- !u!1 &7545741692364888197
 GameObject:
   m_ObjectHideFlags: 0
@@ -1819,6 +1855,34 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 35999405536688704}
     m_Modifications:
+    - target: {fileID: 4407697484513145023, guid: 963183dbb0424421eba704cd5cfae162, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4407697484513145023, guid: 963183dbb0424421eba704cd5cfae162, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4407697484513145023, guid: 963183dbb0424421eba704cd5cfae162, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 2998604612155407082}
+    - target: {fileID: 4407697484513145023, guid: 963183dbb0424421eba704cd5cfae162, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4407697484513145023, guid: 963183dbb0424421eba704cd5cfae162, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: HandleClickTab
+      objectReference: {fileID: 0}
+    - target: {fileID: 4407697484513145023, guid: 963183dbb0424421eba704cd5cfae162, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: DetailsTab, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 4407697484513145023, guid: 963183dbb0424421eba704cd5cfae162, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 5486752398778903290, guid: 963183dbb0424421eba704cd5cfae162, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -3875,6 +3939,22 @@ PrefabInstance:
       propertyPath: m_text
       value: Quests
       objectReference: {fileID: 0}
+    - target: {fileID: 4407697484513145023, guid: 963183dbb0424421eba704cd5cfae162, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 7708559416689350099}
+    - target: {fileID: 4407697484513145023, guid: 963183dbb0424421eba704cd5cfae162, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: HandleClickTab
+      objectReference: {fileID: 0}
+    - target: {fileID: 4407697484513145023, guid: 963183dbb0424421eba704cd5cfae162, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: DetailsTab, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 4407697484513145023, guid: 963183dbb0424421eba704cd5cfae162, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 5486752398778903290, guid: 963183dbb0424421eba704cd5cfae162, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -3970,3 +4050,14 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 5486752398778903290, guid: 963183dbb0424421eba704cd5cfae162, type: 3}
   m_PrefabInstance: {fileID: 8454765899258473643}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &5223636017275919380 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4407697484513145023, guid: 963183dbb0424421eba704cd5cfae162, type: 3}
+  m_PrefabInstance: {fileID: 8454765899258473643}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

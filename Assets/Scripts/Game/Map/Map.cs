@@ -166,7 +166,7 @@ public class Map : MonoBehaviour
 
 	private void Deselect() {
 		_selectedIndicator.SetActive(false);
-		_locationDetailsPanel.gameObject.SetActive(false);
+		_locationDetailsPanel.ToggleOpen(false);
 	}
 
 	public void SetLocationToBuild(Location location) 
@@ -185,9 +185,9 @@ public class Map : MonoBehaviour
 		
 		if (cell.Location) {
 			_locationDetailsPanel.SetLocationData(cell.Location);
-			_locationDetailsPanel.gameObject.SetActive(true);
+			_locationDetailsPanel.ToggleOpen(true);
 		} else {
-			_locationDetailsPanel.gameObject.SetActive(false);
+			_locationDetailsPanel.ToggleOpen(false);
 		}
 	}
 

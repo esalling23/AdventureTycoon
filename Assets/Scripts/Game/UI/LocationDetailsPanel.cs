@@ -4,6 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+[System.Serializable]
+public enum TabType {
+	Activities,
+	Quests
+}
+
 public class LocationDetailsPanel : LocationDetailItem
 {
     #region Fields
@@ -11,7 +17,16 @@ public class LocationDetailsPanel : LocationDetailItem
 		private MapLocation _activeLocation;
 
 		public ActivityListItem activityListItemPrefab;
-		public GameObject activitiesContainer;
+
+		public TabType lastTabOpen = TabType.Activities;
+
+		public GameObject activitiesListContainer;
+		public DetailsTab activitiesTab;
+		// public GameObject activitiesPanel;
+
+		public GameObject questListContainer;
+		public DetailsTab questTab;
+		// public GameObject questPanel;
 
 		#endregion
 
@@ -28,6 +43,12 @@ public class LocationDetailsPanel : LocationDetailItem
 			EventManager.StartListening(EventName.OnActivityChanged, HandleActivityChanged);
     }
 
+		public void ToggleOpen(bool isOpen) 
+		{
+			this.gameObject.SetActive(isOpen);
+			ToggleTab(lastTabOpen);
+		}
+
 		public void HandleActivityChanged(Dictionary<string, object> _data = null) {
 			DisplayActivities();
 		}
@@ -42,7 +63,7 @@ public class LocationDetailsPanel : LocationDetailItem
 
 		private void DisplayActivities() {
 			// to do - don't delete all, just replace data & remove extras
-			foreach(Transform child in activitiesContainer.transform)
+			foreach(Transform child in activitiesListContainer.transform)
 			{
 				Destroy(child.gameObject);
 			}
@@ -54,11 +75,25 @@ public class LocationDetailsPanel : LocationDetailItem
 					activityListItemPrefab,
 					Vector3.zero,
 					Quaternion.identity,
-					activitiesContainer.transform
+					activitiesListContainer.transform
 				);
 
 				item.SetData(activity);
 			}
+		}
+
+		public void ToggleTab(TabType type)
+		{
+			if (type == TabType.Activities)
+			{
+				questTab.SetSelected(false);
+			}
+			else if (type == TabType.Quests)
+			{
+				activitiesTab.SetSelected(false);
+			}
+
+			lastTabOpen = type;
 		}
 
 		public void HandleClickAddActivity() {
