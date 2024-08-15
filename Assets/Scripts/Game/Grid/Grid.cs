@@ -1,8 +1,9 @@
-// using System.Numerics;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using CodeMonkey.Utils;
+
 
 public class Grid<TGridObject>
 {
@@ -20,6 +21,8 @@ public class Grid<TGridObject>
 
 		#region Properties
 
+		public TGridObject[,] GridArray { get { return _gridArray; } }
+
 		public int TotalCellCount { 
 			get { 
 				if (_gridArray == null) {
@@ -28,6 +31,8 @@ public class Grid<TGridObject>
 				return _gridArray.Length; 
 			} 
 		}
+
+		public float CellSize { get { return _cellSize; } }
 
 		#endregion
 
@@ -72,7 +77,7 @@ public class Grid<TGridObject>
 
 		public void TriggerOnChangeEvent(Vector2Int coords) {
 			EventManager.TriggerEvent(EventName.OnGridValueChanged, new Dictionary<string, object>() {
-				{ "coords", (object) coords }
+				{ "coords", (object) coords },
 			});
 		}
 
@@ -137,6 +142,22 @@ public class Grid<TGridObject>
 			int x, y;
 			GetXY(worldPosition, out x, out y);
 			return GetGridObject(x, y);
+		}
+
+		public TGridObject FindFirstMatch(System.Func<TGridObject, bool> matchCondition) {
+			TGridObject match = default(TGridObject);
+			for (int x = 1; x < _gridArray.GetLength(0); x++) {
+				for (int y = 1; y < _gridArray.GetLength(1); y++) {
+					TGridObject obj = _gridArray[x, y];
+					bool isMatch = matchCondition(obj);
+					if (matchCondition(obj)) {
+						match = obj;
+						break;
+					}
+				}
+			}
+
+			return match;
 		}
 
 		#endregion

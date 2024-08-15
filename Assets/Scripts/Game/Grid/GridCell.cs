@@ -57,13 +57,22 @@ public class GridCell
 
 		public void PlaceLocation(MapLocation location) {
 			this._location = location;
+			location.coordinates = Coordinates;
+		}
+
+		public void RemoveLocation() {
+			EventManager.TriggerEvent(EventName.OnGridValueChanged, new Dictionary<string, object> {
+				{ "coords", Coordinates },
+				{ "locationRemoved", this._location.Id }
+			});
+			this._location = null;
 		}
 
 		public override string ToString() {
-			if (_location) {
+			if (_location != null) {
 				return _location.name;
 			}
-			return _coordinates.x + ", " + _coordinates.y;
+			return Coordinates.x + ", " + Coordinates.y;
 		}
 
 		#endregion
