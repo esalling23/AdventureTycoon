@@ -20,7 +20,8 @@ public class LoadSaveJsonData : Editor
 				manager.WorldLocations,
 				manager.LocationTypeDefaults,
 				manager.WorldActivities,
-				manager.ActivityTypeDefaults
+				manager.ActivityTypeDefaults,
+				manager.WorldQuests
 			);
 			string jsonData = JsonUtility.ToJson(data);
 			System.IO.File.WriteAllText(Application.dataPath + "/Resources/" + Path + ".json", jsonData);

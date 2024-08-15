@@ -117,7 +117,7 @@
 			"icon": {
 				"instanceID": 22640
 			},
-			"costToPlay": 400,
+			"costToPlace": 0,
 			"baseActivitySlots": 10,
 			"baseActivityType": 0
 		},
@@ -126,7 +126,7 @@
 			"icon": {
 				"instanceID": 22642
 			},
-			"costToPlay": 200,
+			"costToPlace": 0,
 			"baseActivitySlots": 5,
 			"baseActivityType": 0
 		},
@@ -135,7 +135,7 @@
 			"icon": {
 				"instanceID": 22644
 			},
-			"costToPlay": 100,
+			"costToPlace": 0,
 			"baseActivitySlots": 3,
 			"baseActivityType": 0
 		},
@@ -144,7 +144,7 @@
 			"icon": {
 				"instanceID": 22646
 			},
-			"costToPlay": 150,
+			"costToPlace": 0,
 			"baseActivitySlots": 2,
 			"baseActivityType": 2
 		},
@@ -153,7 +153,7 @@
 			"icon": {
 				"instanceID": 22648
 			},
-			"costToPlay": 300,
+			"costToPlace": 0,
 			"baseActivitySlots": 4,
 			"baseActivityType": 1
 		},
@@ -162,7 +162,7 @@
 			"icon": {
 				"instanceID": 22650
 			},
-			"costToPlay": 800,
+			"costToPlace": 0,
 			"baseActivitySlots": 8,
 			"baseActivityType": 1
 		}
@@ -202,7 +202,7 @@
 			"name": "Buy a round",
 			"description": "Impress local patrons by buying everyone a round of drinks",
 			"failureMessage": "This adventurer has died during the quest attempt",
-			"type": 0,
+			"type": 3,
 			"appearsInLocationTypes": [
 				0,
 				1,
@@ -218,7 +218,7 @@
 			"name": "Visit local market",
 			"description": "Trade items found on quests for $ or other goods",
 			"failureMessage": "This adventurer has died during the quest attempt",
-			"type": 0,
+			"type": 2,
 			"appearsInLocationTypes": [
 				1,
 				3,
@@ -234,7 +234,7 @@
 			"name": "Trade with traveling merchant",
 			"description": "Tradeable merchant passing through the area",
 			"failureMessage": "This adventurer has died during the quest attempt",
-			"type": 0,
+			"type": 2,
 			"appearsInLocationTypes": [
 				2,
 				3
@@ -249,7 +249,7 @@
 			"name": "Seek quest knowledge",
 			"description": "Ask around to get your bearings before you head off to a quest",
 			"failureMessage": "This adventurer has died during the quest attempt",
-			"type": 0,
+			"type": 1,
 			"appearsInLocationTypes": [
 				0,
 				1,
@@ -260,97 +260,6 @@
 			"power": 1,
 			"costToPlace": 60,
 			"costToUse": 10
-		},
-		{
-			"name": "Dragon Spirit Path",
-			"description": "Seek the truth of the tales of dragons in this land. There may be much history not written.",
-			"failureMessage": "This adventurer has died during the quest attempt",
-			"type": 0,
-			"appearsInLocationTypes": [
-				0,
-				1,
-				2
-			],
-			"hasLifetime": false,
-			"lifetime": 0,
-			"power": 1,
-			"costToPlace": 60,
-			"costToUse": 10
-		},
-		{
-			"name": "Vendom",
-			"description": "A large city ruled by King Ven CCXIV",
-			"failureMessage": "This adventurer has died during the quest attempt",
-			"type": 0,
-			"appearsInLocationTypes": [
-				0
-			],
-			"hasLifetime": false,
-			"lifetime": 0,
-			"power": 1,
-			"costToPlace": 60,
-			"costToUse": 10
-		},
-		{
-			"name": "Eldralith",
-			"description": "A city built within the roots of an ancient, sentient tree, where druids and scholars study the secrets of nature.",
-			"failureMessage": "This adventurer has died during the quest attempt",
-			"type": 0,
-			"appearsInLocationTypes": [
-				0
-			],
-			"hasLifetime": false,
-			"lifetime": 0,
-			"power": 1,
-			"costToPlace": 60,
-			"costToUse": 10
-		},
-		{
-			"name": "Investigate Missing Farmers",
-			"description": "A group of farmers have gone missing. The only clue to their whereabouts is that they were last seen arguing in the local tavern.",
-			"failureMessage": "An adventurer fell on some sharp farm tools",
-			"type": 0,
-			"appearsInLocationTypes": [
-				0,
-				1
-			],
-			"hasLifetime": false,
-			"lifetime": 0,
-			"power": 1,
-			"costToPlace": 120,
-			"costToUse": 0
-		},
-		{
-			"name": "Investigate Missing Merchant",
-			"description": "A traveler is looking for someone to locate a merchant who went missing while making a delivery in the surrounding wilderness.",
-			"failureMessage": "This adventurer tried to lift the caravan and was crushed underneath",
-			"type": 0,
-			"appearsInLocationTypes": [
-				0,
-				0,
-				0
-			],
-			"hasLifetime": false,
-			"lifetime": 0,
-			"power": 1,
-			"costToPlace": 120,
-			"costToUse": 0
-		},
-		{
-			"name": "Investigate Missing Scholar",
-			"description": "You've heard whispers of a renowned scholar who vanished without a trace, leaving behind only cryptic notes and an unfinished tome. The air around the village is thick with mystery, and as you set out to uncover the truth, you can't shake the feeling that ancient secrets and hidden dangers await.",
-			"failureMessage": "This adventurer tried to lift the caravan and was crushed underneath",
-			"type": 0,
-			"appearsInLocationTypes": [
-				1,
-				2,
-				0
-			],
-			"hasLifetime": false,
-			"lifetime": 0,
-			"power": 1,
-			"costToPlace": 120,
-			"costToUse": 0
 		}
 	],
 	"activityTypeDefaults": [
@@ -377,6 +286,100 @@
 			"icon": {
 				"instanceID": 22636
 			}
+		}
+	],
+	"quests": [
+		{
+			"name": "Explore Ancient Dragon Tomb",
+			"description": "Seek the truth of the tales of dragons in this land. There may be much history not written.",
+			"failureMessage": "This adventurer has died during the quest attempt",
+			"type": 1,
+			"appearsInLocationTypes": [
+				0,
+				1,
+				2
+			],
+			"hasLifetime": true,
+			"lifetime": 1000,
+			"power": 1,
+			"costToPlace": 60,
+			"costToUse": 10
+		},
+		{
+			"name": "Explore Underneath City",
+			"description": "A large city ruled by King Ven CCXIV",
+			"failureMessage": "This adventurer has died during the quest attempt",
+			"type": 1,
+			"appearsInLocationTypes": [
+				0
+			],
+			"hasLifetime": true,
+			"lifetime": 800,
+			"power": 1,
+			"costToPlace": 60,
+			"costToUse": 10
+		},
+		{
+			"name": "Collect Alchemy Ingredients",
+			"description": "A city built within the roots of an ancient, sentient tree, where druids and scholars study the secrets of nature.",
+			"failureMessage": "This adventurer has died during the quest attempt",
+			"type": 1,
+			"appearsInLocationTypes": [
+				3,
+				0
+			],
+			"hasLifetime": true,
+			"lifetime": 100,
+			"power": 1,
+			"costToPlace": 60,
+			"costToUse": 10
+		},
+		{
+			"name": "Investigate Missing Farmers",
+			"description": "A group of farmers have gone missing. The only clue to their whereabouts is that they were last seen arguing in the local tavern.",
+			"failureMessage": "An adventurer fell on some sharp farm tools",
+			"type": 1,
+			"appearsInLocationTypes": [
+				0,
+				1
+			],
+			"hasLifetime": true,
+			"lifetime": 150,
+			"power": 1,
+			"costToPlace": 120,
+			"costToUse": 0
+		},
+		{
+			"name": "Investigate Missing Merchant",
+			"description": "A traveler is looking for someone to locate a merchant who went missing while making a delivery in the surrounding wilderness.",
+			"failureMessage": "This adventurer tried to lift the caravan and was crushed underneath",
+			"type": 1,
+			"appearsInLocationTypes": [
+				0,
+				0,
+				0
+			],
+			"hasLifetime": true,
+			"lifetime": 50,
+			"power": 1,
+			"costToPlace": 120,
+			"costToUse": 0
+		},
+		{
+			"name": "Investigate Missing Scholar",
+			"description": "You've heard whispers of a renowned scholar who vanished without a trace, leaving behind only cryptic notes and an unfinished tome. The air around the village is thick with mystery, and as you set out to uncover the truth, you can't shake the feeling that ancient secrets and hidden dangers await.",
+			"failureMessage": "This adventurer tried to lift the caravan and was crushed underneath",
+			"type": 1,
+			"appearsInLocationTypes": [
+				1,
+				2,
+				0
+			],
+			"hasLifetime": true,
+			"lifetime": 50,
+			"power": 1,
+			"costToPlace": 120,
+			"costToUse": 0
 		}
 	]
 }

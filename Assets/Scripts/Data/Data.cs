@@ -6,17 +6,20 @@ public class Data
 	public LocationTypeData[] locationTypeDefaults;
 	public Activity[] activities;
 	public ActivityTypeData[] activityTypeDefaults;
+	public Quest[] quests;
 
 	public Data(
 		Location[] locs, 
 		LocationTypeData[] locTypeDefaults,
 		Activity[] acts,
-		ActivityTypeData[] actTypeDefaults
+		ActivityTypeData[] actTypeDefaults,
+		Quest[] quests
 	)
 	{
 		locations = locs;
 		locationTypeDefaults = locTypeDefaults;
 		activities = acts;
 		activityTypeDefaults = actTypeDefaults;
+		this.quests = quests;
 	}
 }
