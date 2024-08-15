@@ -3,9 +3,32 @@ using System.Collections;
 
 public class CameraManager : MonoBehaviour 
 {
+	// Scroll to zoom
+	[SerializeField] private float _scrollSpeed = 10;
+
+	// Arrow Key & WASD movement
 	private float _horizontalInput;
 	private float _verticalInput;
 	private Coroutine _movementCoroutine;
+
+	void Start() 
+	{
+
+	}
+
+	void Update() 
+	{
+		float size = Input.GetAxis("Mouse ScrollWheel") * _scrollSpeed;
+		if (Camera.main.orthographic)
+		{
+			Camera.main.orthographicSize -= size;
+		}
+		else
+		{
+			Camera.main.fieldOfView -= size;
+		}
+	}
+
 	public void AnimateTo(Vector3 newPos, float duration)
 	{
 		if (_movementCoroutine != null) StopCoroutine(_movementCoroutine);
