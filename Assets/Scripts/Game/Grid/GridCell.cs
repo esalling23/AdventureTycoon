@@ -14,6 +14,7 @@ public class GridCell
 
 		// private List<MapObject> _objects;
 		private MapLocation _location;
+		private TerrainType _terrainType = TerrainType.Jungle;
 
 		#endregion
 
@@ -23,6 +24,8 @@ public class GridCell
 		public Vector2Int Coordinates { get { return _coordinates; } }
 		public MapLocation Location { get { return _location; } }
 
+		public TerrainType TerrainType { get { return _terrainType; } }
+
 		#endregion
 
 		#region Methods
@@ -31,11 +34,14 @@ public class GridCell
 			this._grid = grid;
 			this._isSelected = false;
 			this._coordinates = coordinates;
-			// this._objects = new List<MapObject>;
 
+			// To do - sensical terrain generation
+			System.Array terrainValues = System.Enum.GetValues(typeof(TerrainType));
+			int random = Mathf.FloorToInt(Random.Range(0, terrainValues.Length));
+			TerrainType randomType = (TerrainType) terrainValues.GetValue(random);
+			this._terrainType = randomType;
 
 			EventManager.StartListening(EventName.OnGridValueChanged, HandleGridValueChanged);
-
 		}
 
 		public void HandleGridValueChanged(Dictionary<string, object> data) {
