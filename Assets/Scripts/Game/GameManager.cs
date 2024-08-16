@@ -9,8 +9,8 @@ public class GameManager : MonoBehaviour
     #region Fields
 		private static GameManager _instance;
 
-		private int _gold;
-		private int _currentDay;
+		private int _gold = 0;
+		private int _currentDay = 1;
 
 		[SerializeField] private float _minutesInDay = 0.2f;
 
@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
 
 		public float MinutesInDay { get { return _minutesInDay; } }
 		public int Gold { get { return _gold; } }
+		public int CurrentDay { get { return _currentDay; } }
 		public GameMode Mode { get { return _mode; } }
 
 		#endregion
@@ -45,6 +46,21 @@ public class GameManager : MonoBehaviour
             _instance = this;
         }
     }
+
+		private IEnumerator PlayTime()
+		{
+			yield return new WaitForSeconds(MinutesInDay);
+
+			_currentDay++;
+
+			EventManager.TriggerEvent(EventName.OnDayChanged, null);
+		}
+
+		public void UpdatePlayerGold(int gold)
+		{
+			_gold += gold;
+			EventManager.TriggerEvent(EventName.OnPlayerGoldChanged, null);
+		}
 
 		public void SetMode(GameMode mode) {
 			_mode = mode;

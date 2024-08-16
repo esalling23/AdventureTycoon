@@ -62,6 +62,8 @@ public class Adventurer : MonoBehaviour
 			_currentHealth = _maxHealth;
 
 			_happiness = AdventurerManager.Instance.maxHappiness;
+
+			EventManager.TriggerEvent(EventName.OnAdventurerStatChanged, null);
     }
 
 		void ClearCoroutine()
