@@ -20,6 +20,12 @@ public class Map : MonoBehaviour
 	[SerializeField] private GameManager _manager;
 	private CameraManager _camera;
 
+	// Initialization
+	[SerializeField] private int initLocationCount = 1;
+	[SerializeField] private int initAdventurerCount = 3;
+	[SerializeField] private int initActivityCount = 2;
+	[SerializeField] private int initQuestCount = 1;
+
 	// Grid
 	public Vector2Int gridSize = new Vector2Int(20, 10);
 	public float cellSize = 10f;
@@ -42,7 +48,7 @@ public class Map : MonoBehaviour
 	#region Properties
 
 	public List<MapLocation> LocationsOnMap { get { return _locationsOnMap; } }
-
+	public Grid<GridCell> Grid { get { return _mapGrid; } }
 
 	#endregion
 
@@ -54,21 +60,9 @@ public class Map : MonoBehaviour
 
 		_camera = GameObject.FindWithTag("MainCamera").GetComponent<CameraManager>();
 
-		_mapGrid = new Grid<GridCell>(
-			(int) gridSize.x, 
-			(int) gridSize.y, 
-			cellSize, 
-			new Vector2(-gridSize.x * 5, -gridSize.y * 5),
-			(Grid<GridCell> g, int x, int y) => new GridCell(g, new Vector2Int(x, y))
-		);
+		Init();
 
-		ShowTerrainSprites();
-
-		_activeLocationToBuild = null;
-
-		InitMapLocations(DataManager.Instance.WorldLocations, 1);
-		InitMapAdventurers(2);
-
+		EventManager.StartListening(EventName.OnBuildLocationSelected, HandleBuildLocationSelected);
 		EventManager.StartListening(EventName.OnGridValueChanged, HandleGridValueChanged);
 	}
 
@@ -78,7 +72,7 @@ public class Map : MonoBehaviour
 			GridCell cell = _mapGrid.GetGridObject(UtilsClass.GetMouseWorldPosition());
 			if (cell != null)
 			{
-				Debug.Log($"Clicked on cell coordinates ({cell.Coordinates.x}, {cell.Coordinates.y})");
+				// Debug.Log($"Clicked on cell coordinates ({cell.Coordinates.x}, {cell.Coordinates.y})");
 				switch(_manager.Mode) {
 					case GameMode.Build:
 						if (_activeLocationToBuild != null) {
@@ -99,6 +93,25 @@ public class Map : MonoBehaviour
 		if (Input.GetMouseButtonDown(1)) {
 			Deselect();
 		}
+	}
+
+	public void Init() {
+		// Debug.Log("Initializing map");
+
+		_mapGrid = new Grid<GridCell>(
+			(int) gridSize.x, 
+			(int) gridSize.y, 
+			cellSize, 
+			new Vector2(-gridSize.x * 5, -gridSize.y * 5),
+			(Grid<GridCell> g, int x, int y) => new GridCell(g, new Vector2Int(x, y))
+		);
+
+		ShowTerrainSprites();
+
+		InitMapLocations(DataManager.Instance.WorldLocations, initLocationCount);
+		InitMapAdventurers(initAdventurerCount);
+
+		_activeLocationToBuild = null;
 	}
 
 	// Builds map for terrain type -> tile sprite
@@ -130,7 +143,7 @@ public class Map : MonoBehaviour
 					this.transform
 				);
 				tile.cell = _mapGrid.GetGridObject(x, y);
-				Debug.Log($"Cell for ({x}, {y}) is {tile.cell}");
+				// Debug.Log($"Cell for ({x}, {y}) is {tile.cell}");
 				if (_terrainTileSpritesMap.TryGetValue(tile.cell.TerrainType, out Sprite tileSprite)) {
 					tile.SetSprite(tileSprite);
 				}
@@ -145,35 +158,6 @@ public class Map : MonoBehaviour
 		}
 	}
 
-	private void HandleGridValueChanged(Dictionary<string, object> data) {
-		if (data.TryGetValue("coords", out object coords)) 
-		{
-			Vector2Int vectCoords = (Vector2Int) coords;
-			GridCell cell = _mapGrid.GetGridObject(vectCoords.x, vectCoords.y);
-			if (cell.Location != null)
-			{
-				_locationsOnMap.Add(cell.Location);
-			}
-			else if (data.TryGetValue("locationRemoved", out object locationIdRemoved))
-			{
-				_locationsOnMap.RemoveAll((MapLocation location) => {
-					return location.Id == (System.Guid) locationIdRemoved;
-				});
-			}
-		}
-	}
-
-	private void Deselect() {
-		_selectedIndicator.SetActive(false);
-		_locationDetailsPanel.ToggleOpen(false);
-	}
-
-	public void SetLocationToBuild(Location location) 
-	{
-		_manager.SetMode(GameMode.Build);
-		_activeLocationToBuild = location;
-	}
-	
 	private void SelectCell(GridCell cell) {
 		Vector3 centeredCellPos = _mapGrid.GetCenteredCellPosition(cell.Coordinates.x, cell.Coordinates.y);
 		
@@ -190,6 +174,17 @@ public class Map : MonoBehaviour
 		}
 	}
 
+	private void Deselect() {
+		_selectedIndicator.SetActive(false);
+		_locationDetailsPanel.ToggleOpen(false);
+	}
+
+	public void SetLocationToBuild(Location location) 
+	{
+		_manager.SetMode(GameMode.Build);
+		_activeLocationToBuild = location;
+	}
+	
 	public void PlaceLocation(
 		GridCell cell, 
 		Location locationData, 
@@ -215,10 +210,6 @@ public class Map : MonoBehaviour
 		}
 		_activeLocationToBuild = null;
 		_manager.SetMode(GameMode.Run);
-	}
-
-	public void Regenerate() {
-		// InitMapLocations();
 	}
 
 	private void GenerateMapTerrain() {
@@ -252,13 +243,16 @@ public class Map : MonoBehaviour
 			// init locations are random
 			Location randLocation = GetRandomLocationData(available);
 			PlaceLocation(cell, randLocation, (MapLocation newLocation) => {
-				for (int i = 0; i < 1; i++)
+				for (int i = 0; i < initActivityCount; i++)
 				{
 					// Make sure there's at least 1 activity matching 
 					// the base activity type for this location type
 					newLocation.AddRandomActivity(i == 0);
 				}
-				newLocation.AddRandomQuest();
+				for (int i = 0; i < initQuestCount; i++)
+				{
+					newLocation.AddRandomQuest();
+				}
 			});
 		}
 	}
@@ -275,6 +269,33 @@ public class Map : MonoBehaviour
 		
 		return location; 
 	}
+
+	#region EventHandlers
+
+	private void HandleBuildLocationSelected(Dictionary<string, object> msg)
+	{
+		Deselect();
+	}
+
+	private void HandleGridValueChanged(Dictionary<string, object> data) {
+		if (data.TryGetValue("coords", out object coords)) 
+		{
+			Vector2Int vectCoords = (Vector2Int) coords;
+			GridCell cell = _mapGrid.GetGridObject(vectCoords.x, vectCoords.y);
+			if (cell.Location != null)
+			{
+				_locationsOnMap.Add(cell.Location);
+			}
+			else if (data.TryGetValue("locationRemoved", out object locationIdRemoved))
+			{
+				_locationsOnMap.RemoveAll((MapLocation location) => {
+					return location.Id == (System.Guid) locationIdRemoved;
+				});
+			}
+		}
+	}
+
+	#endregion
 
 	#endregion
 }

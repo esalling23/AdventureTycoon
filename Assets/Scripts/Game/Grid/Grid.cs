@@ -50,11 +50,20 @@ public class Grid<TGridObject>
 			this._originPosition = originPosition;
 
 			_gridArray = new TGridObject[width, height];
-			_debugTextArray = new TextMesh[width, height];
 
 			for (int x = 0; x < _gridArray.GetLength(0); x++) {
 				for (int y = 0; y < _gridArray.GetLength(1); y++) {
 					_gridArray[x, y] = createGridObject(this, x, y);
+				}
+			}
+		}
+
+		public void ShowDebug()
+		{
+			_debugTextArray = new TextMesh[_width, _height];
+
+			for (int x = 0; x < _gridArray.GetLength(0); x++) {
+				for (int y = 0; y < _gridArray.GetLength(1); y++) {
 					_debugTextArray[x, y] = UtilsClass.CreateWorldText(
 						_gridArray[x, y]?.ToString(), 
 						null, 
@@ -70,8 +79,8 @@ public class Grid<TGridObject>
 			}
 
 			// Remaining lines fill the top & right (don't need these per box)
-			Debug.DrawLine(GetWorldPosition(0, height), GetWorldPosition(width, height), Color.white, 100f);
-			Debug.DrawLine(GetWorldPosition(width, 0), GetWorldPosition(width, height), Color.white, 100f);
+			Debug.DrawLine(GetWorldPosition(0, _height), GetWorldPosition(_width, _height), Color.white, 100f);
+			Debug.DrawLine(GetWorldPosition(_width, 0), GetWorldPosition(_width, _height), Color.white, 100f);
 		
 		}
 
