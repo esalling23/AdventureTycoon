@@ -25,6 +25,15 @@ public class AdventurerManager : MonoBehaviour
 		#region Properties
 
 		public static AdventurerManager Instance { get { return _instance; }}
+		public int AverageHappiness { 
+			get { 
+				if (TotalAdventurers == 0) return 0;
+
+				int total = (from obj in Instance._adventurersOnMap select obj.Happiness).Sum();
+				return total / TotalAdventurers; 
+			}
+		}
+		public int TotalAdventurers { get { return _adventurersOnMap.Count; } }
 
 		#endregion
 
@@ -60,8 +69,20 @@ public class AdventurerManager : MonoBehaviour
 				Quaternion.identity,
 				gameObject.transform
 			).GetComponent<Adventurer>();
+			_adventurersOnMap.Add(newAdventurer);
 			newAdventurer.Init();
 			newAdventurer.Loop();
+		}
+
+		public void KillAdventurer(Adventurer adventurer)
+		{
+			_adventurersOnMap.Remove(adventurer);
+			Destroy(adventurer.gameObject);
+		}
+
+		public int GetAdventurerNextLevelXp(int level = 1)
+		{
+			return GetAdventurerLevelXp(level + 1);
 		}
 
 		public int GetAdventurerLevelXp(int level = 1)
