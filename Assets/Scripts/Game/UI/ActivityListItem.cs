@@ -38,7 +38,7 @@ public class ActivityListItem : MonoBehaviour
 			// healthBar.SetActive(activity.data.hasLifetime);
 			// healthRemainingText.text = activity.currentHealthRemaining.ToString();
 
-			Debug.Log($"Displaying a count of {activity.adventurersPresent.Count} adventurers");
+			// Debug.Log($"Displaying a count of {activity.adventurersPresent.Count} adventurers");
 			adventurerCountText.text = activity.adventurersPresent.Count.ToString();
 
 			ActivityTypeData defaultData = DataManager.Instance.GetActivityTypeData(activity.data.Type);

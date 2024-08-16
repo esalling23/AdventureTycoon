@@ -37,20 +37,20 @@ public class GameStatsHUD : MonoBehaviour
 
 		void HandleAdventurerStatChanged(Dictionary<string, object> _data = null) 
 		{
-			Debug.Log($"Setting HUD adventurer data: Happiness {AdventurerManager.Instance.AverageHappiness} and Total {AdventurerManager.Instance.TotalAdventurers}");
+			// Debug.Log($"Setting HUD adventurer data: Happiness {AdventurerManager.Instance.AverageHappiness} and Total {AdventurerManager.Instance.TotalAdventurers}");
 			totalAdventurersText.text = AdventurerManager.Instance.TotalAdventurers.ToString();
 			averageHappinessText.text = AdventurerManager.Instance.AverageHappiness.ToString();
 		}
 
 		void HandlePlayerGoldChanged(Dictionary<string, object> _data = null) 
 		{
-			Debug.Log($"Setting HUD gold: {GameManager.Instance.Gold}");
+			// Debug.Log($"Setting HUD gold: {GameManager.Instance.Gold}");
 			playerGoldText.text = GameManager.Instance.Gold.ToString();
 		}
 
 		void HandleDayChanged(Dictionary<string, object> _data = null) 
 		{
-			Debug.Log($"Setting HUD Day: {GameManager.Instance.CurrentDay}");
+			// Debug.Log($"Setting HUD Day: {GameManager.Instance.CurrentDay}");
 			currentDayText.text = GameManager.Instance.CurrentDay.ToString();
 		}
 

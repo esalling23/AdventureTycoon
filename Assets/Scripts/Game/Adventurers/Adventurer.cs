@@ -107,7 +107,7 @@ public class Adventurer : MonoBehaviour
 				{
 					_isIdle = false;
 
-					Debug.Log($"Adventurer {_id} chose {nextActivity?.Type} activity at {nextActivity?.locationParent}");
+					// Debug.Log($"Adventurer {_id} chose {nextActivity?.Type} activity at {nextActivity?.locationParent}");
 					
 					if (nextActivity.Type == ActivityType.PassTime) {
 						_hasPassedTimeSinceLastQuest = true;
@@ -248,7 +248,7 @@ public class Adventurer : MonoBehaviour
 				chosenActivity = available[randIndex];
 			}
 
-			Debug.Log($"Found Activity Match: {chosenActivity?.data.Name}");
+			// Debug.Log($"Found Activity Match: {chosenActivity?.data.Name}");
 		}
 
 		private void GetOrCreateLocationLog(MapLocation location, out HistoryLog log)

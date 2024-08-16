@@ -85,7 +85,7 @@ public class LocationDetailsPanel : LocationDetailItem
 		private void RefreshList(TabType tabType) {
 			if (!_activeLocation) return;
 
-			Debug.Log($"Refreshing list of {tabType}");
+			// Debug.Log($"Refreshing list of {tabType}");
 			List<MapActivity> list = _activeLocation.activities
 				.Where((MapActivity obj) => {
 					if (tabType == TabType.Quests)

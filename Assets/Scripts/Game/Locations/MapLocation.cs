@@ -27,7 +27,6 @@ public class MapLocation : MapObject
 		public Location LocationData { get { return _locationData; } }
 		public LocationType Type { get { return _locationData.type; } }
 		public Vector3 WorldPosition { get { 
-			Debug.Log(gameObject.transform.position);
 			return gameObject.transform.position; 
 		} }
 
@@ -130,7 +129,7 @@ public class MapLocation : MapObject
 
 		public MapActivity AddRandomQuest()
 		{
-			Debug.Log($"Adding Quest to {Type} Location");
+			// Debug.Log($"Adding Quest to {Type} Location");
 
 			// LocationTypeData typeDefaults = DataManager.Instance.LocationTypeDefaults.FirstOrDefault(data => data.type == location.type);
 			// ActivityType baseActivityType = typeDefaults.baseActivityType;
