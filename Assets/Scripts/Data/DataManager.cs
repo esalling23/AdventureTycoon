@@ -88,22 +88,22 @@ public class DataManager : MonoBehaviour
 			return data;
 		}
 
-		public Activity GetActivityData(int index) 
+		public Activity GetActivityData(Activity[] activities, int index) 
 		{
-			return _worldActivityData[index];
+			return activities[index];
 		}
 
-		public Activity GetRandomActivityData()
+		public Activity GetRandomActivityData(Activity[] activities)
 		{
-			int index = Random.Range(0, _worldActivityData.Length);
-			return GetActivityData(index);
+			int index = Random.Range(0, activities.Length);
+			return GetActivityData(activities, index);
 		}
 
-		public Activity GetRandomActivityData(ActivityType type)
+		public Activity GetRandomActivityData(Activity[] activities, ActivityType type)
 		{
-			Activity[] available = System.Array.FindAll(_worldActivityData, a => a.type == type);
+			Activity[] available = System.Array.FindAll(activities, a => a.type == type);
 			int index = Random.Range(0, available.Length);
-			return GetActivityData(index);
+			return GetActivityData(activities, index);
 		}
 
 		public Activity GetRandomActivityData(Location location)
@@ -112,7 +112,7 @@ public class DataManager : MonoBehaviour
 				return System.Array.IndexOf(a.appearsInLocationTypes, location.type) > -1;
 			});
 			int index = Random.Range(0, available.Length);
-			return GetActivityData(index);
+			return GetActivityData(available, index);
 		}
 
 		public Location GetLocationData(int index) 

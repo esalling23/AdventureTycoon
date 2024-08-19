@@ -101,20 +101,25 @@ public class MapLocation : MapObject
 			}
     }
 
-		public MapActivity AddRandomActivity(bool isBaseActivity)
+		public MapActivity AddRandomActivity(bool isBaseActivity = false)
 		{
 			// Debug.Log($"Adding Activity to Location Type {location.type}");
+			System.Guid[] activityDataIds = activities.Select(a => a.data.Id).ToArray();
+			Activity[] unusedActivities = DataManager.Instance.WorldActivities.Where(a => {
+				return !activityDataIds.Any(id => id == a.Id);
+			}).ToArray();
+
 			Activity randActivity;
 			if (isBaseActivity)
 			{
 				LocationTypeData typeDefaults = DataManager.Instance.LocationTypeDefaults.FirstOrDefault(data => data.type == Type);
 				ActivityType baseActivityType = typeDefaults.baseActivityType;
 
-				randActivity = DataManager.Instance.GetRandomActivityData(baseActivityType);
+				randActivity = DataManager.Instance.GetRandomActivityData(unusedActivities, baseActivityType);
 			}
 			else
 			{
-				randActivity = DataManager.Instance.GetRandomActivityData();
+				randActivity = DataManager.Instance.GetRandomActivityData(unusedActivities);
 			}
 
 			MapActivity activeActivity = new MapActivity(randActivity, this);
