@@ -66,6 +66,12 @@ public class Map : MonoBehaviour
 		EventManager.StartListening(EventName.OnGridValueChanged, HandleGridValueChanged);
 	}
 
+	void OnDestroy()
+	{
+		EventManager.StopListening(EventName.OnBuildLocationSelected, HandleBuildLocationSelected);
+		EventManager.StopListening(EventName.OnGridValueChanged, HandleGridValueChanged);
+	}
+
 	void Update()
 	{
 		if (!EventSystem.current.IsPointerOverGameObject() && Input.GetMouseButtonDown(0)) {
@@ -120,7 +126,7 @@ public class Map : MonoBehaviour
 		foreach (TerrainTileSprite terrain in _terrainTileSprites)
 		{
 			if (_terrainTileSpritesMap.TryGetValue(terrain.type, out Sprite sprite)) {
-				sprite = terrain.sprite;
+				_terrainTileSpritesMap[terrain.type] = terrain.sprite;
 			}
 			else
 			{
@@ -212,10 +218,6 @@ public class Map : MonoBehaviour
 		_manager.SetMode(GameMode.Run);
 	}
 
-	private void GenerateMapTerrain() {
-		// generate map background/terrain
-	}
-
 	public Location GetRandomLocationData(Location[] available) {
 		int rand = Random.Range(0, available.Length);
 		return available[rand];
@@ -274,7 +276,11 @@ public class Map : MonoBehaviour
 
 	private void HandleBuildLocationSelected(Dictionary<string, object> msg)
 	{
-		Deselect();
+		if (msg.TryGetValue("location", out object locationToBuild))
+		{
+			SetLocationToBuild((Location) locationToBuild);
+			Deselect();
+		}
 	}
 
 	private void HandleGridValueChanged(Dictionary<string, object> data) {

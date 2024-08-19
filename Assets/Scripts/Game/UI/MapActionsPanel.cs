@@ -5,18 +5,20 @@ using UnityEngine.UI;
 using TMPro;
 using System.Linq;
 
+/// <summary>
+/// Map action panel of buttons
+/// - Build button & build type shelf
+/// ???
+/// </summary>
 public class MapActionsPanel : MonoBehaviour
 {
     #region Fields
 
-		[SerializeField] private Map _map;
-		[SerializeField] private GameManager _manager;
-
-		[SerializeField] private int _locationGenerationCount = 3;
-
-		[SerializeField] private GameObject _buildShelf;
-		[SerializeField] private LocationDetailItem _locationDetailPrefab;
-
+		// Displays location types to build
+		[SerializeField] private GameObject _buildTypeShelf;
+		[SerializeField] private LocationTypeItem _locationTypeItemPrefab;
+		[SerializeField] private List<LocationTypeItem> _typeItems = new List<LocationTypeItem>();
+		[SerializeField] private LocationBuildModal _locationBuildModal;
 
 		#endregion
 
@@ -28,9 +30,21 @@ public class MapActionsPanel : MonoBehaviour
 
     void Start()
     {
-			ClearBuildShelf();
 			HideBuildShelf();
 
+			foreach (LocationTypeData def in DataManager.Instance.LocationTypeDefaults)
+			{
+				LocationTypeItem item = Instantiate(
+					_locationTypeItemPrefab,
+					Vector3.zero,
+					Quaternion.identity,
+					_buildTypeShelf.gameObject.transform
+				);
+				item.SetData(def);
+				_typeItems.Add(item);
+			}
+
+			EventManager.StartListening(EventName.OnBuildTypeSelected, HandleBuildTypeSelected);
 			EventManager.StartListening(EventName.OnBuildLocationSelected, HandleBuildLocationSelected);
     }
 
@@ -39,41 +53,9 @@ public class MapActionsPanel : MonoBehaviour
 			HideBuildShelf();
 		}
 
-		void ClearBuildShelf() {
-			foreach (Transform child in _buildShelf.transform) {
-				Destroy(child.gameObject);
-			}
-		}
-
 		public void HideBuildShelf() {
-			_buildShelf.SetActive(false);
+			_buildTypeShelf.SetActive(false);
 		}
-		public void HandleClickBuildMode() {
-			ClearBuildShelf();
-			// generate # of locations for player
-			Location[] options = new Location[_locationGenerationCount];
-			List<Location> availableLocations = new List<Location>(DataManager.Instance.WorldLocations);
-
-			for (int i = 0; i < _locationGenerationCount; i++) 
-			{
-				Location newLocation = _map.GetRandomLocationData(availableLocations.ToArray());
-
-				availableLocations.Remove(newLocation);
-
-				// and display them
-				LocationDetailItem item = Instantiate(
-					_locationDetailPrefab,
-					Vector3.zero,
-					Quaternion.identity, 
-					_buildShelf.transform
-				);
-				item.gameObject.transform.position = Vector3.zero;
-				item.SetData(newLocation);
-			}
-
-			_buildShelf.SetActive(true);
-		}
-
 		// public void HandleClickTimingButton(TimeChangeType type) {
 			// if (_manager.Mode == GameMode.Build) {
 			// 	_manager.SetMode(GameMode.Run);
@@ -81,6 +63,25 @@ public class MapActionsPanel : MonoBehaviour
 			// _manager.SetMode(GameMode.Build);
 		// }
 
+		/// <summary>
+		/// Shows the build type shelf of options
+		/// </summary>
+		public void HandleClickBuildButton()
+		{
+			Debug.Log(_typeItems.Count);
+			foreach (LocationTypeItem item in _typeItems)
+			{
+				item.CheckIsEnabled();
+			}
+			_buildTypeShelf.SetActive(true);
+
+			// todo: update buttons to be disabled if they can't be built (ex player doesnt have enough money)
+		}
+
+		private void HandleBuildTypeSelected(Dictionary<string, object> data)
+		{
+			HideBuildShelf();
+		}
 
 
 		#endregion

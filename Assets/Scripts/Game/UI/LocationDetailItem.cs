@@ -4,11 +4,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+/// <summary>
+/// Handles display of rolled locations that can be built
+/// Used in the LocationBuildModal
+/// </summary>
 public class LocationDetailItem : MonoBehaviour
 {
     #region Fields
-
-		private Map _map;
 
 		private Location _location;
 		public TMP_Text nameText;
@@ -19,11 +21,6 @@ public class LocationDetailItem : MonoBehaviour
 		#endregion
 
 		#region Methods
-
-		private void Start() 
-		{
-			_map = GameObject.FindWithTag("Map").GetComponent<Map>();
-		}
 
     public void SetData(Location location)
     {
@@ -38,9 +35,9 @@ public class LocationDetailItem : MonoBehaviour
     }
 
 		public void HandleClickLocationForBuild() {
-			_map.SetLocationToBuild(_location);
-
-			EventManager.TriggerEvent(EventName.OnBuildLocationSelected, null);
+			EventManager.TriggerEvent(EventName.OnBuildLocationSelected, new Dictionary<string, object>() {
+				{ "location", _location }
+			});
 		}
 
 		#endregion
