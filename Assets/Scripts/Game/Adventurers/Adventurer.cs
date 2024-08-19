@@ -52,6 +52,12 @@ public class Adventurer : MonoBehaviour
 			EventManager.StartListening(EventName.OnDayChanged, HandleOnDayChanged);
 		}
 
+		public void OnDestroy()
+		{
+			EventManager.StopListening(EventName.OnActivityChanged, HandleOnActivityChanged);
+			EventManager.StopListening(EventName.OnDayChanged, HandleOnDayChanged);
+		}
+
     public void Init()
     {
 			// Debug.Log($"Initing adventurer {Id}");
@@ -168,25 +174,28 @@ public class Adventurer : MonoBehaviour
 			activity.LogAttempt(Id, isSuccessful);
 		}
 
-		private void UpdateStats(bool isSuccess, MapActivity activity)
+		private void UpdateStats(bool isSuccess, MapActivity mapActivity)
 		{
 			if (isSuccess)
 			{
-				if (activity.Type == ActivityType.Quest)
+				if (mapActivity.data is Quest quest)
 				{
-					_gold += ((Quest) activity.data).reward;
+					_gold += quest.reward;
 					_currentExperience += 50;
 
 					int nextLevelXp = AdventurerManager.Instance.GetAdventurerNextLevelXp(_level);
 					if (nextLevelXp <= _currentExperience)
 					{
-						_currentExperience = _currentExperience - nextLevelXp;
+						_currentExperience -= nextLevelXp;
 						_level++;
 					}
 				}
-				else if (activity.Type == ActivityType.Rest)
+				else if (mapActivity.data is Activity activity)
 				{
-					_currentHealth += 1;
+					if (activity.Type == ActivityType.Rest)
+					{
+						_currentHealth += 1;
+					}
 				}
 
 				_happiness += 1;
