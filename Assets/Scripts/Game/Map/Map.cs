@@ -101,9 +101,7 @@ public class Map : MonoBehaviour
 					{
 						_activeTempLocation = CreateTempLocation(_activeLocationToBuild, cell);
 					}
-					_activeTempLocation.SetPosition(
-						_mapGrid.GetCenteredCellPosition(cell.Coordinates.x, cell.Coordinates.y) - new Vector3(0f, cellSize / 2, 0f)
-					);
+					_activeTempLocation.SetPosition(GetCellObjectPosition(cell));
 					_activeTempLocation.SetSortingOrder(_mapGrid.GridArray.GetLength(1) - cell.Coordinates.y);
 				}	
 			}
@@ -230,6 +228,21 @@ public class Map : MonoBehaviour
 		_manager.SetMode(GameMode.Run);
 	}
 
+	private MapLocation CreateLocationObject(Location locationData, GridCell cell) 
+	{
+		MapLocation location = Instantiate(
+			_locationPrefab,
+			GetCellObjectPosition(cell),
+			Quaternion.identity, 
+			transform
+		);
+
+		location.SetData(locationData);
+		location.SetSpriteSize(cellSize, cellSize);
+
+		return location; 
+	}
+
 	private TempBuildLocation CreateTempLocation(Location locationData, GridCell cell)
 	{
 		TempBuildLocation location = Instantiate(
@@ -251,7 +264,11 @@ public class Map : MonoBehaviour
 
 	private Vector3 GetCellObjectPosition(GridCell cell)
 	{
-		return _mapGrid.GetCenteredCellPosition(cell.Coordinates.x, cell.Coordinates.y) - new Vector3(0f, cellSize / 2, 0f);
+		Vector3 center = _mapGrid.GetCenteredCellPosition(cell.Coordinates.x, cell.Coordinates.y);
+		Debug.Log(center);
+		Vector3 offset = new Vector3(0f, cellSize / 2, 0f);
+		Debug.Log(offset);
+		return center - offset;
 	}
 
 	private void InitMapAdventurers(int count) {
@@ -288,19 +305,6 @@ public class Map : MonoBehaviour
 				}
 			});
 		}
-	}
-
-	private MapLocation CreateLocationObject(Location locationData, GridCell cell) {
-		MapLocation location = Instantiate(
-			_locationPrefab,
-			GetCellObjectPosition(cell),
-			Quaternion.identity, 
-			transform
-		);
-
-		location.SetData(locationData);
-		
-		return location; 
 	}
 
 	#region EventHandlers
