@@ -1,4 +1,4 @@
-using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -28,15 +28,13 @@ public class GridCell
 
 		#region Methods
 
-    public GridCell(Grid<GridCell> grid, Vector2Int coordinates) {
+    public GridCell(Vector2Int coordinates, TerrainTileSprite[] availableTerrains) {
 			_isSelected = false;
 			_coordinates = coordinates;
 
 			// To do - sensical terrain generation
-			System.Array terrainValues = System.Enum.GetValues(typeof(TerrainType));
-			int random = Mathf.FloorToInt(Random.Range(0, terrainValues.Length));
-			TerrainType randomType = (TerrainType) terrainValues.GetValue(random);
-			_terrainType = randomType;
+			TerrainTileSprite sprite = Utils.GetRandomFromList(availableTerrains.ToList());
+			_terrainType = sprite.type;
 
 			EventManager.StartListening(EventName.OnGridValueChanged, HandleGridValueChanged);
 		}

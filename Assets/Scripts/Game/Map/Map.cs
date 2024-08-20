@@ -118,11 +118,11 @@ public class Map : MonoBehaviour
 		// Debug.Log("Initializing map");
 
 		_mapGrid = new Grid<GridCell>(
-			(int) gridSize.x, 
-			(int) gridSize.y, 
+			gridSize.x,
+			gridSize.y, 
 			cellSize, 
 			new Vector2(-gridSize.x * 5, -gridSize.y * 5),
-			(Grid<GridCell> g, int x, int y) => new GridCell(g, new Vector2Int(x, y))
+			(Grid<GridCell> g, int x, int y) => new GridCell(new Vector2Int(x, y), _terrainTileSprites)
 		);
 
 		ShowTerrainSprites();
@@ -159,7 +159,7 @@ public class Map : MonoBehaviour
 					_tilePrefab,
 					Vector3.zero,
 					Quaternion.identity,
-					this.transform
+					transform
 				);
 				tile.cell = _mapGrid.GetGridObject(x, y);
 				// Debug.Log($"Cell for ({x}, {y}) is {tile.cell}");
