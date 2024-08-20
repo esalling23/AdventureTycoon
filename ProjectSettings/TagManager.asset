@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Map
   - GameManager
+  - MainCanvas
   layers:
   - Default
   - TransparentFX
