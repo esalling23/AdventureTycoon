@@ -140,7 +140,7 @@ public class MapLocation : MapObject
 			// ActivityType baseActivityType = typeDefaults.baseActivityType;
 
 			Quest quest = DataManager.Instance.GetRandomQuestData();
-			MapActivity activeActivity = new MapActivity((IActivity) quest, this);
+			MapActivity activeActivity = new(quest, this);
 
 			activities.Add(activeActivity);
 

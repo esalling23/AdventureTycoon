@@ -17,13 +17,7 @@ public class Adventurer : MonoBehaviour
 		private int _currentExperience = 0;
 
 		private MapLocation _currentLocation = null;
-		private List<MapLocation> _locationsVisited = new List<MapLocation>();
-
-		private List<string> _inventory = new List<string>();
-		// if this adventurer has tried to pass time since their last quest
-		// will be true even if the adventurer was not able to find a pass time activity
-		private bool _hasPassedTimeSinceLastQuest = false;
-		private bool _isNew = true;
+		// private List<string> _inventory = new List<string>();
 		private bool _isIdle = false;
 
 		// public AdventurerEffect activeEffects;
@@ -115,9 +109,6 @@ public class Adventurer : MonoBehaviour
 
 					// Debug.Log($"Adventurer {_id} chose {nextActivity?.Type} activity at {nextActivity?.locationParent}");
 					
-					if (nextActivity.Type == ActivityType.PassTime) {
-						_hasPassedTimeSinceLastQuest = true;
-					}
 
 					GetOrCreateLocationLog(_currentLocation, out HistoryLog log);
 					log.LogAttemptActivity(nextActivity);
@@ -253,8 +244,7 @@ public class Adventurer : MonoBehaviour
 			}
 
 			if (chosenActivity == null && available.Count > 0) {
-				int randIndex = Random.Range(0, available.Count);
-				chosenActivity = available[randIndex];
+				chosenActivity = Utils.GetRandomFromList(available);
 			}
 
 			// Debug.Log($"Found Activity Match: {chosenActivity?.data.Name}");
@@ -340,6 +330,8 @@ public class Adventurer : MonoBehaviour
 			yield return _activeCoroutine;
 		}
 
+		#region Event Handlers
+
 		private void HandleOnActivityChanged(Dictionary<string, object> msg)
 		{
 			// Attempt loop
@@ -354,5 +346,7 @@ public class Adventurer : MonoBehaviour
 			_happiness--;
 		}
 
+		#endregion
+		
 		#endregion
 }

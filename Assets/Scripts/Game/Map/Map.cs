@@ -218,7 +218,6 @@ public class Map : MonoBehaviour
 			}
 			// Create the actual location map object to display (visual layer)
 			MapLocation newPlacement = CreateLocationObject(locationData, cell);
-			newPlacement.SetSpriteSize((float) cellSize, (float) cellSize);
 
 			runSideEffects?.Invoke(newPlacement);
 
@@ -241,14 +240,13 @@ public class Map : MonoBehaviour
 		);
 
 		location.SetData(locationData);
-		location.SetSpriteSize((float) cellSize, (float) cellSize);
+		location.SetSpriteSize(cellSize, cellSize);
 
 		return location;
 	}
 
 	public Location GetRandomLocationData(Location[] available) {
-		int rand = Random.Range(0, available.Length);
-		return available[rand];
+		return Utils.GetRandomFromList(available.ToList());
 	}
 
 	private Vector3 GetCellObjectPosition(GridCell cell)
@@ -276,7 +274,7 @@ public class Map : MonoBehaviour
 			} while (cell?.Location != null);
 
 			// init locations are random
-			Location randLocation = GetRandomLocationData(available);
+			Location randLocation = Utils.GetRandomFromList(available.ToList());
 			PlaceLocation(randLocation, cell, (MapLocation newLocation) => {
 				for (int i = 0; i < initActivityCount; i++)
 				{
