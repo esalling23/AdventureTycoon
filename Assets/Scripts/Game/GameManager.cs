@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
     #region Fields
 		private static GameManager _instance;
 
-		private int _gold = 0;
+		[SerializeField] private int _gold = 0;
 		private int _currentDay = 1;
 
 		[SerializeField] private float _minutesInDay = 0.2f;
@@ -31,7 +31,6 @@ public class GameManager : MonoBehaviour
 		#endregion
 
 		#region Methods
-
 
 		/// <summary>
     /// Manages singleton wakeup/destruction
@@ -58,7 +57,9 @@ public class GameManager : MonoBehaviour
 
 		public void UpdatePlayerGold(int gold)
 		{
+			Debug.Log($"Changing player gold by {gold}");
 			_gold += gold;
+			Debug.Log($"Player gold now {_gold}");
 			EventManager.TriggerEvent(EventName.OnPlayerGoldChanged, null);
 		}
 

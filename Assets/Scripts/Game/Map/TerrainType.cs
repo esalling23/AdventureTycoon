@@ -1,14 +1,13 @@
 
 public enum TerrainType
 {
-	Empty,
+	// Empty,
 	Plains,
 	Forest,
 	Jungle,
 	Snow,
 	Mountain,
 	Desert,
-	City,
 	Water,
 	Volcano
 }
