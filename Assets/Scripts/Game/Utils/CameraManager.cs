@@ -6,6 +6,8 @@ public class CameraManager : MonoBehaviour
 {
 	// Scroll to zoom
 	[SerializeField] private float _scrollSpeed = 10;
+	[SerializeField] private float minZoom = 5f;
+	[SerializeField] private float maxZoom = 100f;
 
 	// Arrow Key & WASD movement
 	private float _horizontalInput;
@@ -27,10 +29,24 @@ public class CameraManager : MonoBehaviour
 		if (Camera.main.orthographic)
 		{
 			Camera.main.orthographicSize -= size;
+			if (Camera.main.orthographicSize < minZoom)
+			{
+				Camera.main.orthographicSize = minZoom;
+			} else if (Camera.main.orthographicSize > maxZoom)
+			{
+				Camera.main.orthographicSize = maxZoom;
+			}
 		}
 		else
 		{
 			Camera.main.fieldOfView -= size;
+			if (Camera.main.fieldOfView < minZoom)
+			{
+				Camera.main.fieldOfView = minZoom;
+			} else if (Camera.main.fieldOfView > maxZoom)
+			{
+				Camera.main.fieldOfView = maxZoom;
+			}
 		}
 	}
 
