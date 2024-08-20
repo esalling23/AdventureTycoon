@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public static class Utils 
 {
@@ -15,5 +16,16 @@ public static class Utils
 				yield return null;
 		}
 		transform.position = targetPosition;
+	}
+
+	public static T GetRandomFromList<T>(List<T> list)
+	{
+		if (list.Count == 0)
+				return default;
+		if (list.Count == 1)
+				return list[0];
+
+		int rnd = Mathf.FloorToInt(Random.Range(0, list.Count));
+		return list[rnd];
 	}
 }
