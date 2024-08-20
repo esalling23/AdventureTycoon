@@ -38,6 +38,8 @@ public class Map : MonoBehaviour
 	private List<MapLocation> _locationsOnMap = new List<MapLocation>();
 	[SerializeField] private MapLocation _locationPrefab;
 	private Location _activeLocationToBuild;
+	private TempBuildLocation _activeTempLocation;
+	[SerializeField] private TempBuildLocation _tempLocationPrefab;
 
 	// UI
 	[SerializeField] private GameObject _selectedIndicator;
@@ -74,25 +76,36 @@ public class Map : MonoBehaviour
 
 	void Update()
 	{
-		if (!EventSystem.current.IsPointerOverGameObject() && Input.GetMouseButtonDown(0)) {
+		if (!EventSystem.current.IsPointerOverGameObject()) {
 			GridCell cell = _mapGrid.GetGridObject(UtilsClass.GetMouseWorldPosition());
+			
 			if (cell != null)
 			{
-				// Debug.Log($"Clicked on cell coordinates ({cell.Coordinates.x}, {cell.Coordinates.y})");
-				switch(_manager.Mode) {
-					case GameMode.Build:
-						if (_activeLocationToBuild != null) {
-							PlaceLocation(cell, _activeLocationToBuild);
-						}
-						else 
-						{
-							Debug.Log("No Location Selected For Building");
-						}
-						break;
-					default: 
-						break;
-				}
-				SelectCell(cell);
+				if (Input.GetMouseButtonDown(0))
+				{
+					// Debug.Log($"Clicked on cell coordinates ({cell.Coordinates.x}, {cell.Coordinates.y})");
+					switch(_manager.Mode) {
+						case GameMode.Build:
+							if (_activeLocationToBuild != null && !cell.Location) {
+								PlaceLocation(_activeLocationToBuild, cell);
+							}
+							break;
+						default: 
+							break;
+					}
+					SelectCell(cell);
+				} 
+				else if (_activeLocationToBuild != null)
+				{
+					if (_activeTempLocation == null)
+					{
+						_activeTempLocation = CreateTempLocation(_activeLocationToBuild, cell);
+					}
+					_activeTempLocation.SetPosition(
+						_mapGrid.GetCenteredCellPosition(cell.Coordinates.x, cell.Coordinates.y) - new Vector3(0f, cellSize / 2, 0f)
+					);
+					_activeTempLocation.SetSortingOrder(_mapGrid.GridArray.GetLength(1) - cell.Coordinates.y);
+				}	
 			}
 		}
 
@@ -192,35 +205,55 @@ public class Map : MonoBehaviour
 	}
 	
 	public void PlaceLocation(
-		GridCell cell, 
 		Location locationData, 
+		GridCell cell, 
 		System.Action<MapLocation> runSideEffects = null
 	) {
 		// only place if it's a null position
 		if (!cell?.Location) {
+			if (_activeTempLocation != null)
+			{
+				Destroy(_activeTempLocation.gameObject);
+				_activeTempLocation = null;
+			}
 			// Create the actual location map object to display (visual layer)
 			MapLocation newPlacement = CreateLocationObject(locationData, cell);
 			newPlacement.SetSpriteSize((float) cellSize, (float) cellSize);
 
-			if (runSideEffects != null) 
-			{
-				runSideEffects(newPlacement);
-			}
+			runSideEffects?.Invoke(newPlacement);
 
 			// Keep track of the placed object in the grid (data layer)
 			cell.PlaceLocation(newPlacement);
 
 			_locationsOnMap.Add(newPlacement);
-
-			_mapGrid.TriggerOnChangeEvent(cell.Coordinates);
 		}
 		_activeLocationToBuild = null;
 		_manager.SetMode(GameMode.Run);
 	}
 
+	private TempBuildLocation CreateTempLocation(Location locationData, GridCell cell)
+	{
+		TempBuildLocation location = Instantiate(
+			_tempLocationPrefab,
+			GetCellObjectPosition(cell),
+			Quaternion.identity, 
+			transform
+		);
+
+		location.SetData(locationData);
+		location.SetSpriteSize((float) cellSize, (float) cellSize);
+
+		return location;
+	}
+
 	public Location GetRandomLocationData(Location[] available) {
 		int rand = Random.Range(0, available.Length);
 		return available[rand];
+	}
+
+	private Vector3 GetCellObjectPosition(GridCell cell)
+	{
+		return _mapGrid.GetCenteredCellPosition(cell.Coordinates.x, cell.Coordinates.y) - new Vector3(0f, cellSize / 2, 0f);
 	}
 
 	private void InitMapAdventurers(int count) {
@@ -244,7 +277,7 @@ public class Map : MonoBehaviour
 
 			// init locations are random
 			Location randLocation = GetRandomLocationData(available);
-			PlaceLocation(cell, randLocation, (MapLocation newLocation) => {
+			PlaceLocation(randLocation, cell, (MapLocation newLocation) => {
 				for (int i = 0; i < initActivityCount; i++)
 				{
 					// Make sure there's at least 1 activity matching 
@@ -262,9 +295,9 @@ public class Map : MonoBehaviour
 	private MapLocation CreateLocationObject(Location locationData, GridCell cell) {
 		MapLocation location = Instantiate(
 			_locationPrefab,
-			_mapGrid.GetCenteredCellPosition(cell.Coordinates.x, cell.Coordinates.y),
+			GetCellObjectPosition(cell),
 			Quaternion.identity, 
-			this.transform
+			transform
 		);
 
 		location.SetData(locationData);
@@ -284,15 +317,9 @@ public class Map : MonoBehaviour
 	}
 
 	private void HandleGridValueChanged(Dictionary<string, object> data) {
-		if (data.TryGetValue("coords", out object coords)) 
+		if (data.TryGetValue("locationRemoved", out object locationIdRemoved))
 		{
-			Vector2Int vectCoords = (Vector2Int) coords;
-			GridCell cell = _mapGrid.GetGridObject(vectCoords.x, vectCoords.y);
-			if (cell.Location != null)
-			{
-				_locationsOnMap.Add(cell.Location);
-			}
-			else if (data.TryGetValue("locationRemoved", out object locationIdRemoved))
+			if (data.TryGetValue("coords", out object coords)) 
 			{
 				_locationsOnMap.RemoveAll((MapLocation location) => {
 					return location.Id == (System.Guid) locationIdRemoved;
