@@ -202,9 +202,13 @@ public class Adventurer : MonoBehaviour
 			{
 				_happiness = AdventurerManager.Instance.maxHappiness;
 			}
+			if (_currentHealth > _maxHealth)
+			{
+				_currentHealth = _maxHealth;
+			}
 
-			EventManager.TriggerEvent(EventName.OnAdventurerStatChanged, null);
 			Debug.Log($"Adventurer stats -- \nGold: {_gold}\nLevel: {_level} & XP:{_currentExperience}\nHappiness: {_happiness}\nHealth: {_currentHealth} / {_maxHealth}");
+			EventManager.TriggerEvent(EventName.OnAdventurerStatChanged, null);
 		}
 
 		private void FindActivityAtLocation(MapLocation location, out MapActivity chosenActivity)
@@ -228,7 +232,6 @@ public class Adventurer : MonoBehaviour
 				}
 				
 				if ((activity.Type == ActivityType.Rest && NeedsRest)
-						// || (activity.Type == ActivityType.Trade && _inventory.Count > 0)
 						|| (activity.Type == ActivityType.Quest && !activity.AttemptLog.ContainsKey(Id))
 				) {
 					chosenActivity = activity;
