@@ -6,8 +6,6 @@ public class GridCell
 {
     #region Fields
 
-		private Grid<GridCell> _grid;
-
 		private bool _isSelected;
 
 		private Vector2Int _coordinates;
@@ -31,15 +29,14 @@ public class GridCell
 		#region Methods
 
     public GridCell(Grid<GridCell> grid, Vector2Int coordinates) {
-			this._grid = grid;
-			this._isSelected = false;
-			this._coordinates = coordinates;
+			_isSelected = false;
+			_coordinates = coordinates;
 
 			// To do - sensical terrain generation
 			System.Array terrainValues = System.Enum.GetValues(typeof(TerrainType));
 			int random = Mathf.FloorToInt(Random.Range(0, terrainValues.Length));
 			TerrainType randomType = (TerrainType) terrainValues.GetValue(random);
-			this._terrainType = randomType;
+			_terrainType = randomType;
 
 			EventManager.StartListening(EventName.OnGridValueChanged, HandleGridValueChanged);
 		}
@@ -52,20 +49,23 @@ public class GridCell
 		}
 
 		public void SetValue(bool isSelected) {
-			this._isSelected = isSelected;
+			_isSelected = isSelected;
 		}
 
 		public void PlaceLocation(MapLocation location) {
-			this._location = location;
+			_location = location;
 			location.coordinates = Coordinates;
+			EventManager.TriggerEvent(EventName.OnGridValueChanged, new Dictionary<string, object> {
+				{ "coords", Coordinates },
+			});
 		}
 
 		public void RemoveLocation() {
 			EventManager.TriggerEvent(EventName.OnGridValueChanged, new Dictionary<string, object> {
 				{ "coords", Coordinates },
-				{ "locationRemoved", this._location.Id }
+				{ "locationRemoved", _location.Id }
 			});
-			this._location = null;
+			_location = null;
 		}
 
 		public override string ToString() {

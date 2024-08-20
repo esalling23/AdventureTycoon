@@ -84,12 +84,6 @@ public class Grid<TGridObject>
 		
 		}
 
-		public void TriggerOnChangeEvent(Vector2Int coords) {
-			EventManager.TriggerEvent(EventName.OnGridValueChanged, new Dictionary<string, object>() {
-				{ "coords", (object) coords },
-			});
-		}
-
 		public Vector3 GetCenteredCellPosition(int x, int y) {
 			return GetWorldPosition(x, y) + new Vector3(_cellSize, _cellSize) * 0.5f;
 		}
