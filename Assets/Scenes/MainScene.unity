@@ -472,6 +472,10 @@ MonoBehaviour:
     type: 0
     capacity: 5
     costToUse: 0
+    happinessEffect: 5
+    healthEffect: 0
+    minTimeToUse: 1
+    maxTimeToUse: 1.2
     appearsInLocationTypes: 03000000
     costToPlace: 30
   - name: Rent a room
@@ -479,6 +483,10 @@ MonoBehaviour:
     type: 0
     capacity: 5
     costToUse: 20
+    happinessEffect: 10
+    healthEffect: 0
+    minTimeToUse: 1
+    maxTimeToUse: 1.2
     appearsInLocationTypes: 000000000100000002000000
     costToPlace: 60
   - name: Buy a round
@@ -486,6 +494,10 @@ MonoBehaviour:
     type: 3
     capacity: 5
     costToUse: 100
+    happinessEffect: 15
+    healthEffect: 0
+    minTimeToUse: 1
+    maxTimeToUse: 1.2
     appearsInLocationTypes: 000000000100000002000000
     costToPlace: 100
   - name: Visit local market
@@ -493,6 +505,10 @@ MonoBehaviour:
     type: 2
     capacity: 5
     costToUse: 100
+    happinessEffect: 10
+    healthEffect: 0
+    minTimeToUse: 1
+    maxTimeToUse: 1.2
     appearsInLocationTypes: 010000000300000000000000
     costToPlace: 100
   - name: Trade with traveling merchant
@@ -500,6 +516,10 @@ MonoBehaviour:
     type: 2
     capacity: 5
     costToUse: 50
+    happinessEffect: 5
+    healthEffect: 0
+    minTimeToUse: 1
+    maxTimeToUse: 1.2
     appearsInLocationTypes: 0200000003000000
     costToPlace: 80
   - name: Seek quest knowledge
@@ -507,6 +527,10 @@ MonoBehaviour:
     type: 3
     capacity: 5
     costToUse: 10
+    happinessEffect: 5
+    healthEffect: 0
+    minTimeToUse: 1
+    maxTimeToUse: 1.2
     appearsInLocationTypes: 000000000100000002000000
     costToPlace: 60
   _worldLocationData:
@@ -750,14 +774,26 @@ MonoBehaviour:
     type: 1
     capacity: 5
     costToUse: 0
-    level: 1
+    happinessEffect: 4
+    healthEffect: 4
+    minTimeToUse: 1
+    maxTimeToUse: 1.2
+    minLevel: 1
+    maxLevel: 5
+    baseExperience: 100
     reward: 100
   - name: Explore Underneath City
     description: A large city ruled by King Ven CCXIV
     type: 1
     capacity: 5
     costToUse: 0
-    level: 1
+    happinessEffect: 1
+    healthEffect: 3
+    minTimeToUse: 1
+    maxTimeToUse: 1.2
+    minLevel: 1
+    maxLevel: 5
+    baseExperience: 100
     reward: 100
   - name: Collect Alchemy Ingredients
     description: A city built within the roots of an ancient, sentient tree, where
@@ -765,7 +801,13 @@ MonoBehaviour:
     type: 1
     capacity: 5
     costToUse: 0
-    level: 1
+    happinessEffect: 1
+    healthEffect: 1
+    minTimeToUse: 1
+    maxTimeToUse: 1.2
+    minLevel: 1
+    maxLevel: 5
+    baseExperience: 100
     reward: 100
   - name: Investigate Missing Farmers
     description: A group of farmers have gone missing. The only clue to their whereabouts
@@ -773,7 +815,13 @@ MonoBehaviour:
     type: 1
     capacity: 5
     costToUse: 0
-    level: 1
+    happinessEffect: 1
+    healthEffect: 1
+    minTimeToUse: 1
+    maxTimeToUse: 1.2
+    minLevel: 1
+    maxLevel: 5
+    baseExperience: 100
     reward: 100
   - name: Investigate Missing Merchant
     description: A traveler is looking for someone to locate a merchant who went
@@ -781,7 +829,13 @@ MonoBehaviour:
     type: 1
     capacity: 5
     costToUse: 0
-    level: 1
+    happinessEffect: 1
+    healthEffect: 2
+    minTimeToUse: 1
+    maxTimeToUse: 1.2
+    minLevel: 1
+    maxLevel: 5
+    baseExperience: 100
     reward: 100
   - name: Investigate Missing Scholar
     description: You've heard whispers of a renowned scholar who vanished without
@@ -792,7 +846,13 @@ MonoBehaviour:
     type: 1
     capacity: 5
     costToUse: 0
-    level: 1
+    happinessEffect: 1
+    healthEffect: 2
+    minTimeToUse: 1
+    maxTimeToUse: 1.2
+    minLevel: 1
+    maxLevel: 5
+    baseExperience: 100
     reward: 100
 --- !u!1 &861122679
 GameObject:
@@ -894,7 +954,7 @@ MonoBehaviour:
   _scrollSpeed: 15
   _minZoom: 5
   _maxZoom: 200
-  _speed: 20
+  _speed: 50
   dragSpeed: 2
 --- !u!1 &1224020434
 GameObject:
@@ -926,8 +986,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   initHealthRoll: 4
-  minGroupSize: 5
-  maxGroupSize: 10
+  minHappinessForGroup: 50
+  minLowGroupSize: 1
+  maxLowGroupSize: 3
+  minHighGroupSize: 10
+  maxHighGroupSize: 15
   maxHappiness: 100
   _adventurerPrefab: {fileID: 4294982699453881730, guid: da89bfc7ea9e84e38849c0f376c91eb8, type: 3}
 --- !u!4 &1224020436
@@ -973,6 +1036,30 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2050894249260547885, guid: d6094da4bddaf4b0da78d25be3f22836, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5278473644795238019, guid: d6094da4bddaf4b0da78d25be3f22836, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5278473644795238019, guid: d6094da4bddaf4b0da78d25be3f22836, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5278473644795238019, guid: d6094da4bddaf4b0da78d25be3f22836, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5278473644795238019, guid: d6094da4bddaf4b0da78d25be3f22836, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5278473644795238019, guid: d6094da4bddaf4b0da78d25be3f22836, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5278473644795238019, guid: d6094da4bddaf4b0da78d25be3f22836, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
@@ -3663,10 +3750,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 34545083327928026, guid: 0add19713443741f9a5ff143176a18a4, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 34545083327928026, guid: 0add19713443741f9a5ff143176a18a4, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -3674,38 +3757,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 540757285462939849, guid: 0add19713443741f9a5ff143176a18a4, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 540757285462939849, guid: 0add19713443741f9a5ff143176a18a4, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 540757285462939849, guid: 0add19713443741f9a5ff143176a18a4, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 540757285462939849, guid: 0add19713443741f9a5ff143176a18a4, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 540757285798911561, guid: 0add19713443741f9a5ff143176a18a4, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 540757285798911561, guid: 0add19713443741f9a5ff143176a18a4, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 540757285798911561, guid: 0add19713443741f9a5ff143176a18a4, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 540757285798911561, guid: 0add19713443741f9a5ff143176a18a4, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 589766350364672496, guid: 0add19713443741f9a5ff143176a18a4, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -3736,10 +3787,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1970017522975828788, guid: 0add19713443741f9a5ff143176a18a4, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1970017522975828788, guid: 0add19713443741f9a5ff143176a18a4, type: 3}
-      propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1970017522975828788, guid: 0add19713443741f9a5ff143176a18a4, type: 3}
@@ -3798,24 +3845,12 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4073966179659612136, guid: 0add19713443741f9a5ff143176a18a4, type: 3}
-      propertyPath: m_TargetGraphic
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 4073966179995515240, guid: 0add19713443741f9a5ff143176a18a4, type: 3}
-      propertyPath: m_TargetGraphic
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 4595183169117188343, guid: 0add19713443741f9a5ff143176a18a4, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4595183169117188343, guid: 0add19713443741f9a5ff143176a18a4, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4595183169117188343, guid: 0add19713443741f9a5ff143176a18a4, type: 3}
-      propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4595183169117188343, guid: 0add19713443741f9a5ff143176a18a4, type: 3}
@@ -3835,10 +3870,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5431238219718590946, guid: 0add19713443741f9a5ff143176a18a4, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5431238219718590946, guid: 0add19713443741f9a5ff143176a18a4, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -3855,34 +3886,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5797241631973424140, guid: 0add19713443741f9a5ff143176a18a4, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5797241631973424140, guid: 0add19713443741f9a5ff143176a18a4, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5797241631973424140, guid: 0add19713443741f9a5ff143176a18a4, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5887511299590836190, guid: 0add19713443741f9a5ff143176a18a4, type: 3}
-      propertyPath: m_TargetGraphic
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 7979288993925344895, guid: 0add19713443741f9a5ff143176a18a4, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7979288993925344895, guid: 0add19713443741f9a5ff143176a18a4, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7979288993925344895, guid: 0add19713443741f9a5ff143176a18a4, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7979288993925344895, guid: 0add19713443741f9a5ff143176a18a4, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
@@ -3892,10 +3899,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8421808602086385615, guid: 0add19713443741f9a5ff143176a18a4, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8421808602086385615, guid: 0add19713443741f9a5ff143176a18a4, type: 3}
-      propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8421808602086385615, guid: 0add19713443741f9a5ff143176a18a4, type: 3}
@@ -3936,11 +3939,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8499300618860691881, guid: 0add19713443741f9a5ff143176a18a4, type: 3}
       propertyPath: m_SizeDelta.x
-      value: -40
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8499300618860691881, guid: 0add19713443741f9a5ff143176a18a4, type: 3}
       propertyPath: m_SizeDelta.y
-      value: -40
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8499300618860691881, guid: 0add19713443741f9a5ff143176a18a4, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3993,14 +3996,6 @@ PrefabInstance:
     - target: {fileID: 8499300618860691882, guid: 0add19713443741f9a5ff143176a18a4, type: 3}
       propertyPath: m_Name
       value: RollBuildModal
-      objectReference: {fileID: 0}
-    - target: {fileID: 8499300618860691882, guid: 0add19713443741f9a5ff143176a18a4, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8499300619935364180, guid: 0add19713443741f9a5ff143176a18a4, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0add19713443741f9a5ff143176a18a4, type: 3}
