@@ -6,10 +6,12 @@ public class CameraManager : MonoBehaviour
 {
 	// Scroll to zoom
 	[SerializeField] private float _scrollSpeed = 10;
-	[SerializeField] private float minZoom = 5f;
-	[SerializeField] private float maxZoom = 100f;
+	[SerializeField] private float _minZoom = 5f;
+	[SerializeField] private float _maxZoom = 100f;
 
 	// Arrow Key & WASD movement
+	[SerializeField] private float _speed = 30f;
+	private Vector3 _input;
 	private float _horizontalInput;
 	private float _verticalInput;
 	private Coroutine _movementCoroutine;
@@ -21,6 +23,9 @@ public class CameraManager : MonoBehaviour
 
 	void Update() 
 	{
+			_horizontalInput = Input.GetAxis("Horizontal");
+			_verticalInput = Input.GetAxis("Vertical");
+
 		if (EventSystem.current.IsPointerOverGameObject())
 			return;
 
@@ -29,23 +34,23 @@ public class CameraManager : MonoBehaviour
 		if (Camera.main.orthographic)
 		{
 			Camera.main.orthographicSize -= size;
-			if (Camera.main.orthographicSize < minZoom)
+			if (Camera.main.orthographicSize < _minZoom)
 			{
-				Camera.main.orthographicSize = minZoom;
-			} else if (Camera.main.orthographicSize > maxZoom)
+				Camera.main.orthographicSize = _minZoom;
+			} else if (Camera.main.orthographicSize > _maxZoom)
 			{
-				Camera.main.orthographicSize = maxZoom;
+				Camera.main.orthographicSize = _maxZoom;
 			}
 		}
 		else
 		{
 			Camera.main.fieldOfView -= size;
-			if (Camera.main.fieldOfView < minZoom)
+			if (Camera.main.fieldOfView < _minZoom)
 			{
-				Camera.main.fieldOfView = minZoom;
-			} else if (Camera.main.fieldOfView > maxZoom)
+				Camera.main.fieldOfView = _minZoom;
+			} else if (Camera.main.fieldOfView > _maxZoom)
 			{
-				Camera.main.fieldOfView = maxZoom;
+				Camera.main.fieldOfView = _maxZoom;
 			}
 		}
 	}
@@ -58,14 +63,16 @@ public class CameraManager : MonoBehaviour
 		_movementCoroutine = StartCoroutine(Utils.LerpObject(Camera.main.transform, newCameraPos, duration));
 	}
 
+
 	private void FixedUpdate()
 	{
-		_horizontalInput = Input.GetAxis("Horizontal");
-		_verticalInput = Input.GetAxis("Vertical");
+		_input = new Vector3(
+			_horizontalInput,
+			_verticalInput,
+			0f
+		).normalized;
+		_input = Vector3.ClampMagnitude(_input, 1);
 
-		if (_horizontalInput != 0 ^ _verticalInput != 0) 
-		{
-			Camera.main.transform.Translate(new Vector3(_horizontalInput, _verticalInput, 0f));
-		}
+		Camera.main.transform.Translate(_speed * Time.deltaTime * _input);
 	}
 }
