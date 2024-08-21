@@ -53,12 +53,27 @@ public class AdventurerManager : MonoBehaviour
         }
     }
 
-		public void GenerateGroup() {
-			int count = Random.Range(minGroupSize, maxGroupSize);
+		void Start()
+		{
+			EventManager.StartListening(EventName.OnDayChanged, HandleOnDayChanged);
+		}
+		void OnDestroy()
+		{
+			EventManager.StopListening(EventName.OnDayChanged, HandleOnDayChanged);
+		}
 
+		public void CreateGroup(int min, int max) {
+			int count = Random.Range(min, max);
+			CreateGroup(count);
+		}
+
+		public void CreateGroup(int count) {
 			for (int i = 0; i < count; i++) {
 				CreateAdventurer();
 			}
+			EventManager.TriggerEvent(EventName.OnMessageBroadcast, new Dictionary<string, object>() {
+				{ "message", $"{count} Adventurers Joined Your Map!" }
+			});
 		}
 
 		public void CreateAdventurer() 
@@ -89,6 +104,27 @@ public class AdventurerManager : MonoBehaviour
 		{
 			return Mathf.FloorToInt(100 * Mathf.Pow(1 + _xpIncreaseRate, level));
 		}
+
+		#region EventHandlers
+
+		private void HandleOnDayChanged(Dictionary<string, object> _data = null)
+		{
+			if (AverageHappiness > 25)
+			{
+				// examples: assuming maxGroupSize = 10, minGroupSize = 5
+				// AH = 25  -> 3 - 5 advs
+				// AH = 50  -> 5 - 10
+				// AH = 80 -> 8 - 16
+				// AH = 100 -> 10 - 20
+				CreateGroup(AverageHappiness / maxGroupSize, AverageHappiness / minGroupSize);
+			}
+			else
+			{
+				Debug.Log("Happiness is low - no new adventurers wanted to come to your map.");
+			}
+		}
+
+		#endregion
 
 		#endregion
 }
