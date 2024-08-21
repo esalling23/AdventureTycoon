@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
 		[SerializeField] private float _minutesInDay = 0.2f;
 
 		private GameMode _mode = GameMode.Run;
+		private IEnumerator _activeCoroutine = null;
 
 
 		#endregion
@@ -46,20 +47,39 @@ public class GameManager : MonoBehaviour
         }
     }
 
+		private void Start()
+		{
+			StartCoroutine(PlayTime());
+		}
+
+		private void OnDestroy()
+		{
+			ClearCoroutine();
+		}
+
+		private void ClearCoroutine()
+		{
+			if (_activeCoroutine != null) {
+				StopCoroutine(_activeCoroutine);
+				_activeCoroutine = null;
+			}
+		}
+
 		private IEnumerator PlayTime()
 		{
-			yield return new WaitForSeconds(MinutesInDay);
+			while (true)
+			{
+				yield return new WaitForSeconds(MinutesInDay * 60f);
 
-			_currentDay++;
+				_currentDay++;
 
-			EventManager.TriggerEvent(EventName.OnDayChanged, null);
+				EventManager.TriggerEvent(EventName.OnDayChanged, null);
+			}
 		}
 
 		public void UpdatePlayerGold(int gold)
 		{
-			Debug.Log($"Changing player gold by {gold}");
 			_gold += gold;
-			Debug.Log($"Player gold now {_gold}");
 			EventManager.TriggerEvent(EventName.OnPlayerGoldChanged, null);
 		}
 
