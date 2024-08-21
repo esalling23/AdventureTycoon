@@ -27,15 +27,22 @@ public class Map : MonoBehaviour
 	[SerializeField] private int initQuestCount = 1;
 
 	// Grid
-	public Vector2Int gridSize = new Vector2Int(20, 10);
+	public Vector2Int gridSize = new(20, 10);
 	public float cellSize = 10f;
 	private Grid<GridCell> _mapGrid;
 	[SerializeField] private MapTile _tilePrefab;
 	[SerializeField] private TerrainTileSprite[] _terrainTileSprites;
-	private Dictionary<TerrainType, Sprite> _terrainTileSpritesMap = new Dictionary<TerrainType, Sprite>();
+	private Dictionary<TerrainType, Sprite> _terrainTileSpritesMap = new();
 
 	// Locations
-	private List<MapLocation> _locationsOnMap = new List<MapLocation>();
+	/// <summary>
+	/// All unused locations
+	/// </summary>
+	private List<Location> _unusedLocations = new();
+	/// <summary>
+	/// A map of Location IDs to the MapLocation representing that Location on the map
+	/// </summary>
+	private Dictionary<System.Guid, MapLocation> _mapLocationDataIdDict = new();
 	[SerializeField] private MapLocation _locationPrefab;
 	private Location _activeLocationToBuild;
 	private TempBuildLocation _activeTempLocation;
@@ -49,7 +56,9 @@ public class Map : MonoBehaviour
 
 	#region Properties
 
-	public List<MapLocation> LocationsOnMap { get { return _locationsOnMap; } }
+	public MapLocation[] LocationsOnMap { get { return _mapLocationDataIdDict.Values.ToArray(); } }
+	public Dictionary<System.Guid, MapLocation> LocationsOnMapDict { get { return _mapLocationDataIdDict; } }
+	public List<Location> UnusedLocations { get { return _unusedLocations; } }
 	public Grid<GridCell> Grid { get { return _mapGrid; } }
 
 	#endregion
@@ -108,27 +117,8 @@ public class Map : MonoBehaviour
 		}
 
 		if (Input.GetMouseButtonDown(1)) {
-			Deselect();
+			DeselectCell();
 		}
-	}
-
-	public void Init() {
-		// Debug.Log("Initializing map");
-
-		_mapGrid = new Grid<GridCell>(
-			gridSize.x,
-			gridSize.y, 
-			cellSize, 
-			new Vector2(-gridSize.x * 5, -gridSize.y * 5),
-			(Grid<GridCell> g, int x, int y) => new GridCell(new Vector2Int(x, y), _terrainTileSprites)
-		);
-
-		ShowTerrainSprites();
-
-		InitMapLocations(DataManager.Instance.WorldLocations, initLocationCount);
-		InitMapAdventurers(initAdventurerCount);
-
-		_activeLocationToBuild = null;
 	}
 
 	// Builds map for terrain type -> tile sprite
@@ -169,7 +159,7 @@ public class Map : MonoBehaviour
 					Debug.Log($"Could not find sprite for {tile.cell.TerrainType}");
 				}
 				tile.transform.position = _mapGrid.GetCenteredCellPosition(x, y) - new Vector3(0f, cellSize / 2, 0f);
-				tile.SetSpriteSizeSquare(_mapGrid.CellSize, tile.Renderer.bounds.size.x);
+				tile.SetSpriteSizeSquare(_mapGrid.CellSize);
 				tile.Renderer.sortingOrder = _mapGrid.GridArray.GetLength(1) - y;
 			}
 		}
@@ -180,6 +170,7 @@ public class Map : MonoBehaviour
 		
 		_selectedIndicator.transform.position = centeredCellPos;
 		_selectedIndicator.SetActive(true);
+		_selectedIndicator.GetComponent<MapObject>().SetSpriteSizeSquare(cellSize);
 
 		_camera.AnimateTo(centeredCellPos, 0.5f);
 		
@@ -191,10 +182,12 @@ public class Map : MonoBehaviour
 		}
 	}
 
-	private void Deselect() {
+	private void DeselectCell() {
 		_selectedIndicator.SetActive(false);
 		_locationDetailsPanel.ToggleOpen(false);
 	}
+
+	#region Locations
 
 	public void SetLocationToBuild(Location location) 
 	{
@@ -214,6 +207,8 @@ public class Map : MonoBehaviour
 				Destroy(_activeTempLocation.gameObject);
 				_activeTempLocation = null;
 			}
+			_unusedLocations.Remove(locationData);
+
 			// Create the actual location map object to display (visual layer)
 			MapLocation newPlacement = CreateLocationObject(locationData, cell);
 
@@ -222,7 +217,7 @@ public class Map : MonoBehaviour
 			// Keep track of the placed object in the grid (data layer)
 			cell.PlaceLocation(newPlacement);
 
-			_locationsOnMap.Add(newPlacement);
+			_mapLocationDataIdDict.Add(locationData.Id, newPlacement);
 		}
 		_activeLocationToBuild = null;
 		_manager.SetMode(GameMode.Run);
@@ -266,15 +261,37 @@ public class Map : MonoBehaviour
 	{
 		Vector3 center = _mapGrid.GetCenteredCellPosition(cell.Coordinates.x, cell.Coordinates.y);
 		Debug.Log(center);
-		Vector3 offset = new Vector3(0f, cellSize / 2, 0f);
+		Vector3 offset = new(0f, cellSize / 2, 0f);
 		Debug.Log(offset);
 		return center - offset;
+	}
+
+	#endregion
+
+	#region Init Handlers
+
+	public void Init() {
+		// Debug.Log("Initializing map");
+
+		_mapGrid = new Grid<GridCell>(
+			gridSize.x,
+			gridSize.y, 
+			cellSize, 
+			new Vector2(-gridSize.x * 5, -gridSize.y * 5),
+			(Grid<GridCell> g, int x, int y) => new GridCell(new Vector2Int(x, y), _terrainTileSprites)
+		);
+
+		ShowTerrainSprites();
+
+		InitMapLocations(DataManager.Instance.WorldLocations, initLocationCount);
+		InitMapAdventurers(initAdventurerCount);
+
+		_activeLocationToBuild = null;
 	}
 
 	private void InitMapAdventurers(int count) {
 		for (int i = 0; i < count; i++) {
 			AdventurerManager.Instance.CreateAdventurer();
-			// newAdventurer.
 		}
 	}
 
@@ -283,6 +300,8 @@ public class Map : MonoBehaviour
 		if (count > _mapGrid.TotalCellCount) {
 			locCount = _mapGrid.TotalCellCount;
 		}
+
+		_unusedLocations = available.ToList().ConvertAll(loc => loc);
 		for (int i = 0; i < locCount; i++) {	
 			// find empty cell			
 			GridCell cell;
@@ -291,7 +310,7 @@ public class Map : MonoBehaviour
 			} while (cell?.Location != null);
 
 			// init locations are random
-			Location randLocation = Utils.GetRandomFromList(available.ToList());
+			Location randLocation = Utils.GetRandomFromList(_unusedLocations);
 			PlaceLocation(randLocation, cell, (MapLocation newLocation) => {
 				for (int i = 0; i < initActivityCount; i++)
 				{
@@ -307,26 +326,24 @@ public class Map : MonoBehaviour
 		}
 	}
 
-	#region EventHandlers
+	#endregion
+
+	#region Event Handlers
 
 	private void HandleBuildLocationSelected(Dictionary<string, object> msg)
 	{
 		if (msg.TryGetValue("location", out object locationToBuild))
 		{
 			SetLocationToBuild((Location) locationToBuild);
-			Deselect();
+			DeselectCell();
 		}
 	}
 
 	private void HandleGridValueChanged(Dictionary<string, object> data) {
 		if (data.TryGetValue("locationRemoved", out object locationIdRemoved))
 		{
-			if (data.TryGetValue("coords", out object coords)) 
-			{
-				_locationsOnMap.RemoveAll((MapLocation location) => {
-					return location.Id == (System.Guid) locationIdRemoved;
-				});
-			}
+			MapLocation locationToRemove = _mapLocationDataIdDict.Values.First(loc => loc.Id == (System.Guid) locationIdRemoved);
+			_mapLocationDataIdDict.Remove(locationToRemove.LocationData.Id);
 		}
 	}
 

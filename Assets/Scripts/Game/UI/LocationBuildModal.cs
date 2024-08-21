@@ -13,6 +13,8 @@ public class LocationBuildModal : MonoBehaviour
 {
     #region Fields
 
+		[SerializeField] private Map _map;
+
 		[SerializeField] private int _locationGenerationCount = 3;
 
 		// Displays location types to build
@@ -20,6 +22,7 @@ public class LocationBuildModal : MonoBehaviour
 		[SerializeField] private GameObject _buildShelf;
 		[SerializeField] private RollBuildItem _rollBuildItemPrefab;
 		private List<RollBuildItem> _rollBuildItems = new List<RollBuildItem>();
+		private List<Location> _availableLocations = new List<Location>();
 
 		// First roll is free, subsequent rolls will increase by _costToRollIncrementAmount
 		private int _currentCostToRoll = 0;
@@ -36,6 +39,7 @@ public class LocationBuildModal : MonoBehaviour
 
     void Start()
     {
+			_map = GameObject.FindWithTag("Map").GetComponent<Map>();
 			// initial hide
 			// ClearBuildShelf();
 			_modalContainer.SetActive(false);
@@ -51,6 +55,10 @@ public class LocationBuildModal : MonoBehaviour
 			ClearBuildShelf();
 			_currentCostToRoll = 0;
 			_rollBuildItems = new List<RollBuildItem>();
+			_availableLocations = _map.UnusedLocations
+															.Where((Location location) => location.type == type)
+															.ToList()
+															.ConvertAll((location) => location);
 
 			for (int i = 0; i < _locationGenerationCount; i++)
 			{
@@ -61,7 +69,11 @@ public class LocationBuildModal : MonoBehaviour
 					Quaternion.identity,
 					_buildShelf.transform
 				);
+				item.SetFutureLocation(_availableLocations);
+				_availableLocations.Remove(item.Location);
+
 				item.CheckCanBuy(_currentCostToRoll);
+
 				_rollBuildItems.Add(item);
 			}
 			_buildShelf.SetActive(true);
@@ -72,8 +84,6 @@ public class LocationBuildModal : MonoBehaviour
 				Destroy(child.gameObject);
 			}
 			_rollBuildItems.Clear();
-			Debug.Log("Cleared location rollables");
-			Debug.Log(_rollBuildItems.Count);
 		}
 
 		public void OnClickAbandonButton()

@@ -79,7 +79,7 @@ public class MapLocation : MapObject
 				foundActivity = activities.First(a => a.data.Type == type);
 				return true;
 			}
-			catch(System.Exception err)
+			catch (System.Exception)
 			{
 				foundActivity = null;
 				return false;
@@ -94,7 +94,7 @@ public class MapLocation : MapObject
 				});
 				return true;
 			}
-			catch(System.Exception err)
+			catch(System.Exception)
 			{
 				foundActivity = null;
 				return false;

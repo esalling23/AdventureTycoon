@@ -12,6 +12,8 @@ public class RollBuildItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 {
     #region Fields
 
+		private Location _location;
+
 		[SerializeField] private Button _selectButton;
 		[SerializeField] private GameObject _errorMessage;
 		[SerializeField] private GameObject _costToRollContainer;
@@ -20,6 +22,12 @@ public class RollBuildItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 		[SerializeField] private GameObject[] _hoverStateObjs;
 		[SerializeField] private GameObject _preRollDisplay;
 		[SerializeField] private LocationDetailItem _postRollDetails;
+
+		#endregion
+
+		#region Properties
+
+		public Location Location { get { return _location; } }
 
 		#endregion
 
@@ -49,13 +57,19 @@ public class RollBuildItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
 		public void HandleClickRoll() {
 			Debug.Log("Clicked roll build item");
-			_postRollDetails.SetData(DataManager.Instance.GetRandomLocationData());
+
+			_postRollDetails.SetData(_location);
 
 			_postRollDetails.gameObject.SetActive(true);
 			_preRollDisplay.gameObject.SetActive(false);
 
 			EventManager.TriggerEvent(EventName.OnBuildOptionRolled, null);
 			EventManager.StopListening(EventName.OnRollCostChanged, HandleOnRollCostChanged);
+		}
+
+		public void SetFutureLocation(List<Location> available)
+		{
+			_location = Utils.GetRandomFromList(available);
 		}
 
 		public void OnPointerEnter(PointerEventData eventData)
@@ -85,6 +99,7 @@ public class RollBuildItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 		{
 			if (data.TryGetValue("cost", out object costObj))
 			{
+				Debug.Log(_costToRollText);
 				_costToRollText.text = costObj.ToString();
 				_costToRollContainer.SetActive((int) costObj > 0);
 				
