@@ -25,6 +25,10 @@ public class LocationTypeItem : MonoBehaviour
 		{
 			EventManager.StartListening(EventName.OnPlayerGoldChanged, HandleOnPlayerGoldChanged);
 		}
+		private void OnDestroy() 
+		{
+			EventManager.StopListening(EventName.OnPlayerGoldChanged, HandleOnPlayerGoldChanged);
+		}
 
     public void SetData(LocationTypeData data)
     {

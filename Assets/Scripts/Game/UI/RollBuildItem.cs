@@ -99,7 +99,6 @@ public class RollBuildItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 		{
 			if (data.TryGetValue("cost", out object costObj))
 			{
-				Debug.Log(_costToRollText);
 				_costToRollText.text = costObj.ToString();
 				_costToRollContainer.SetActive((int) costObj > 0);
 				

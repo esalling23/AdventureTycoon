@@ -50,6 +50,14 @@ public class LocationBuildModal : MonoBehaviour
 			EventManager.StartListening(EventName.OnPlayerGoldChanged, HandlePlayerGoldChanged);
     }
 
+		void OnDestroy()
+		{
+			EventManager.StopListening(EventName.OnBuildOptionRolled, HandleOnBuildOptionRolled);
+			EventManager.StopListening(EventName.OnBuildTypeSelected, HandleBuildTypeSelected);
+			EventManager.StopListening(EventName.OnBuildLocationSelected, HandleBuildLocationSelected);
+			EventManager.StopListening(EventName.OnPlayerGoldChanged, HandlePlayerGoldChanged);
+    }
+
 		public void InitTypeLocations(LocationType type)
 		{
 			ClearBuildShelf();
@@ -89,16 +97,21 @@ public class LocationBuildModal : MonoBehaviour
 		public void OnClickAbandonButton()
 		{
 			// confirmation?
+			CloseModal();
+		}
 
+		private void CloseModal()
+		{
 			ClearBuildShelf();
 			_modalContainer.SetActive(false);
+			Time.timeScale = 1;
 		}
 
 		#region Event Handlers
 
 		void HandleBuildLocationSelected(Dictionary<string, object> data) 
 		{
-			_modalContainer.SetActive(false);
+			CloseModal();
 		}
 		void HandleBuildTypeSelected(Dictionary<string, object> data) 
 		{
@@ -108,6 +121,7 @@ public class LocationBuildModal : MonoBehaviour
 				if (System.Enum.TryParse(type.ToString(), out LocationType locationType))
 				{
 					Debug.Log("BUild modal heard type selected");
+					Time.timeScale = 0;
 					_modalContainer.SetActive(true);
 					InitTypeLocations(locationType);
 				}

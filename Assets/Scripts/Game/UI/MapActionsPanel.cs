@@ -49,6 +49,12 @@ public class MapActionsPanel : MonoBehaviour
 			EventManager.StartListening(EventName.OnBuildLocationSelected, HandleBuildLocationSelected);
     }
 
+		void OnDestroy()
+		{
+			EventManager.StopListening(EventName.OnBuildTypeSelected, HandleBuildTypeSelected);
+			EventManager.StopListening(EventName.OnBuildLocationSelected, HandleBuildLocationSelected);
+		}
+
 		void HandleBuildLocationSelected(Dictionary<string, object> data) 
 		{
 			HideBuildShelf();

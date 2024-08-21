@@ -42,6 +42,11 @@ public class LocationDetailsPanel : LocationDetailItem
 			EventManager.StartListening(EventName.OnActivityChanged, HandleActivityChanged);
     }
 
+		void OnDestroy()
+		{
+			EventManager.StopListening(EventName.OnActivityChanged, HandleActivityChanged);
+    }
+
 		public void ToggleOpen(bool isOpen) 
 		{
 			this.gameObject.SetActive(isOpen);

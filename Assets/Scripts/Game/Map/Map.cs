@@ -260,9 +260,9 @@ public class Map : MonoBehaviour
 	private Vector3 GetCellObjectPosition(GridCell cell)
 	{
 		Vector3 center = _mapGrid.GetCenteredCellPosition(cell.Coordinates.x, cell.Coordinates.y);
-		Debug.Log(center);
+		// Debug.Log(center);
 		Vector3 offset = new(0f, cellSize / 2, 0f);
-		Debug.Log(offset);
+		// Debug.Log(offset);
 		return center - offset;
 	}
 

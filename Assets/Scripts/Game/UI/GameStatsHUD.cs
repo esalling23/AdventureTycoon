@@ -35,6 +35,14 @@ public class GameStatsHUD : MonoBehaviour
 			EventManager.StartListening(EventName.OnDayChanged, HandleDayChanged);
     }
 
+		void OnDestroy()
+    {
+
+			EventManager.StopListening(EventName.OnPlayerGoldChanged, HandlePlayerGoldChanged);
+			EventManager.StopListening(EventName.OnAdventurerStatChanged, HandleAdventurerStatChanged);
+			EventManager.StopListening(EventName.OnDayChanged, HandleDayChanged);
+    }
+
 		void HandleAdventurerStatChanged(Dictionary<string, object> _data = null) 
 		{
 			// Debug.Log($"Setting HUD adventurer data: Happiness {AdventurerManager.Instance.AverageHappiness} and Total {AdventurerManager.Instance.TotalAdventurers}");

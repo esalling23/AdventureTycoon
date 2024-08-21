@@ -130,7 +130,7 @@ public class Adventurer : MonoBehaviour
 
 				// Possibility for death during quest activities
 				if (_currentHealth <= 0) {
-					Debug.Log("Adventurer died");
+					// Debug.Log("Adventurer died");
 					AdventurerManager.Instance.KillAdventurer(this);
 					yield break;
 				}
@@ -150,7 +150,7 @@ public class Adventurer : MonoBehaviour
 			GameManager.Instance.UpdatePlayerGold(activity.data.CostToUse);
 
 			float timeForActivity = Random.Range(GameManager.Instance.MinutesInDay / 2f, (float) GameManager.Instance.MinutesInDay);
-			Debug.Log($"Attempting {activity.Type} Activity -- ETA {timeForActivity} minutes");
+			// Debug.Log($"Attempting {activity.Type} Activity -- ETA {timeForActivity} minutes");
 			yield return new WaitForSeconds(timeForActivity * 60f);
 
 			// // success is 100% by default - only Quest activities can be failed
@@ -158,7 +158,7 @@ public class Adventurer : MonoBehaviour
 			// float successProbability = 100f;
 			bool isSuccessful = true;
 
-			Debug.Log($"{activity.Type} Activity Attempt {(isSuccessful ? "Success" : "Failure")}");
+			// Debug.Log($"{activity.Type} Activity Attempt {(isSuccessful ? "Success" : "Failure")}");
 
 			UpdateStats(isSuccessful, activity);
 
@@ -207,7 +207,7 @@ public class Adventurer : MonoBehaviour
 				_currentHealth = _maxHealth;
 			}
 
-			Debug.Log($"Adventurer stats -- \nGold: {_gold}\nLevel: {_level} & XP:{_currentExperience}\nHappiness: {_happiness}\nHealth: {_currentHealth} / {_maxHealth}");
+			// Debug.Log($"Adventurer stats -- \nGold: {_gold}\nLevel: {_level} & XP:{_currentExperience}\nHappiness: {_happiness}\nHealth: {_currentHealth} / {_maxHealth}");
 			EventManager.TriggerEvent(EventName.OnAdventurerStatChanged, null);
 		}
 
@@ -216,7 +216,7 @@ public class Adventurer : MonoBehaviour
 			chosenActivity = null;
 
 			if (!location) {
-				Debug.Log("Adventurer not at a location - find one!");
+				// Debug.Log("Adventurer not at a location - find one!");
 				return;
 			};
 
@@ -305,7 +305,7 @@ public class Adventurer : MonoBehaviour
 				}
 			}
 
-			Debug.Log($"Found Location Match: {bestMatch?.LocationData.name}");
+			// Debug.Log($"Found Location Match: {bestMatch?.LocationData.name}");
 
 			return bestMatch;
     }
@@ -317,7 +317,7 @@ public class Adventurer : MonoBehaviour
 			if (!_currentLocation)
 			{
 				_isIdle = true;
-				Debug.Log($"Adventurer {_id} could not find anywhere to go :(");
+				// Debug.Log($"Adventurer {_id} could not find anywhere to go :(");
 				yield break;
 			}
 
