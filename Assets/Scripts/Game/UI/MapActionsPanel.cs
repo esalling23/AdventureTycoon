@@ -16,6 +16,7 @@ public class MapActionsPanel : MonoBehaviour
 
 		// Displays location types to build
 		[SerializeField] private GameObject _buildTypeShelf;
+		[SerializeField] private GameObject _locationTypeContainer;
 		[SerializeField] private LocationTypeItem _locationTypeItemPrefab;
 		[SerializeField] private List<LocationTypeItem> _typeItems = new List<LocationTypeItem>();
 		[SerializeField] private LocationBuildModal _locationBuildModal;
@@ -38,7 +39,7 @@ public class MapActionsPanel : MonoBehaviour
 					_locationTypeItemPrefab,
 					Vector3.zero,
 					Quaternion.identity,
-					_buildTypeShelf.gameObject.transform
+					_locationTypeContainer.gameObject.transform
 				);
 				item.SetData(def);
 				_typeItems.Add(item);

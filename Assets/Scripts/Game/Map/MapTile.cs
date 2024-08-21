@@ -12,7 +12,6 @@ public class MapTile : MapObject
 
 		#region Properties
 
-		public SpriteRenderer Renderer { get { return _spriteRenderer; } }
 
 
 		#endregion

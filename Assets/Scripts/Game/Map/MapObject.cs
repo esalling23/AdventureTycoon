@@ -12,12 +12,12 @@ public class MapObject : MonoBehaviour
 
 		protected SpriteRenderer _spriteRenderer;
 		
-
 		#endregion
 
 		#region Properties
 
 		public Vector2Int Coordinates { get { return cell.Coordinates; } }
+		public SpriteRenderer Renderer { get { return _spriteRenderer; } }
 
 		#endregion
 
@@ -37,10 +37,11 @@ public class MapObject : MonoBehaviour
 			_spriteRenderer.transform.localScale = Vector3.Scale(_spriteRenderer.transform.localScale, new Vector3(ratioX, ratioY, 1f));
 		}
 
-		public void SetSpriteSizeSquare(float setSize, float spriteSize) {
+		public void SetSpriteSizeSquare(float setSize) {
 			if (!_spriteRenderer) {
 				_spriteRenderer = GetComponent<SpriteRenderer>();
 			}
+			float spriteSize = Renderer.bounds.size.x;
 			float ratio = setSize / spriteSize;
 			_spriteRenderer.transform.localScale *= ratio;
 		}

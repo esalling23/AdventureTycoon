@@ -32,7 +32,7 @@ public class LocationTypeItem : MonoBehaviour
 			_typeData = data;
 
 			// UI
-			nameText.text = _typeData.ToString();
+			// nameText.text = _typeData.ToString();
 			costText.text = _typeData.costToPlace.ToString();
 			
 			icon.sprite = _typeData.icon;

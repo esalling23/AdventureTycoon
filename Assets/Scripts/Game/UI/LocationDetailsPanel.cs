@@ -23,11 +23,9 @@ public class LocationDetailsPanel : LocationDetailItem
 
 		public GameObject activitiesListContainer;
 		public DetailsTab activitiesTab;
-		// public GameObject activitiesPanel;
 
 		public GameObject questListContainer;
 		public DetailsTab questTab;
-		// public GameObject questPanel;
 
 		#endregion
 
