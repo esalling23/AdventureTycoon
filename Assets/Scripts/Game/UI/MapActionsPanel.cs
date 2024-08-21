@@ -39,7 +39,7 @@ public class MapActionsPanel : MonoBehaviour
 					_locationTypeItemPrefab,
 					Vector3.zero,
 					Quaternion.identity,
-					_locationTypeContainer.gameObject.transform
+					_locationTypeContainer.transform
 				);
 				item.SetData(def);
 				_typeItems.Add(item);
@@ -75,6 +75,12 @@ public class MapActionsPanel : MonoBehaviour
 		/// </summary>
 		public void HandleClickBuildButton()
 		{
+			if (_buildTypeShelf.activeInHierarchy)
+			{
+				HideBuildShelf();
+				return;
+			}
+			
 			Debug.Log(_typeItems.Count);
 			foreach (LocationTypeItem item in _typeItems)
 			{

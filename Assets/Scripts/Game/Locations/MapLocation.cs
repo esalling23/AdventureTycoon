@@ -11,10 +11,8 @@ public class MapLocation : MapObject
     #region Fields
 
 		private System.Guid _id = System.Guid.NewGuid();
-		private GameManager _manager;
-
 		public Vector2Int coordinates;
-		public List<MapActivity> activities = new List<MapActivity>();
+		public List<MapActivity> activities = new();
 
 		// To do - load data from database somewhere
 		private Location _locationData;
@@ -41,8 +39,6 @@ public class MapLocation : MapObject
 
 		public void SetData(Location data) {
 			_locationData = data;
-
-			_manager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
 			
 			LocationTypeData defaultData = DataManager.Instance.GetLocationTypeData(data.type);
 
