@@ -8,5 +8,6 @@ public enum EventName
 	OnAdventurerStatChanged,
 	OnDayChanged,
 	OnBuildOptionRolled,
-	OnRollCostChanged
+	OnRollCostChanged,
+	OnMessageBroadcast
 }
