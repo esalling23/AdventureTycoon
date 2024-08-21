@@ -21,6 +21,15 @@ public class Activity : ActivityBase
 	#endregion
 	#region Properties
 
+	public override bool Attempt(Adventurer adventurer)
+	{
+		if (Type == ActivityType.Rest)
+		{
+			adventurer.ChangeHealth(healthEffect);
+		}
+		adventurer.ChangeHappiness(happinessEffect);
+		return base.Attempt(adventurer);
+	}
 
 	#endregion
 }

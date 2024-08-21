@@ -26,11 +26,14 @@ public class Adventurer : MonoBehaviour
 
 		private Dictionary<System.Guid, HistoryLog> _historyLog = new Dictionary<System.Guid, HistoryLog>();
 
+		private Renderer _renderer;
+
 		#endregion
 
 		#region Properties
 
 		public int Gold { get { return _gold; } }
+		public int Level { get { return _level; } }
 		public int Happiness { get { return _happiness; } }
 		public int Health { get { return _currentHealth; } }
 		public System.Guid Id { get { return _id; } }
@@ -42,6 +45,7 @@ public class Adventurer : MonoBehaviour
 
     void Start()
     {
+			_renderer = GetComponent<Renderer>();
 			EventManager.StartListening(EventName.OnActivityChanged, HandleOnActivityChanged);
 			EventManager.StartListening(EventName.OnDayChanged, HandleOnDayChanged);
 		}
@@ -58,7 +62,10 @@ public class Adventurer : MonoBehaviour
 
 			_map = GameObject.FindWithTag("Map").GetComponent<Map>();
 
-			_maxHealth = Mathf.FloorToInt(Random.Range(1, AdventurerManager.Instance.initHealthRoll));
+			_maxHealth = Mathf.FloorToInt(Random.Range(
+				AdventurerManager.Instance.initHealthRange.x, 
+				AdventurerManager.Instance.initHealthRange.y
+			));
 			_currentHealth = _maxHealth;
 
 			_happiness = AdventurerManager.Instance.maxHappiness / 2;
@@ -96,9 +103,8 @@ public class Adventurer : MonoBehaviour
 					yield return _activeCoroutine;
 				}
 
-				MapActivity nextActivity;
 				// Attempt to do anything possible at the current location
-				FindActivityAtLocation(_currentLocation, out nextActivity);
+				FindActivityAtLocation(_currentLocation, out MapActivity nextActivity);
 
 				// If there's no activity found at the current location, change locations
 				if (nextActivity == null) {
@@ -108,9 +114,7 @@ public class Adventurer : MonoBehaviour
 				else 
 				{
 					_isIdle = false;
-
 					// Debug.Log($"Adventurer {_id} chose {nextActivity?.Type} activity at {nextActivity?.locationParent}");
-					
 
 					GetOrCreateLocationLog(_currentLocation, out HistoryLog log);
 					log.LogAttemptActivity(nextActivity);
@@ -132,133 +136,98 @@ public class Adventurer : MonoBehaviour
 
 				// Possibility for death during quest activities
 				if (_currentHealth <= 0) {
-					// Debug.Log("Adventurer died");
+					Debug.Log("Adventurer died");
 					AdventurerManager.Instance.KillAdventurer(this);
 					yield break;
 				}
 
 				// Debug.Log($"Adventurer {Id} ready for next loop");
-
-				// Wait some time before looping again, if needed
 				yield return new WaitForSeconds(1f);
 			}
 		}
 
-		// To do - activities should have time ranges for attempts
-		private IEnumerator PerformActivity(MapActivity activity)
+		private IEnumerator PerformActivity(MapActivity mapActivity)
 		{
-			// Adventurers pay upfront for the activity?
-			_gold -= activity.data.CostToUse;
-			GameManager.Instance.UpdatePlayerGold(activity.data.CostToUse);
+			_gold -= mapActivity.data.CostToUse;
+			GameManager.Instance.UpdatePlayerGold(mapActivity.data.CostToUse);
 
-			float timeForActivity = Random.Range(GameManager.Instance.MinutesInDay / 2f, (float) GameManager.Instance.MinutesInDay);
-			// Debug.Log($"Attempting {activity.Type} Activity -- ETA {timeForActivity} minutes");
+			float timeForActivity = Random.Range(mapActivity.data.MinTimeToUse, mapActivity.data.MaxTimeToUse);
+			Debug.Log($"Attempting {mapActivity.Type} Activity -- ETA {timeForActivity} minutes");
 			yield return new WaitForSeconds(timeForActivity * 60f);
 
-			// // success is 100% by default - only Quest activities can be failed
+			// success is 100% by default - only Quest activities can be failed
 			bool isSuccessful = true;
-
-			if (activity.data is Quest quest)
+			if (mapActivity.data is Quest quest)
 			{
-				float successProbability = CalculateSuccessProbability(quest.minLevel, quest.maxLevel);
-				isSuccessful = AttemptQuest(successProbability);
+				isSuccessful = quest.Attempt(this);
+			}
+			else if (mapActivity.data is Activity activity)
+			{
+				activity.Attempt(this);
 			}
 
-			Debug.Log($"{activity.Type} Activity Attempt {(isSuccessful ? "Success" : "Failure")}");
+			mapActivity.LogAttempt(Id, isSuccessful);
+			Debug.Log($"{mapActivity.Type} Activity Attempt {(isSuccessful ? "Success" : "Failure")}");
 
-			UpdateStats(isSuccessful, activity);
-
-			activity.LogAttempt(Id, isSuccessful);
+			CapStats();
+			EventManager.TriggerEvent(EventName.OnAdventurerStatChanged, null);
+			Debug.Log($"Adventurer stats -- \nGold: {_gold}\nLevel: {_level} & XP:{_currentExperience}\nHappiness: {_happiness}\nHealth: {_currentHealth} / {_maxHealth}");
 		}
 
-		private void UpdateStats(bool isSuccess, MapActivity mapActivity)
+		#endregion
+
+		#region Stats
+
+		/// <summary>
+		/// Caps stats at maximum or minimum values
+		/// </summary>
+		private void CapStats()
 		{
-			if (isSuccess)
-			{
-				if (mapActivity.data is Quest quest)
-				{
-					_gold += quest.reward;
-					_currentExperience += 50;
-
-					int nextLevelXp = AdventurerManager.Instance.GetAdventurerNextLevelXp(_level);
-					if (nextLevelXp <= _currentExperience)
-					{
-						_currentExperience -= nextLevelXp;
-						_level++;
-					}
-				}
-				else if (mapActivity.data is Activity activity)
-				{
-					if (activity.Type == ActivityType.Rest)
-					{
-						_currentHealth += 1;
-					}
-				}
-
-				_happiness += 1;
-			}
-			else 
-			{
-				int loss = Mathf.FloorToInt(Random.Range(1, 3));
-				_happiness -= loss;
-				_currentHealth -= loss;
-			}
-
 			if (_happiness > AdventurerManager.Instance.maxHappiness)
 			{
 				_happiness = AdventurerManager.Instance.maxHappiness;
 			}
+			else if (_happiness < 0) _happiness = 0;
+
 			if (_currentHealth > _maxHealth)
 			{
 				_currentHealth = _maxHealth;
 			}
-
-			// Debug.Log($"Adventurer stats -- \nGold: {_gold}\nLevel: {_level} & XP:{_currentExperience}\nHappiness: {_happiness}\nHealth: {_currentHealth} / {_maxHealth}");
-			EventManager.TriggerEvent(EventName.OnAdventurerStatChanged, null);
 		}
 
-		/// <summary>
-		/// Calculates probability of succeeding quest
-		/// </summary>
-		/// <param name="minLevel">Quest min Level</param>
-		/// <param name="maxLevel">Quest max Level</param>
-		/// <returns></returns>
-		private float CalculateSuccessProbability(int minLevel, int maxLevel)
-    {
-			// Calculate the midpoint and steepness
-			float midpoint = (minLevel + maxLevel) / 2f;
-			float k = 0.2f; // You can adjust this value to control the steepness
-
-			// Calculate the logistic probability
-			float probability = 1f / (1f + Mathf.Exp(-k * (_level - midpoint)));
-
-			// Probability should range from 25% - 99%
-			if (_level <= minLevel)
+		public void ChangeExperience(int xp)
+		{
+			_currentExperience += xp;
+			int nextLevelXp = AdventurerManager.Instance.GetAdventurerNextLevelXp(_level);
+			if (nextLevelXp <= _currentExperience)
 			{
-				return 0.25f;
+				_currentExperience -= nextLevelXp;
+				_level++;
+				_maxHealth++;
 			}
-			else if (_level >= maxLevel)
-			{
-				return 0.99f;
-			}
-			else
-			{
-				// Scale the probability to the desired range (25% to 99%)
-				float scaledProbability = 0.25f + (0.74f * probability);
-				return scaledProbability;
-			}
-    }
-
-		private bool AttemptQuest(float probability)
-    {
-			float randomValue = Random.Range(0f, 1f);
-			return randomValue < probability;
-    }
+		}
+		public void ChangeReward(int gold)
+		{
+			_gold += gold;
+		}
+		public void ChangeHappiness(int change)
+		{
+			_happiness += change;
+		}
+		public void ChangeHealth(int change)
+		{
+			_currentHealth += change;
+		}
 
 		#endregion
 
 		#region Locations
 
+		/// <summary>
+		/// Finds a suitable activity at a provided location
+		/// </summary>
+		/// <param name="location">The location to search</param>
+		/// <param name="chosenActivity">The activity selected</param>
 		private void FindActivityAtLocation(MapLocation location, out MapActivity chosenActivity)
 		{
 			chosenActivity = null;
@@ -268,7 +237,7 @@ public class Adventurer : MonoBehaviour
 				return;
 			};
 
-			List<MapActivity> available = new List<MapActivity>();
+			List<MapActivity> available = new();
 			foreach (MapActivity activity in location.activities) {
 				// Debug.Log($"Checking activity {activity.data.Name}. Attempted already? {activity.AttemptLog.ContainsKey(Id)}");
 				if (
@@ -280,15 +249,18 @@ public class Adventurer : MonoBehaviour
 				}
 				
 				if ((activity.Type == ActivityType.Rest && NeedsRest)
-						|| (activity.Type == ActivityType.Quest && !activity.AttemptLog.ContainsKey(Id))
+						|| (activity.data is Quest quest && 
+								!activity.AttemptLog.ContainsKey(Id) && 
+								quest.minLevel <= _level)
 				) {
 					chosenActivity = activity;
 					break;
-				} else if (activity.Type == ActivityType.Rest) {
+				} 
+				else if (activity.Type == ActivityType.Rest) {
 					// only perform rest activities if we need rest (checked above)
 					continue;
 				}
-				if (activity.data.CostToUse < Gold)
+				if (activity.data.CostToUse <= Gold)
 				{
 					available.Add(activity);
 				}
@@ -298,7 +270,7 @@ public class Adventurer : MonoBehaviour
 				chosenActivity = Utils.GetRandomFromList(available);
 			}
 
-			// Debug.Log($"Found Activity Match: {chosenActivity?.data.Name}");
+			Debug.Log($"Found Activity Match: {chosenActivity?.data.Name}");
 		}
 
 		private void GetOrCreateLocationLog(MapLocation location, out HistoryLog log)
@@ -310,6 +282,10 @@ public class Adventurer : MonoBehaviour
 			}
 		}
 
+		/// <summary>
+		/// Finds best location to move to next based on location & last visited timestamp
+		/// </summary>
+		/// <returns>The closest & oldest visited location on the map</returns>
 		public MapLocation FindBestLocationMatch()
     {
 			MapLocation bestMatch = null;
@@ -359,7 +335,10 @@ public class Adventurer : MonoBehaviour
     }
 
 		private IEnumerator ChangeLocation()
-		{
+		{			
+			if (!_renderer) _renderer = GetComponent<Renderer>();
+			_renderer.enabled = true;
+
 			_currentLocation = FindBestLocationMatch();
 
 			if (!_currentLocation)
@@ -372,13 +351,15 @@ public class Adventurer : MonoBehaviour
 			GetOrCreateLocationLog(_currentLocation, out HistoryLog log);
 			log.LogVisitLocation();
 
-			// Move to the new location
+			// Physically move to the new location
 			_activeCoroutine = StartCoroutine(Utils.LerpObject(
 				gameObject.transform, 
 				_currentLocation.transform.position, 
 				1f
 			));
 			yield return _activeCoroutine;
+
+			_renderer.enabled = false;
 		}
 
 		#endregion

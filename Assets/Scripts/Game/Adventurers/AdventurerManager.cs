@@ -9,16 +9,22 @@ public class AdventurerManager : MonoBehaviour
     #region Fields
 
 		private static AdventurerManager _instance;
-
-		public int initHealthRoll = 4;
-		public int minGroupSize = 5;
-		public int maxGroupSize = 10;
-		public int maxHappiness = 100;
-		private float _xpIncreaseRate = 0.3f;
-
-		private List<Adventurer> _adventurersOnMap = new List<Adventurer>();
-
 		[SerializeField] private Adventurer _adventurerPrefab;
+
+		[Header("Group Sizing Min/Max Values for High & Low Avg. Happiness")]
+		public int minLowGroupSize = 1;
+		public int maxLowGroupSize = 3;
+		public int minHighGroupSize = 10;
+		public int maxHighGroupSize = 15;
+
+		[Header("Stats")]
+		public Vector2 initHealthRange = new(3, 5);
+		[Tooltip("Minimum avg. happiness value to spawn new adventurers")]
+		public int minHappinessForGroup = 50;
+		public int maxHappiness = 100;
+
+		private float _xpIncreaseRate = 0.3f;
+		private List<Adventurer> _adventurersOnMap = new();
 
 		#endregion
 
@@ -44,13 +50,13 @@ public class AdventurerManager : MonoBehaviour
     /// </summary>
     private void Awake()
     {
-        // Singleton management
-        if (_instance != null && _instance != this)
-        {
-            Destroy(this.gameObject);
-        } else {
-            _instance = this;
-        }
+			// Singleton management
+			if (_instance != null && _instance != this)
+			{
+				Destroy(this.gameObject);
+			} else {
+				_instance = this;
+			}
     }
 
 		void Start()
@@ -63,7 +69,7 @@ public class AdventurerManager : MonoBehaviour
 		}
 
 		public void CreateGroup(int min, int max) {
-			int count = Random.Range(min, max);
+			int count = Mathf.FloorToInt(Random.Range(min, max));
 			CreateGroup(count);
 		}
 
@@ -109,18 +115,23 @@ public class AdventurerManager : MonoBehaviour
 
 		private void HandleOnDayChanged(Dictionary<string, object> _data = null)
 		{
-			if (AverageHappiness > 25)
+			if (AverageHappiness >= minHappinessForGroup)
 			{
-				// examples: assuming maxGroupSize = 10, minGroupSize = 5
-				// AH = 25  -> 3 - 5 advs
-				// AH = 50  -> 5 - 10
-				// AH = 80 -> 8 - 16
-				// AH = 100 -> 10 - 20
-				CreateGroup(AverageHappiness / maxGroupSize, AverageHappiness / minGroupSize);
+				float interpolationVal = (AverageHappiness - minHappinessForGroup) / 100f;
+				int minRange = Mathf.RoundToInt(Mathf.Lerp(minLowGroupSize, minHighGroupSize, interpolationVal));
+        int maxRange = Mathf.RoundToInt(Mathf.Lerp(maxLowGroupSize, maxHighGroupSize, interpolationVal));
+
+        // Ensure minRange is not greater than maxRange
+        minRange = Mathf.Clamp(minRange, minLowGroupSize, maxHighGroupSize);
+        maxRange = Mathf.Clamp(maxRange, minRange, maxHighGroupSize);
+
+				CreateGroup(minRange, maxRange);
 			}
 			else
 			{
-				Debug.Log("Happiness is low - no new adventurers wanted to come to your map.");
+				EventManager.TriggerEvent(EventName.OnMessageBroadcast, new Dictionary<string, object>() {
+					{ "message", "Happiness Low - No New Adventurers" }
+				});
 			}
 		}
 
