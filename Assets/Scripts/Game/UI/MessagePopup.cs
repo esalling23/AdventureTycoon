@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using System.Collections;
 
 
 public class MessagePopup : MonoBehaviour
@@ -7,13 +8,11 @@ public class MessagePopup : MonoBehaviour
     #region Fields
 
 		[SerializeField] private TMP_Text _messageText;
-		private float _timer = 0f;
+		private Coroutine _activeCoroutine = null;
 		/// <summary>
 		/// Time after this object spawns that it will auto-hide itself
 		/// </summary>
-		private float _autoHideTime = 3f;
-		private bool _isActive = false;
-
+		public float autoHideTime = 2f;
 
 		#endregion
 
@@ -23,21 +22,19 @@ public class MessagePopup : MonoBehaviour
 
 		#region Methods
 
-		private void Update()
+		private void ClearCoroutine()
 		{
-			if (!_isActive) return;
-
-			_timer += Time.deltaTime;
-
-			if (_timer >= _autoHideTime)
-			{
-				CloseMessage();
+			if (_activeCoroutine != null) {
+				StopCoroutine(_activeCoroutine);
+				_activeCoroutine = null;
 			}
 		}
 
-		private void Start()
+		private IEnumerator StayVisible()
 		{
-			_timer = 0f;
+			yield return new WaitForSeconds(autoHideTime);
+
+			CloseMessage();
 		}
 
 		public void OnClickHideMessage()
@@ -47,14 +44,18 @@ public class MessagePopup : MonoBehaviour
 
 		private void CloseMessage()
 		{
+			ClearCoroutine();
+
 			gameObject.SetActive(false);
-			_isActive = false;
 			MessageManager.Instance.CloseMessage(this);
 		}
 
 		public void ShowMessage(string message)
 		{
 			_messageText.text = message;
+			gameObject.SetActive(true);
+
+			_activeCoroutine = StartCoroutine(StayVisible());
 		}
 
 		#endregion

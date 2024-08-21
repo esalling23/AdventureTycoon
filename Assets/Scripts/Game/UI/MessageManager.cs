@@ -38,6 +38,10 @@ public class MessageManager : MonoBehaviour
 		{
 			EventManager.StartListening(EventName.OnMessageBroadcast, HandleOnMessageBroadcast);
 		}
+		void OnDestroy()
+		{
+			EventManager.StopListening(EventName.OnMessageBroadcast, HandleOnMessageBroadcast);
+		}
 
 		public void CloseMessage(MessagePopup _message)
 		{
@@ -62,7 +66,6 @@ public class MessageManager : MonoBehaviour
 
 				// implementing a single-at-a-time message for now
 				_messageObj.ShowMessage(message.ToString());
-				_messageObj.gameObject.SetActive(true);
 				_isMessageActive = true;
 			}
 		}
