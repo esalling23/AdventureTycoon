@@ -66,6 +66,8 @@ public class Adventurer : MonoBehaviour
 			EventManager.TriggerEvent(EventName.OnAdventurerStatChanged, null);
     }
 
+		#region Activity Loop
+
 		void ClearCoroutine()
 		{
 			if (_activeCoroutine != null) {
@@ -154,11 +156,15 @@ public class Adventurer : MonoBehaviour
 			yield return new WaitForSeconds(timeForActivity * 60f);
 
 			// // success is 100% by default - only Quest activities can be failed
-			// to do - set success probability
-			// float successProbability = 100f;
 			bool isSuccessful = true;
 
-			// Debug.Log($"{activity.Type} Activity Attempt {(isSuccessful ? "Success" : "Failure")}");
+			if (activity.data is Quest quest)
+			{
+				float successProbability = CalculateSuccessProbability(quest.minLevel, quest.maxLevel);
+				isSuccessful = AttemptQuest(successProbability);
+			}
+
+			Debug.Log($"{activity.Type} Activity Attempt {(isSuccessful ? "Success" : "Failure")}");
 
 			UpdateStats(isSuccessful, activity);
 
@@ -210,6 +216,48 @@ public class Adventurer : MonoBehaviour
 			// Debug.Log($"Adventurer stats -- \nGold: {_gold}\nLevel: {_level} & XP:{_currentExperience}\nHappiness: {_happiness}\nHealth: {_currentHealth} / {_maxHealth}");
 			EventManager.TriggerEvent(EventName.OnAdventurerStatChanged, null);
 		}
+
+		/// <summary>
+		/// Calculates probability of succeeding quest
+		/// </summary>
+		/// <param name="minLevel">Quest min Level</param>
+		/// <param name="maxLevel">Quest max Level</param>
+		/// <returns></returns>
+		private float CalculateSuccessProbability(int minLevel, int maxLevel)
+    {
+			// Calculate the midpoint and steepness
+			float midpoint = (minLevel + maxLevel) / 2f;
+			float k = 0.2f; // You can adjust this value to control the steepness
+
+			// Calculate the logistic probability
+			float probability = 1f / (1f + Mathf.Exp(-k * (_level - midpoint)));
+
+			// Probability should range from 25% - 99%
+			if (_level <= minLevel)
+			{
+				return 0.25f;
+			}
+			else if (_level >= maxLevel)
+			{
+				return 0.99f;
+			}
+			else
+			{
+				// Scale the probability to the desired range (25% to 99%)
+				float scaledProbability = 0.25f + (0.74f * probability);
+				return scaledProbability;
+			}
+    }
+
+		private bool AttemptQuest(float probability)
+    {
+			float randomValue = Random.Range(0f, 1f);
+			return randomValue < probability;
+    }
+
+		#endregion
+
+		#region Locations
 
 		private void FindActivityAtLocation(MapLocation location, out MapActivity chosenActivity)
 		{
@@ -332,6 +380,8 @@ public class Adventurer : MonoBehaviour
 			));
 			yield return _activeCoroutine;
 		}
+
+		#endregion
 
 		#region Event Handlers
 
