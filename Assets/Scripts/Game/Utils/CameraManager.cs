@@ -15,7 +15,9 @@ public class CameraManager : MonoBehaviour
 	private float _horizontalInput;
 	private float _verticalInput;
 	private Coroutine _movementCoroutine;
-
+	public float dragSpeed = 2;
+	private Vector3 dragOrigin;
+	
 	void Start() 
 	{
 
@@ -23,13 +25,45 @@ public class CameraManager : MonoBehaviour
 
 	void Update() 
 	{
-			_horizontalInput = Input.GetAxis("Horizontal");
-			_verticalInput = Input.GetAxis("Vertical");
+		_horizontalInput = Input.GetAxis("Horizontal");
+		_verticalInput = Input.GetAxis("Vertical");
+	}
 
+	private void LateUpdate()
+	{
 		if (EventSystem.current.IsPointerOverGameObject())
 			return;
-
 		
+		KeypadToMove();
+		DragToMove();
+		ScrollToZoom();
+	}
+
+	/// <summary>
+	/// Handles dragging to move the camera
+	/// </summary>
+	private void DragToMove()
+	{
+		if (Input.GetMouseButtonDown(0))
+		{
+			dragOrigin = Input.mousePosition;
+			return;
+		}
+
+		if (!Input.GetMouseButton(0)) return;
+
+		Vector3 pos = Camera.main.ScreenToViewportPoint(Input.mousePosition - dragOrigin);
+		Vector3 move = new(pos.x * dragSpeed, pos.y * dragSpeed, 0f);
+
+		transform.Translate(move, Space.World);
+	}
+
+	/// <summary>
+	/// Handles scrolling to zoom the camera in/out
+	/// </summary>
+	private void ScrollToZoom()
+	{
+	
 		float size = Input.GetAxis("Mouse ScrollWheel") * _scrollSpeed;
 		if (Camera.main.orthographic)
 		{
@@ -53,18 +87,13 @@ public class CameraManager : MonoBehaviour
 				Camera.main.fieldOfView = _maxZoom;
 			}
 		}
+	
 	}
 
-	public void AnimateTo(Vector3 newPos, float duration)
-	{
-		if (_movementCoroutine != null) StopCoroutine(_movementCoroutine);
-
-		Vector3 newCameraPos = new Vector3(newPos.x, newPos.y, gameObject.transform.position.z);
-		_movementCoroutine = StartCoroutine(Utils.LerpObject(Camera.main.transform, newCameraPos, duration));
-	}
-
-
-	private void FixedUpdate()
+	/// <summary>
+	/// Handles using arrow & WASD keys to move camera
+	/// </summary>
+	private void KeypadToMove()
 	{
 		_input = new Vector3(
 			_horizontalInput,
@@ -75,4 +104,13 @@ public class CameraManager : MonoBehaviour
 
 		Camera.main.transform.Translate(_speed * Time.deltaTime * _input);
 	}
+
+	public void AnimateTo(Vector3 newPos, float duration)
+	{
+		if (_movementCoroutine != null) StopCoroutine(_movementCoroutine);
+
+		Vector3 newCameraPos = new Vector3(newPos.x, newPos.y, gameObject.transform.position.z);
+		_movementCoroutine = StartCoroutine(Utils.LerpObject(Camera.main.transform, newCameraPos, duration));
+	}
+
 }
