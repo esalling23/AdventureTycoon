@@ -226,7 +226,7 @@ MonoBehaviour:
   initActivityCount: 2
   initQuestCount: 1
   gridSize: {x: 10, y: 10}
-  cellSize: 20
+  cellSize: 40
   _tilePrefab: {fileID: 4691110901109457235, guid: 8d2791f89e5974c01a85f46035ffeb28, type: 3}
   _terrainTileSprites:
   - type: 0
@@ -235,7 +235,7 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 609550d84b1f04322b5a75b602a5ca87, type: 3}
   - type: 2
     sprite: {fileID: 21300000, guid: 57ba59222dcc74b1bb8d60d9c6df7373, type: 3}
-  _locationPrefab: {fileID: 8474493550586513579, guid: a05c6e1e738724079a99bf61c16ce7eb, type: 3}
+  _locationPrefab: {fileID: 1373632353920307844, guid: a05c6e1e738724079a99bf61c16ce7eb, type: 3}
   _tempLocationPrefab: {fileID: 3325829058748021644, guid: a475ea05a1a834254a13bd9cad91c1ae, type: 3}
   _selectedIndicator: {fileID: 1797825335}
   _locationDetailsPanel: {fileID: 605971421}
@@ -774,7 +774,7 @@ MonoBehaviour:
     type: 1
     capacity: 5
     costToUse: 0
-    happinessEffect: 4
+    happinessEffect: 20
     healthEffect: 4
     minTimeToUse: 1
     maxTimeToUse: 1.2
@@ -952,9 +952,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _scrollSpeed: 15
-  _minZoom: 5
-  _maxZoom: 200
-  _speed: 50
+  _minZoom: 50
+  _maxZoom: 150
+  _speed: 100
   dragSpeed: 2
 --- !u!1 &1224020434
 GameObject:
@@ -985,14 +985,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0dda0006db2a94d5a97056436f48994a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initHealthRoll: 4
-  minHappinessForGroup: 50
+  _adventurerPrefab: {fileID: 4294982699453881730, guid: da89bfc7ea9e84e38849c0f376c91eb8, type: 3}
   minLowGroupSize: 1
   maxLowGroupSize: 3
   minHighGroupSize: 10
   maxHighGroupSize: 15
+  initHealthRange: {x: 3, y: 5}
+  minHappinessForGroup: 50
   maxHappiness: 100
-  _adventurerPrefab: {fileID: 4294982699453881730, guid: da89bfc7ea9e84e38849c0f376c91eb8, type: 3}
 --- !u!4 &1224020436
 Transform:
   m_ObjectHideFlags: 0
@@ -3465,7 +3465,11 @@ PrefabInstance:
     - target: {fileID: 193804129538930879, guid: ca5102c04c29443af83417a65c7d69a5, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: fd06afda0fe5f46598f1d12774d5c2a9, type: 3}
+      objectReference: {fileID: 21300000, guid: 87eb133423b0e47c3ad1106845ad96fc, type: 3}
+    - target: {fileID: 193804129538930879, guid: ca5102c04c29443af83417a65c7d69a5, type: 3}
+      propertyPath: m_Color.a
+      value: 0.7019608
+      objectReference: {fileID: 0}
     - target: {fileID: 193804129538930879, guid: ca5102c04c29443af83417a65c7d69a5, type: 3}
       propertyPath: m_SortingLayer
       value: 2

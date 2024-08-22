@@ -19,7 +19,7 @@ public class StartScreen : MonoBehaviour
 		#region Methods
 
     public void StartGame() {
-			SceneManager.LoadScene("Game");
+			SceneManager.LoadScene("MainScene");
 		}
 
 		public void ExitGame() {
