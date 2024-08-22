@@ -17,6 +17,8 @@ public class GameManager : MonoBehaviour
 		private GameMode _mode = GameMode.Run;
 		private IEnumerator _activeCoroutine = null;
 
+		[SerializeField] private GameObject _pauseMenu;
+
 
 		#endregion
 
@@ -55,6 +57,15 @@ public class GameManager : MonoBehaviour
 		private void OnDestroy()
 		{
 			ClearCoroutine();
+		}
+
+		void Update()
+		{
+			if (Input.GetKey(KeyCode.Escape))
+			{
+				Time.timeScale = 0;
+				_pauseMenu.SetActive(true);
+			}
 		}
 
 		private void ClearCoroutine()
