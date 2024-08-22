@@ -233,7 +233,7 @@ public class Map : MonoBehaviour
 		);
 
 		location.SetData(locationData);
-		location.SetSpriteSize(cellSize, cellSize);
+		location.SetSpriteSizeByWidth(cellSize);
 
 		return location; 
 	}
@@ -248,7 +248,7 @@ public class Map : MonoBehaviour
 		);
 
 		location.SetData(locationData);
-		location.SetSpriteSize(cellSize, cellSize);
+		location.SetSpriteSizeByWidth(cellSize);
 
 		return location;
 	}

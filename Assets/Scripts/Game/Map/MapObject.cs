@@ -37,6 +37,15 @@ public class MapObject : MonoBehaviour
 			_spriteRenderer.transform.localScale = Vector3.Scale(_spriteRenderer.transform.localScale, new Vector3(ratioX, ratioY, 1f));
 		}
 
+		public void SetSpriteSizeByWidth(float width = 10f) {
+			if (!_spriteRenderer) {
+				_spriteRenderer = GetComponent<SpriteRenderer>();
+			}
+			float yScale = _spriteRenderer.bounds.size.y / _spriteRenderer.bounds.size.x;
+			float height = yScale * width;
+			SetSpriteSize(width, height);
+		}
+
 		public void SetSpriteSizeSquare(float setSize) {
 			if (!_spriteRenderer) {
 				_spriteRenderer = GetComponent<SpriteRenderer>();
