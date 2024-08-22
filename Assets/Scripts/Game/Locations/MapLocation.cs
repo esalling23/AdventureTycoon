@@ -1,7 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using TMPro;
 using System.Linq;
 
 
@@ -17,6 +16,9 @@ public class MapLocation : MapObject
 		// To do - load data from database somewhere
 		private Location _locationData;
 
+		[SerializeField] private TMP_Text _hudName;
+		[SerializeField] private TMP_Text _hudCounter;
+
 		#endregion
 
 		#region Properties
@@ -31,6 +33,16 @@ public class MapLocation : MapObject
 		#endregion
 
 		#region Methods
+
+		public override void Start()
+		{
+			base.Start();
+			EventManager.StartListening(EventName.OnActivityChanged, HandleOnActivityChanged);
+		}
+
+		private void OnDestroy() {
+			EventManager.StopListening(EventName.OnActivityChanged, HandleOnActivityChanged);
+		}
 
 		public override string ToString()
 		{
@@ -48,6 +60,9 @@ public class MapLocation : MapObject
 			} else {
 				_spriteRenderer.sprite = defaultData.icon;
 			}
+
+			_hudName.text = data.name;
+			_hudCounter.text = "0";
 
 			_locationData.activitySlotCount = defaultData.baseActivitySlots;
 		}
@@ -153,6 +168,18 @@ public class MapLocation : MapObject
 
 		// 	EventManager.TriggerEvent(EventName.OnActivityChanged, null);
 		// }
+
+		private void HandleOnActivityChanged(Dictionary<string, object> data)
+		{
+			int totalAdventurers = 0;
+
+			foreach (MapActivity activity in activities)
+			{
+				totalAdventurers += activity.adventurersPresent.Count;
+			}
+
+			_hudCounter.text = totalAdventurers.ToString();
+		}
 
 		#endregion
 }
