@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,7 +6,7 @@ public class StartScreen : MonoBehaviour
 {
     #region Fields
 
-		[SerializeField] private Button _startButton;
+		[SerializeField] private GameObject _confirmExitPrompt;
 
 		#endregion
 
@@ -20,7 +19,15 @@ public class StartScreen : MonoBehaviour
 		#region Methods
 
     public void StartGame() {
-			
+			SceneManager.LoadScene("Game");
+		}
+
+		public void ExitGame() {
+			_confirmExitPrompt.SetActive(true);
+		}
+
+		public void ConfirmExitGame() {
+			Application.Quit();
 		}
 
 		#endregion
