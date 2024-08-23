@@ -104,7 +104,7 @@ public class LocationBuildModal : MonoBehaviour
 		{
 			ClearBuildShelf();
 			_modalContainer.SetActive(false);
-			Time.timeScale = 1;
+			TimeManager.Instance.PlayTime();
 		}
 
 		#region Event Handlers
@@ -121,7 +121,7 @@ public class LocationBuildModal : MonoBehaviour
 				if (System.Enum.TryParse(type.ToString(), out LocationType locationType))
 				{
 					Debug.Log("BUild modal heard type selected");
-					Time.timeScale = 0;
+					TimeManager.Instance.PauseTime();
 					_modalContainer.SetActive(true);
 					InitTypeLocations(locationType);
 				}

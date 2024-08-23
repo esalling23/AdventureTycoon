@@ -22,10 +22,10 @@ public class LocationDetailsPanel : LocationDetailItem
 		public TabType lastTabOpen = TabType.Activities;
 
 		public GameObject activitiesListContainer;
-		public DetailsTab activitiesTab;
+		public LocationDetailsTab activitiesTab;
 
 		public GameObject questListContainer;
-		public DetailsTab questTab;
+		public LocationDetailsTab questTab;
 
 		#endregion
 

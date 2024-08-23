@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DetailsTab : MonoBehaviour
+public class LocationDetailsTab : MonoBehaviour
 {
 	[SerializeField] private LocationDetailsPanel _detailsPanel;
 	public TabType tabType = TabType.Activities;
