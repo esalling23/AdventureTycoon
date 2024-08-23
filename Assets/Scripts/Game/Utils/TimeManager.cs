@@ -65,6 +65,8 @@ public class TimeManager : MonoBehaviour
 
 	public void PauseTime()
 	{
+		if (Time.timeScale == 0) return;
+
 		SetLastSpeed();
 		Time.timeScale = 0;
 	}

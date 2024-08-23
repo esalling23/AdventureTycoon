@@ -26,10 +26,11 @@ public class TimeControls : MonoBehaviour
 
 	void SetButtonsEnabled()
 	{
-		_slowDownButton.interactable = Time.timeScale > TimeManager.Instance.minSpeed;
-		_speedUpButton.interactable = Time.timeScale < TimeManager.Instance.maxSpeed;
+		bool isPaused = Time.timeScale == 0;
+		_slowDownButton.interactable = !isPaused && Time.timeScale > TimeManager.Instance.minSpeed;
+		_speedUpButton.interactable = !isPaused && Time.timeScale < TimeManager.Instance.maxSpeed;
 
-		_pauseButton.interactable = Time.timeScale != 0;
+		_pauseButton.interactable = !isPaused;
 	}
 
 	public void HandleClickPlay()
