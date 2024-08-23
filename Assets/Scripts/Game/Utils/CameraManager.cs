@@ -4,6 +4,8 @@ using UnityEngine.EventSystems;
 
 public class CameraManager : MonoBehaviour 
 {
+	#region Fields
+	private static CameraManager _instance;
 	// Scroll to zoom
 	[SerializeField] private float _scrollSpeed = 10;
 	[SerializeField] private float _minZoom = 5f;
@@ -17,6 +19,45 @@ public class CameraManager : MonoBehaviour
 	private Coroutine _movementCoroutine;
 	public float dragSpeed = 2;
 	private Vector3 dragOrigin;
+	private float _originalSize;
+
+	#endregion
+
+	#region Properties
+
+	public static CameraManager Instance { get { return _instance; } }
+
+	public float OriginalSize { get { return _originalSize; } }
+
+	#endregion
+
+	#region Methods
+
+	/// <summary>
+	/// Manages singleton wakeup/destruction
+	/// </summary>
+	private void Awake()
+	{
+		// Singleton management
+		if (_instance != null && _instance != this)
+		{
+			Destroy(this.gameObject);
+		} else {
+			_instance = this;
+		}
+	}
+
+	void Start()
+	{
+		if (Camera.main.orthographic)
+		{
+			_originalSize = Camera.main.orthographicSize;
+		} 
+		else 
+		{
+			_originalSize = Camera.main.fieldOfView;
+		}
+	}
 
 	void Update() 
 	{
@@ -107,4 +148,5 @@ public class CameraManager : MonoBehaviour
 		_movementCoroutine = StartCoroutine(Utils.LerpObject(Camera.main.transform, newCameraPos, duration));
 	}
 
+	#endregion
 }

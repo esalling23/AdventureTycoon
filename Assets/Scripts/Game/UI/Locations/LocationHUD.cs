@@ -25,7 +25,7 @@ public class LocationHUD : MonoBehaviour
 			_mainCam = Camera.main;
 			_transform = GetComponent<RectTransform>();
 
-			_initialOrthographicSize = _mainCam.orthographicSize;
+			_initialOrthographicSize = CameraManager.Instance.OriginalSize;
 			_initialCanvasScale = GetComponent<Canvas>().transform.localScale;
 		}
 
