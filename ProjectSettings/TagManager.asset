@@ -50,3 +50,6 @@ TagManager:
   - name: Locations
     uniqueID: 4261563111
     locked: 0
+  - name: Overlay
+    uniqueID: 3923916539
+    locked: 0
