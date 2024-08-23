@@ -51,6 +51,7 @@ public class Map : MonoBehaviour
 	// UI
 	[SerializeField] private GameObject _selectedIndicator;
 	[SerializeField] private LocationDetailsPanel _locationDetailsPanel;
+	[SerializeField] private GameObject _pauseMenu;
 
 	#endregion
 
@@ -85,6 +86,12 @@ public class Map : MonoBehaviour
 
 	void Update()
 	{
+		if (Input.GetKey(KeyCode.Escape))
+		{
+			TimeManager.Instance.PauseTime();
+			_pauseMenu.SetActive(true);
+		}
+		
 		if (!EventSystem.current.IsPointerOverGameObject()) {
 			GridCell cell = _mapGrid.GetGridObject(UtilsClass.GetMouseWorldPosition());
 			

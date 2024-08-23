@@ -6,13 +6,9 @@ public class PauseScreen : MonoBehaviour
 {
     #region Fields
 
-		
-
 		#endregion
 
 		#region Properties
-
-		public string Property { get; set; }
 
 		#endregion
 
@@ -24,7 +20,7 @@ public class PauseScreen : MonoBehaviour
 		}
 
 		public void HandleClickExitGame() {
-			SceneManager.LoadScene("StartScreen");
+			GameManager.Instance.GameOver(true);
 		}
 
 		#endregion

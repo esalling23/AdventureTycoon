@@ -77,6 +77,7 @@ public class AdventurerManager : MonoBehaviour
 			for (int i = 0; i < count; i++) {
 				CreateAdventurer();
 			}
+			EventManager.TriggerEvent(EventName.OnAdventurerGroupAdded, null);
 			EventManager.TriggerEvent(EventName.OnMessageBroadcast, new Dictionary<string, object>() {
 				{ "message", $"{count} Adventurers Joined Your Map!" }
 			});

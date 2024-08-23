@@ -1,6 +1,7 @@
 public enum EventName 
 {
   OnGridValueChanged,
+	OnAdventurerGroupAdded,
 	OnActivityChanged,
 	OnBuildTypeSelected,
 	OnBuildLocationSelected,

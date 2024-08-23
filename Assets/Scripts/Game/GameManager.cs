@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.SceneManagement;
 
 
 public class GameManager : MonoBehaviour
@@ -11,14 +12,14 @@ public class GameManager : MonoBehaviour
 
 		[SerializeField] private int _gold = 0;
 		private int _currentDay = 1;
+		private int _highestPopulation = 0;
+
+		private bool _isForceQuit = false;
 
 		[SerializeField] private float _minutesInDay = 0.2f;
 
 		private GameMode _mode = GameMode.Run;
 		private IEnumerator _activeCoroutine = null;
-
-		[SerializeField] private GameObject _pauseMenu;
-
 
 		#endregion
 
@@ -26,10 +27,17 @@ public class GameManager : MonoBehaviour
 
 		public static GameManager Instance { get { return _instance; }}
 
+		public int HighestPopulation { get { return _highestPopulation; } }
+		// public int TotalLocations { get { return _totalLocations; } }
+		// public int TotalActivities { get { return _totalActivities; } }
+		// public int TotalQuests { get { return _totalQuests; } }
+
 		public float MinutesInDay { get { return _minutesInDay; } }
 		public int Gold { get { return _gold; } }
 		public int CurrentDay { get { return _currentDay; } }
 		public GameMode Mode { get { return _mode; } }
+
+		public bool IsForceQuit { get { return _isForceQuit; } }
 
 		#endregion
 
@@ -52,20 +60,14 @@ public class GameManager : MonoBehaviour
 		private void Start()
 		{
 			StartCoroutine(PlayTime());
+
+			EventManager.StartListening(EventName.OnAdventurerGroupAdded, HandleOnAdventurerGroupAdded);
 		}
 
 		private void OnDestroy()
 		{
+			EventManager.StopListening(EventName.OnAdventurerGroupAdded, HandleOnAdventurerGroupAdded);
 			ClearCoroutine();
-		}
-
-		void Update()
-		{
-			if (Input.GetKey(KeyCode.Escape))
-			{
-				Time.timeScale = 0;
-				_pauseMenu.SetActive(true);
-			}
 		}
 
 		private void ClearCoroutine()
@@ -97,6 +99,29 @@ public class GameManager : MonoBehaviour
 		public void SetMode(GameMode mode) {
 			_mode = mode;
 		}
+
+		public void StartGame()
+		{
+			_highestPopulation = 0;
+			SceneManager.LoadScene("MainScene");
+		}
+		public void GameOver(bool isForceQuit)
+		{
+			_isForceQuit = isForceQuit;
+			SceneManager.LoadScene("EndGame");
+		}
+
+		#region Event Handlers
+
+		private void HandleOnAdventurerGroupAdded(Dictionary<string, object> _data)
+		{
+			if (AdventurerManager.Instance.TotalAdventurers > _highestPopulation)
+			{
+				_highestPopulation = AdventurerManager.Instance.TotalAdventurers;
+			}
+		}
+
+		#endregion
 
 		#endregion
 }

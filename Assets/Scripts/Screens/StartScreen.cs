@@ -19,15 +19,20 @@ public class StartScreen : MonoBehaviour
 		#region Methods
 
     public void StartGame() {
-			SceneManager.LoadScene("MainScene");
+			GameManager.Instance.StartGame();
 		}
 
 		public void ExitGame() {
-			_confirmExitPrompt.SetActive(true);
+			// _confirmExitPrompt .SetActive(true);
+			ConfirmExitGame();
 		}
 
 		public void ConfirmExitGame() {
-			Application.Quit();
+			#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+			#else
+				UnityEngine.Application.Quit();
+			#endif
 		}
 
 		#endregion

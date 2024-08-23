@@ -239,6 +239,7 @@ MonoBehaviour:
   _tempLocationPrefab: {fileID: 3325829058748021644, guid: a475ea05a1a834254a13bd9cad91c1ae, type: 3}
   _selectedIndicator: {fileID: 1797825335}
   _locationDetailsPanel: {fileID: 605971421}
+  _pauseMenu: {fileID: 1546767476}
 --- !u!4 &390809373
 Transform:
   m_ObjectHideFlags: 0
@@ -354,507 +355,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26620d1d96634416eb43b2ebc8c6203d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &835701167
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 835701169}
-  - component: {fileID: 835701168}
-  - component: {fileID: 835701170}
-  - component: {fileID: 835701171}
-  m_Layer: 0
-  m_Name: GameManager
-  m_TagString: GameManager
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &835701168
+--- !u!114 &835701168 stripped
 MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 92473408020566867, guid: 4c1c724449e2f4a5aacfdf986a03c413, type: 3}
+  m_PrefabInstance: {fileID: 92473408317790947}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 835701167}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5a082b98a551040e68488f3974976a18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _gold: 100
-  _minutesInDay: 0.2
-  _pauseMenu: {fileID: 1546767476}
---- !u!4 &835701169
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 835701167}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &835701170
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 835701167}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 763dc98814c7d4e62b60a2990cd1bc1c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &835701171
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 835701167}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 257d4f2d5b00040f397d780a861fa366, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _activityTypeDatas:
-  - type: 0
-    icon: {fileID: 21300000, guid: b014a14c6b9d24f2bad630a5117ad858, type: 3}
-  - type: 1
-    icon: {fileID: 21300000, guid: 167aa851377b646d7a4d194f7f97e724, type: 3}
-  - type: 2
-    icon: {fileID: 21300000, guid: 270fe05726f384970a514a5d0f41a194, type: 3}
-  - type: 3
-    icon: {fileID: 21300000, guid: 7a13ce64bed2c42f982342838a398212, type: 3}
-  _locationTypeDatas:
-  - type: 0
-    icon: {fileID: 21300000, guid: d8e7d3bb698bd4f02bb7d17ad2f7e194, type: 3}
-    costToPlace: 800
-    baseActivitySlots: 10
-    baseActivityType: 0
-  - type: 1
-    icon: {fileID: 21300000, guid: 169cd334e9770465aa51d2810c4e6af1, type: 3}
-    costToPlace: 400
-    baseActivitySlots: 5
-    baseActivityType: 0
-  - type: 2
-    icon: {fileID: 21300000, guid: 7cea75523386047278093acd1f27a512, type: 3}
-    costToPlace: 100
-    baseActivitySlots: 3
-    baseActivityType: 0
-  - type: 3
-    icon: {fileID: 21300000, guid: 35407ab12519146058050898c35d6dd1, type: 3}
-    costToPlace: 100
-    baseActivitySlots: 2
-    baseActivityType: 2
-  - type: 4
-    icon: {fileID: 21300000, guid: fa2ca613d57474b49a2a87483e5a9fc6, type: 3}
-    costToPlace: 600
-    baseActivitySlots: 4
-    baseActivityType: 1
-  - type: 5
-    icon: {fileID: 21300000, guid: 110fc76c7d6084b368cd5d3ed1399c27, type: 3}
-    costToPlace: 1200
-    baseActivitySlots: 8
-    baseActivityType: 1
-  _worldActivityData:
-  - name: Rest by the fire
-    description: Rest at a campfire to regain a bit of health and happiness
-    type: 0
-    capacity: 5
-    costToUse: 0
-    happinessEffect: 5
-    healthEffect: 0
-    minTimeToUse: 1
-    maxTimeToUse: 1.2
-    appearsInLocationTypes: 03000000
-    costToPlace: 30
-  - name: Rent a room
-    description: Rest a night in a bed surrounded by walls
-    type: 0
-    capacity: 5
-    costToUse: 20
-    happinessEffect: 10
-    healthEffect: 0
-    minTimeToUse: 1
-    maxTimeToUse: 1.2
-    appearsInLocationTypes: 000000000100000002000000
-    costToPlace: 60
-  - name: Buy a round
-    description: Impress local patrons by buying everyone a round of drinks
-    type: 3
-    capacity: 5
-    costToUse: 100
-    happinessEffect: 15
-    healthEffect: 0
-    minTimeToUse: 1
-    maxTimeToUse: 1.2
-    appearsInLocationTypes: 000000000100000002000000
-    costToPlace: 100
-  - name: Visit local market
-    description: Trade items found on quests for $ or other goods
-    type: 2
-    capacity: 5
-    costToUse: 100
-    happinessEffect: 10
-    healthEffect: 0
-    minTimeToUse: 1
-    maxTimeToUse: 1.2
-    appearsInLocationTypes: 010000000300000000000000
-    costToPlace: 100
-  - name: Trade with traveling merchant
-    description: Tradeable merchant passing through the area
-    type: 2
-    capacity: 5
-    costToUse: 50
-    happinessEffect: 5
-    healthEffect: 0
-    minTimeToUse: 1
-    maxTimeToUse: 1.2
-    appearsInLocationTypes: 0200000003000000
-    costToPlace: 80
-  - name: Seek quest knowledge
-    description: Ask around to get your bearings before you head off to a quest
-    type: 3
-    capacity: 5
-    costToUse: 10
-    happinessEffect: 5
-    healthEffect: 0
-    minTimeToUse: 1
-    maxTimeToUse: 1.2
-    appearsInLocationTypes: 000000000100000002000000
-    costToPlace: 60
-  _worldLocationData:
-  - name: Lonely Inn
-    description: An inn just off the road by itself
-    activitySlotCount: 2
-    type: 2
-    costToPlace: 500
-    icon: {fileID: 0}
-  - name: Little Inn
-    description: The smallest lil inn you've ever seen
-    activitySlotCount: 1
-    type: 2
-    costToPlace: 500
-    icon: {fileID: 0}
-  - name: Gnome Inn
-    description: An inn frequented by gnomes and welcome to all who abide by their
-      customs
-    activitySlotCount: 3
-    type: 2
-    costToPlace: 500
-    icon: {fileID: 0}
-  - name: Travelers Inn
-    description: A busy spot for all sorts of traveling folk
-    activitySlotCount: 3
-    type: 2
-    costToPlace: 500
-    icon: {fileID: 0}
-  - name: Herrington
-    description: A small town on the water and known for it's fisheries
-    activitySlotCount: 3
-    type: 1
-    costToPlace: 500
-    icon: {fileID: 0}
-  - name: Marketsville
-    description: A small town with a sizeable market
-    activitySlotCount: 3
-    type: 1
-    costToPlace: 500
-    icon: {fileID: 0}
-  - name: Dragon's Peak
-    description: A mountainside village with history of dragon rulers
-    activitySlotCount: 4
-    type: 1
-    costToPlace: 500
-    icon: {fileID: 0}
-  - name: Vendom
-    description: A large city ruled by King Ven CCXIV
-    activitySlotCount: 10
-    type: 0
-    costToPlace: 500
-    icon: {fileID: 0}
-  - name: Eldralith
-    description: A city built within the roots of an ancient, sentient tree, where
-      druids and scholars study the secrets of nature.
-    activitySlotCount: 8
-    type: 0
-    costToPlace: 500
-    icon: {fileID: 0}
-  - name: Thornwatch
-    description: A fortress city surrounded by a massive, enchanted thorny forest,
-      serving as the last defense against an ancient curse.
-    activitySlotCount: 9
-    type: 0
-    costToPlace: 500
-    icon: {fileID: 0}
-  - name: Lunaris
-    description: A city built on the surface of a massive crystal lake that reflects
-      the phases of the moon, believed to be a gift from the goddess of the night.
-    activitySlotCount: 6
-    type: 0
-    costToPlace: 500
-    icon: {fileID: 0}
-  - name: Traveler's Camp
-    description: A small camp occupied by two travelers. They welcome anyone who
-      cares to debate the stars
-    activitySlotCount: 1
-    type: 3
-    costToPlace: 500
-    icon: {fileID: 0}
-  - name: Moonshade Grove
-    description: A tranquil woodland camp, where druids and travelers gather to rest
-      under the protective canopy of ancient trees.
-    activitySlotCount: 3
-    type: 3
-    costToPlace: 500
-    icon: {fileID: 0}
-  - name: Crimson Banner Camp
-    description: 'A military encampment marked by a blood-red banner, home to mercenaries
-      preparing for their next battle.  '
-    activitySlotCount: 3
-    type: 3
-    costToPlace: 500
-    icon: {fileID: 0}
-  - name: Twilight Caravanserai
-    description: 'A mysterious camp that appears only at dusk, offering shelter and
-      supplies from enigmatic merchants who disappear with the dawn.  '
-    activitySlotCount: 3
-    type: 3
-    costToPlace: 500
-    icon: {fileID: 0}
-  - name: Echoheart Encampment
-    description: 'A camp located in the heart of a cavern, where the sound of every
-      footstep and voice reverberates with eerie clarity.  '
-    activitySlotCount: 3
-    type: 3
-    costToPlace: 500
-    icon: {fileID: 0}
-  - name: Ashen Hollow
-    description: 'A camp situated in a blackened, ashen valley, where survivors of
-      a recent disaster regroup and plan their next move.  '
-    activitySlotCount: 3
-    type: 3
-    costToPlace: 500
-    icon: {fileID: 0}
-  - name: Shadowfang Crypt
-    description: 'An ancient underground mausoleum, where the restless dead guard
-      forgotten relics in dark, narrow passageways.  '
-    activitySlotCount: 3
-    type: 4
-    costToPlace: 500
-    icon: {fileID: 0}
-  - name: The Abyssal Vault
-    description: 'A labyrinthine dungeon carved deep into the earth, filled with
-      traps and treasures, where the air grows hotter the deeper one descends.  '
-    activitySlotCount: 3
-    type: 4
-    costToPlace: 500
-    icon: {fileID: 0}
-  - name: Serpent's Coil
-    description: 'A winding underground temple dedicated to an ancient serpent god,
-      where twisting corridors mimic the coils of a snake.  '
-    activitySlotCount: 3
-    type: 4
-    costToPlace: 500
-    icon: {fileID: 0}
-  - name: Veilwood Catacombs
-    description: 'Hidden beneath the roots of an enchanted forest, these burial chambers
-      are said to be cursed, with spirits of the forest protecting their secrets.  '
-    activitySlotCount: 3
-    type: 4
-    costToPlace: 500
-    icon: {fileID: 0}
-  - name: Emberstone Caverns
-    description: 'A network of volcanic tunnels, glowing with molten lava, where
-      ancient fire elementals are rumored to dwell.  '
-    activitySlotCount: 3
-    type: 4
-    costToPlace: 500
-    icon: {fileID: 0}
-  - name: Forgotten Bastion
-    description: 'A crumbling fortress lost to time, now overrun by dark creatures
-      and filled with the remnants of a once-great empire.  '
-    activitySlotCount: 3
-    type: 4
-    costToPlace: 500
-    icon: {fileID: 0}
-  - name: Whispering Labyrinth
-    description: 'A maze-like dungeon, where the walls themselves seem to whisper
-      secrets and lies, leading adventurers deeper into its heart with every step.       '
-    activitySlotCount: 3
-    type: 4
-    costToPlace: 500
-    icon: {fileID: 0}
-  - name: Stormwrath Keep
-    description: 'A ruined castle atop a mountain, constantly battered by fierce
-      storms, where lightning and thunder seem to obey a malevolent will.  '
-    activitySlotCount: 6
-    type: 5
-    costToPlace: 500
-    icon: {fileID: 0}
-  - name: Forgotten Bastion
-    description: 'A crumbling fortress lost to time, now overrun by dark creatures
-      and filled with the remnants of a once-great empire.  '
-    activitySlotCount: 6
-    type: 5
-    costToPlace: 500
-    icon: {fileID: 0}
-  - name: Ironspire Fortress
-    description: 'A long-abandoned, heavily fortified stronghold, its halls echoing
-      with the sounds of long-lost battles and the whispers of ghosts.  '
-    activitySlotCount: 6
-    type: 5
-    costToPlace: 500
-    icon: {fileID: 0}
-  - name: Dawnspire Citadel
-    description: 'A majestic castle with spires that catch the first light of day,
-      home to an order of knights sworn to protect the realm at any cost.  '
-    activitySlotCount: 6
-    type: 5
-    costToPlace: 500
-    icon: {fileID: 0}
-  - name: Ravencrest Castle
-    description: "An eerie fortress perched high in the mountains, where ravens gather
-      in droves, serving as omens of the castle\u2019s mysterious lord.  "
-    activitySlotCount: 6
-    type: 5
-    costToPlace: 500
-    icon: {fileID: 0}
-  - name: Bloodstone Keep
-    description: 'A castle built from crimson-hued stone, rumored to have been stained
-      by the blood of countless battles fought over its control.  '
-    activitySlotCount: 6
-    type: 5
-    costToPlace: 500
-    icon: {fileID: 0}
-  - name: Aethergate
-    description: 'A city built around a portal to another dimension, where explorers
-      and adventurers come seeking riches and knowledge.  '
-    activitySlotCount: 6
-    type: 0
-    costToPlace: 500
-    icon: {fileID: 0}
-  - name: Glimmerdeep
-    description: 'A subterranean city illuminated by bioluminescent fungi, inhabited
-      by a secretive race of underground dwellers.  Glimmerdeep - A subterranean
-      city illuminated by bioluminescent fungi, inhabited by a secretive race of
-      underground dwellers.  '
-    activitySlotCount: 6
-    type: 0
-    costToPlace: 500
-    icon: {fileID: 0}
-  - name: The Silver Chalice
-    description: 'An upscale inn where the finest wines flow freely, and the patrons
-      whisper of political intrigue over velvet-draped tables.  '
-    activitySlotCount: 2
-    type: 2
-    costToPlace: 500
-    icon: {fileID: 0}
-  - name: The Embered Hearth
-    description: 'A welcoming inn with a large stone fireplace, where travelers find
-      warmth, hearty meals, and stories of the road.  '
-    activitySlotCount: 4
-    type: 2
-    costToPlace: 500
-    icon: {fileID: 0}
-  _worldQuestData:
-  - name: Explore Ancient Dragon Tomb
-    description: Seek the truth of the tales of dragons in this land. There may be
-      much history not written.
-    type: 1
-    capacity: 5
-    costToUse: 0
-    happinessEffect: 20
-    healthEffect: 4
-    minTimeToUse: 1
-    maxTimeToUse: 1.2
-    minLevel: 1
-    maxLevel: 5
-    baseExperience: 100
-    reward: 100
-  - name: Explore Underneath City
-    description: A large city ruled by King Ven CCXIV
-    type: 1
-    capacity: 5
-    costToUse: 0
-    happinessEffect: 1
-    healthEffect: 3
-    minTimeToUse: 1
-    maxTimeToUse: 1.2
-    minLevel: 1
-    maxLevel: 5
-    baseExperience: 100
-    reward: 100
-  - name: Collect Alchemy Ingredients
-    description: A city built within the roots of an ancient, sentient tree, where
-      druids and scholars study the secrets of nature.
-    type: 1
-    capacity: 5
-    costToUse: 0
-    happinessEffect: 1
-    healthEffect: 1
-    minTimeToUse: 1
-    maxTimeToUse: 1.2
-    minLevel: 1
-    maxLevel: 5
-    baseExperience: 100
-    reward: 100
-  - name: Investigate Missing Farmers
-    description: A group of farmers have gone missing. The only clue to their whereabouts
-      is that they were last seen arguing in the local tavern.
-    type: 1
-    capacity: 5
-    costToUse: 0
-    happinessEffect: 1
-    healthEffect: 1
-    minTimeToUse: 1
-    maxTimeToUse: 1.2
-    minLevel: 1
-    maxLevel: 5
-    baseExperience: 100
-    reward: 100
-  - name: Investigate Missing Merchant
-    description: A traveler is looking for someone to locate a merchant who went
-      missing while making a delivery in the surrounding wilderness.
-    type: 1
-    capacity: 5
-    costToUse: 0
-    happinessEffect: 1
-    healthEffect: 2
-    minTimeToUse: 1
-    maxTimeToUse: 1.2
-    minLevel: 1
-    maxLevel: 5
-    baseExperience: 100
-    reward: 100
-  - name: Investigate Missing Scholar
-    description: You've heard whispers of a renowned scholar who vanished without
-      a trace, leaving behind only cryptic notes and an unfinished tome. The air
-      around the village is thick with mystery, and as you set out to uncover the
-      truth, you can't shake the feeling that ancient secrets and hidden dangers
-      await.
-    type: 1
-    capacity: 5
-    costToUse: 0
-    happinessEffect: 1
-    healthEffect: 2
-    minTimeToUse: 1
-    maxTimeToUse: 1.2
-    minLevel: 1
-    maxLevel: 5
-    baseExperience: 100
-    reward: 100
 --- !u!1 &861122679
 GameObject:
   m_ObjectHideFlags: 0
@@ -3505,6 +3016,67 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 8499300618860691881, guid: 0add19713443741f9a5ff143176a18a4, type: 3}
   m_PrefabInstance: {fileID: 8499300619616289891}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &92473408317790947
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 92473408020566860, guid: 4c1c724449e2f4a5aacfdf986a03c413, type: 3}
+      propertyPath: m_Name
+      value: GameManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 92473408020566866, guid: 4c1c724449e2f4a5aacfdf986a03c413, type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 92473408020566866, guid: 4c1c724449e2f4a5aacfdf986a03c413, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 92473408020566866, guid: 4c1c724449e2f4a5aacfdf986a03c413, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 92473408020566866, guid: 4c1c724449e2f4a5aacfdf986a03c413, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 92473408020566866, guid: 4c1c724449e2f4a5aacfdf986a03c413, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 92473408020566866, guid: 4c1c724449e2f4a5aacfdf986a03c413, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 92473408020566866, guid: 4c1c724449e2f4a5aacfdf986a03c413, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 92473408020566866, guid: 4c1c724449e2f4a5aacfdf986a03c413, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 92473408020566866, guid: 4c1c724449e2f4a5aacfdf986a03c413, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 92473408020566866, guid: 4c1c724449e2f4a5aacfdf986a03c413, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 92473408020566866, guid: 4c1c724449e2f4a5aacfdf986a03c413, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 92473408020566867, guid: 4c1c724449e2f4a5aacfdf986a03c413, type: 3}
+      propertyPath: _pauseMenu
+      value: 
+      objectReference: {fileID: 1546767476}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 4c1c724449e2f4a5aacfdf986a03c413, type: 3}
 --- !u!1001 &407900838601290688
 PrefabInstance:
   m_ObjectHideFlags: 0
