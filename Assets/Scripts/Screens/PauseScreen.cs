@@ -19,9 +19,8 @@ public class PauseScreen : MonoBehaviour
 		#region Methods
 
     public void HandleClickReturnToGame() {
-			Time.timeScale = 1;
-
 			gameObject.SetActive(false);
+			TimeManager.Instance.PlayTime();
 		}
 
 		public void HandleClickExitGame() {

@@ -17,16 +17,12 @@ public class CameraManager : MonoBehaviour
 	private Coroutine _movementCoroutine;
 	public float dragSpeed = 2;
 	private Vector3 dragOrigin;
-	
-	void Start() 
-	{
-
-	}
 
 	void Update() 
 	{
-		_horizontalInput = Input.GetAxis("Horizontal");
-		_verticalInput = Input.GetAxis("Vertical");
+		_horizontalInput = Input.GetAxisRaw("Horizontal");
+		_verticalInput = Input.GetAxisRaw("Vertical");
+		KeypadToMove();
 	}
 
 	private void LateUpdate()
@@ -34,29 +30,27 @@ public class CameraManager : MonoBehaviour
 		if (EventSystem.current.IsPointerOverGameObject())
 			return;
 		
-		KeypadToMove();
-		DragToMove();
 		ScrollToZoom();
 	}
 
 	/// <summary>
 	/// Handles dragging to move the camera
 	/// </summary>
-	private void DragToMove()
-	{
-		if (Input.GetMouseButtonDown(0))
-		{
-			dragOrigin = Input.mousePosition;
-			return;
-		}
+	// private void DragToMove()
+	// {
+	// 	if (Input.GetMouseButtonDown(0))
+	// 	{
+	// 		dragOrigin = Input.mousePosition;
+	// 		return;
+	// 	}
 
-		if (!Input.GetMouseButton(0)) return;
+	// 	if (!Input.GetMouseButton(0)) return;
 
-		Vector3 pos = Camera.main.ScreenToViewportPoint(Input.mousePosition - dragOrigin);
-		Vector3 move = new(pos.x * dragSpeed, pos.y * dragSpeed, 0f);
+	// 	Vector3 pos = Camera.main.ScreenToViewportPoint(Input.mousePosition - dragOrigin);
+	// 	Vector3 move = new(pos.x * dragSpeed, pos.y * dragSpeed, 0f);
 
-		transform.Translate(move, Space.World);
-	}
+	// 	transform.Translate(move, Space.World);
+	// }
 
 	/// <summary>
 	/// Handles scrolling to zoom the camera in/out
@@ -102,7 +96,7 @@ public class CameraManager : MonoBehaviour
 		).normalized;
 		_input = Vector3.ClampMagnitude(_input, 1);
 
-		Camera.main.transform.Translate(_speed * Time.deltaTime * _input);
+		Camera.main.transform.Translate(_speed * Time.unscaledDeltaTime * _input);
 	}
 
 	public void AnimateTo(Vector3 newPos, float duration)
