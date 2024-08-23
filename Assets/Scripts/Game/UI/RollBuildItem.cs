@@ -49,7 +49,7 @@ public class RollBuildItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
 		public void CheckCanBuy(int cost)
 		{
-			bool canBuy = GameManager.Instance.Gold > cost;
+			bool canBuy = GameManager.Instance.Gold >= cost;
 			_selectButton.interactable = canBuy;
 
 			_errorMessage.SetActive(!canBuy);
