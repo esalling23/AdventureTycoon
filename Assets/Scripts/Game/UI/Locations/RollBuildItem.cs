@@ -36,7 +36,7 @@ public class RollBuildItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 		private void Start() 
 		{
 			_postRollDetails.gameObject.SetActive(false);
-			_preRollDisplay.gameObject.SetActive(true);
+			_preRollDisplay.SetActive(true);
 			_costToRollContainer.SetActive(false);
 
 			EventManager.StartListening(EventName.OnRollCostChanged, HandleOnRollCostChanged);
@@ -61,7 +61,7 @@ public class RollBuildItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 			_postRollDetails.SetData(_location);
 
 			_postRollDetails.gameObject.SetActive(true);
-			_preRollDisplay.gameObject.SetActive(false);
+			_preRollDisplay.SetActive(false);
 
 			EventManager.TriggerEvent(EventName.OnBuildOptionRolled, null);
 			EventManager.StopListening(EventName.OnRollCostChanged, HandleOnRollCostChanged);
@@ -74,20 +74,18 @@ public class RollBuildItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
 		public void OnPointerEnter(PointerEventData eventData)
     {
-        //If your mouse hovers over the GameObject with the script attached, output this message
-        foreach (GameObject obj in _hoverStateObjs)
-				{
-					obj.SetActive(true);
-				}
+			foreach (GameObject obj in _hoverStateObjs)
+			{
+				obj.SetActive(true);
+			}
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        //The mouse is no longer hovering over the GameObject so output this message each frame
-        foreach (GameObject obj in _hoverStateObjs)
-				{
-					obj.SetActive(false);
-				}
+			foreach (GameObject obj in _hoverStateObjs)
+			{
+				obj.SetActive(false);
+			}
     }
 
 		/// <summary>
