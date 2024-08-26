@@ -8,7 +8,7 @@ public class Location : UniqueObject
 	public string name = "Map Location";
 	public string description;
 
-	public int activitySlotCount = 2;
+	public int activitySlotCount = 0;
 
 	public LocationType type = LocationType.Inn;
 
