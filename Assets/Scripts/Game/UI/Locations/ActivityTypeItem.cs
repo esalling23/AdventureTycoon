@@ -4,12 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class LocationTypeItem : MonoBehaviour
+public class ActivityTypeItem : MonoBehaviour
 {
     #region Fields
 
-		private LocationType _type;
-		private LocationTypeData _typeData;
+		private ActivityType _type;
+		private ActivityTypeData _typeData;
 
 		public Image icon;
 		public TMP_Text nameText;
@@ -30,7 +30,7 @@ public class LocationTypeItem : MonoBehaviour
 			EventManager.StopListening(EventName.OnPlayerGoldChanged, HandleOnPlayerGoldChanged);
 		}
 
-    public void SetData(LocationTypeData data)
+    public void SetData(ActivityTypeData data)
     {
 			_type = data.type;
 			_typeData = data;
@@ -59,14 +59,14 @@ public class LocationTypeItem : MonoBehaviour
 		public void HandleClickForBuild() {
 			if (GameManager.Instance.Gold < _typeData.costToPlace)
 			{
-				Debug.LogError("Player doesn't have enough gold to build this location type");
+				Debug.LogError("Player doesn't have enough gold to build this activity type");
 				return;
 			}
 			GameManager.Instance.UpdatePlayerGold(-_typeData.costToPlace);
 
-			Debug.Log($"Location type transaction completed. Player gold {GameManager.Instance.Gold}");
+			Debug.Log($"Activity type transaction completed. Player gold {GameManager.Instance.Gold}");
 
-			EventManager.TriggerEvent(EventName.OnBuildTypeSelected, new Dictionary<string, object> {
+			EventManager.TriggerEvent(EventName.OnActivityTypeSelected, new Dictionary<string, object> {
 				{ "type", _type }
 			});
 		}

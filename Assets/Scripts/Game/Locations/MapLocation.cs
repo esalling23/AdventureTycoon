@@ -112,13 +112,19 @@ public class MapLocation : MapObject
 			}
     }
 
-		public MapActivity AddRandomActivity(bool isBaseActivity = false)
+		private Activity[] GetUnusedActivities()
 		{
-			// Debug.Log($"Adding Activity to Location Type {location.type}");
 			System.Guid[] activityDataIds = activities.Select(a => a.data.Id).ToArray();
 			Activity[] unusedActivities = DataManager.Instance.WorldActivities.Where(a => {
 				return !activityDataIds.Any(id => id == a.Id);
 			}).ToArray();
+			return unusedActivities;
+		}
+
+		public MapActivity AddRandomActivity(bool isBaseActivity = false)
+		{
+			// Debug.Log($"Adding Activity to Location Type {location.type}");
+			Activity[] unusedActivities = GetUnusedActivities();
 
 			Activity randActivity;
 			if (isBaseActivity)
@@ -133,7 +139,22 @@ public class MapLocation : MapObject
 				randActivity = DataManager.Instance.GetRandomActivityData(unusedActivities);
 			}
 
-			MapActivity activeActivity = new MapActivity(randActivity, this);
+			return CreateMapActivity(randActivity);
+		}
+
+		public MapActivity AddRandomActivity(ActivityType type)
+		{
+			Debug.Log($"Adding Activity to Location Type {type}");
+			Activity[] unusedActivities = GetUnusedActivities();
+
+			Activity randActivity = DataManager.Instance.GetRandomActivityData(unusedActivities, type);
+
+			return CreateMapActivity(randActivity);
+		}
+
+		private MapActivity CreateMapActivity(Activity activity)
+		{
+			MapActivity activeActivity = new MapActivity(activity, this);
 			activities.Add(activeActivity);
 
 			EventManager.TriggerEvent(EventName.OnActivityChanged, new Dictionary<string, object>() {

@@ -4,6 +4,7 @@ public enum EventName
 	OnAdventurerGroupAdded,
 	OnActivityChanged,
 	OnBuildTypeSelected,
+	OnActivityTypeSelected,
 	OnBuildLocationSelected,
 	OnPlayerGoldChanged,
 	OnAdventurerStatChanged,

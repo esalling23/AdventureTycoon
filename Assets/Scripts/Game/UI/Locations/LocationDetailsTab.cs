@@ -10,9 +10,6 @@ public class LocationDetailsTab : MonoBehaviour
 
 	// To do - show/hide different UI to show that the tab is selected
 	public Button tabButton;
-	// public GameObject tabContainer;
-
-	public Sprite tabSprite;
 	public Sprite tabButtonSpriteBase;
 	public Sprite toggledTabButtonSprite;
 
@@ -20,6 +17,9 @@ public class LocationDetailsTab : MonoBehaviour
 		_isSelected = isSelected;
 		// change UI
 
+		Sprite currentSprite = isSelected ? tabButtonSpriteBase : toggledTabButtonSprite;
+		
+		tabButton.GetComponent<Image>().sprite = currentSprite;
 		this.gameObject.SetActive(isSelected);
 	}
 

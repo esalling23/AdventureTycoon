@@ -27,6 +27,10 @@ public class LocationDetailsPanel : LocationDetailItem
 		public GameObject questListContainer;
 		public LocationDetailsTab questTab;
 
+		private ActivityType[] _activityTypes = new ActivityType[] { ActivityType.PassTime, ActivityType.Trade, ActivityType.Rest };
+		public GameObject activitiesTypeShelf;
+		public ActivityTypeItem activitiesTypeItemPrefab;
+
 		#endregion
 
 		#region Properties
@@ -38,14 +42,38 @@ public class LocationDetailsPanel : LocationDetailItem
     void Start()
     {
 			gameObject.SetActive(false);
+			
+			SetupActivitiesShelf();
 
-			EventManager.StartListening(EventName.OnActivityChanged, HandleActivityChanged);
+			EventManager.StartListening(EventName.OnActivityChanged, HandleOnActivityChanged);
+			EventManager.StartListening(EventName.OnActivityTypeSelected, HandleOnActivityTypeSelected);
     }
 
 		void OnDestroy()
 		{
-			EventManager.StopListening(EventName.OnActivityChanged, HandleActivityChanged);
+			EventManager.StopListening(EventName.OnActivityChanged, HandleOnActivityChanged);
+			EventManager.StopListening(EventName.OnActivityTypeSelected, HandleOnActivityTypeSelected);
     }
+
+		private void SetupActivitiesShelf()
+		{
+			activitiesTypeShelf.SetActive(false);
+
+			foreach(ActivityType type in _activityTypes)
+			{
+				ActivityTypeData data = DataManager.Instance.GetActivityTypeData(type);
+
+				ActivityTypeItem item = Instantiate(
+					activitiesTypeItemPrefab,
+					Vector3.zero,
+					Quaternion.identity,
+					activitiesTypeShelf.transform
+				);
+
+				item.SetData(data);
+			}
+
+		}
 
 		public void ToggleOpen(bool isOpen) 
 		{
@@ -60,22 +88,6 @@ public class LocationDetailsPanel : LocationDetailItem
 			else
 			{
 				_activeLocation = null;
-			}
-		}
-
-		public void HandleActivityChanged(Dictionary<string, object> data) {
-			if (data.TryGetValue("type", out object activityType))
-			{
-				System.Enum.TryParse(activityType.ToString(), out ActivityType type);
-				
-				if (type == ActivityType.Quest)
-				{
-					RefreshList(TabType.Quests);
-				}
-				else
-				{
-					RefreshList(TabType.Activities);
-				}
 			}
 		}
 
@@ -137,14 +149,42 @@ public class LocationDetailsPanel : LocationDetailItem
 		}
 
 		public void HandleClickAddActivity() {
-			// to do - show a generated set of activities & allow user to pick one
-			_activeLocation.AddRandomActivity(false);
+			activitiesTypeShelf.SetActive(true);
 		}
 
 		public void HandleClickAddQuest() {
-			// to do - show a generated set of activities & allow user to pick one
 			_activeLocation.AddRandomQuest();
 		}
+
+		#region Event Handlers
+
+		private void HandleOnActivityTypeSelected(Dictionary<string, object> data) {
+			if (data.TryGetValue("type", out object activityType))
+			{
+				System.Enum.TryParse(activityType.ToString(), out ActivityType type);
+				
+				_activeLocation.AddRandomActivity(type);
+				activitiesTypeShelf.SetActive(false);
+			}
+		}
+
+		private void HandleOnActivityChanged(Dictionary<string, object> data) {
+			if (data.TryGetValue("type", out object activityType))
+			{
+				System.Enum.TryParse(activityType.ToString(), out ActivityType type);
+				
+				if (type == ActivityType.Quest)
+				{
+					RefreshList(TabType.Quests);
+				}
+				else
+				{
+					RefreshList(TabType.Activities);
+				}
+			}
+		}
+
+		#endregion
 
 		#endregion
 }

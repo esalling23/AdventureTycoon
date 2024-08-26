@@ -13,4 +13,5 @@ public enum ActivityType {
 public struct ActivityTypeData {
 	public ActivityType type;
 	public Sprite icon;
+	public int costToPlace;
 }
