@@ -15,9 +15,6 @@ public class Activity : ActivityBase
 	// eg: +1 success on next quest, must do X quest next, more happiness from X activity type, more
 	// public AdventurerEffect adventurerEffect;
 
-	[Header("Cost for the player to add to a location")]
-	public int costToPlace = 50;
-
 	#endregion
 	#region Properties
 

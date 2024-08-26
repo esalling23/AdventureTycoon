@@ -50,6 +50,7 @@ public class ActivityBase : UniqueObject, IActivity
 	public float MinTimeToUse { get { return minTimeToUse * GameManager.Instance.MinutesInDay; } }
 	public float MaxTimeToUse { get { return maxTimeToUse * GameManager.Instance.MinutesInDay; } }
 	public float HappinessEffect { get { return happinessEffect; } }
+	public float HealthEffect { get { return healthEffect; } }
 
 	#endregion
 

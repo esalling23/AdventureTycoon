@@ -30,10 +30,26 @@ public class MapActivity : UniqueObject
 		}
 	}
 
+	public void Reroll()
+	{
+		data = locationParent.GetRandomActivity(data.Type);
+		_attemptLog = new();
+
+		foreach (Adventurer adventurer in adventurersPresent)
+		{
+			adventurer.KickOut();
+		}
+		adventurersPresent.RemoveAll(a => a);
+	}
+	public void RemoveSelf()
+	{
+		locationParent.RemoveActivity(data);
+	}
+
 	public MapActivity(IActivity activity, MapLocation mapLocation) 
 	{
-		this.data = activity;
-		this.locationParent = mapLocation;
-		this.adventurersPresent = new List<Adventurer>();
+		data = activity;
+		locationParent = mapLocation;
+		adventurersPresent = new List<Adventurer>();
 	}
 }

@@ -53,7 +53,8 @@ public class ActivityTypeItem : MonoBehaviour
 				isEnabled = false;
 			}
 
-			buyButton.interactable = isEnabled;
+			// buyButton.interactable = isEnabled;
+			buyButton.gameObject.SetActive(isEnabled);
 		}
 
 		public void HandleClickForBuild() {

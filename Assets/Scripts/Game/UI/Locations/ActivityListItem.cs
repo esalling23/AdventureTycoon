@@ -9,24 +9,26 @@ public class ActivityListItem : MonoBehaviour
     #region Fields
 
 		private MapActivity _mapActivity;
-		private bool _isConfirmed = false;
-		private int _rollCountRemaining = 1;
+
+		public Image backgroundImage;
+		public GameObject detailsContainer;
 
 		public TMP_Text titleText;
 		public TMP_Text descriptionText;
-		public TMP_Text adventurerCountText;
+		public TMP_Text capacityStat;
+		public Stat healthStat;
+		public Stat happinessStat;
+		public Stat incomeStat;
 		public Image typeIcon;
-		
-		[Header("Reroll & Confirm buttons used upon creation")]
-		public GameObject creationButtons;
+
+		public GameObject rerollButton;
+		public GameObject removeButton;
 
 
 		// VIP display
 		public Image vipIcon;
 		public GameObject healthBar;
 		public TMP_Text healthRemainingText;
-
-
 
 		#endregion
 
@@ -48,27 +50,53 @@ public class ActivityListItem : MonoBehaviour
 			// healthBar.SetActive(false);
 			// healthBar.SetActive(activity.data.hasLifetime);
 			// healthRemainingText.text = activity.currentHealthRemaining.ToString();
+			ActivityBase activityBase = (ActivityBase) activity.data;
+			capacityStat.text = $"{activity.adventurersPresent.Count} / {activityBase.Capacity}";
 
-			// Debug.Log($"Displaying a count of {activity.adventurersPresent.Count} adventurers");
-			adventurerCountText.text = activity.adventurersPresent.Count.ToString();
+			healthStat.SetStat(
+				activityBase.HealthEffect != 0, 
+				$"+{activityBase.healthEffect}"
+			);
+			happinessStat.SetStat(
+				activityBase.HappinessEffect > 0, 
+				$"+{activityBase.happinessEffect}"
+			);
+			incomeStat.SetStat(
+				activityBase.CostToUse > 0, 
+				$"+{activityBase.CostToUse}g"
+			);
 
-			ActivityTypeData defaultData = DataManager.Instance.GetActivityTypeData(activity.data.Type);
+			ActivityTypeData defaultData = DataManager.Instance.GetActivityTypeData(activityBase.Type);
 			typeIcon.sprite = defaultData.icon;
+
+			DisplayFilled();
+
+			CheckForActions(activity.locationParent);
     }
 
-		private void 
+		public void DisplayFilled(bool isFilled = true)
+		{
+			detailsContainer.SetActive(isFilled);
+
+			Color bgColor = isFilled ? Color.white : Color.grey;
+			backgroundImage.color = bgColor;
+		}
+
+		public void CheckForActions(MapLocation location)
+		{
+			rerollButton.SetActive(location.ActivityRollsAvailable > 0);
+			removeButton.SetActive(location.ActivityRemovesAvailable > 0);
+		}
 
     public void HandleClickReroll()
     {
-			if (_isConfirmed || _rollCountRemaining <= 0) return;
-
-			_rollCountRemaining--;
-      _mapActivity.TryReroll();
+			_mapActivity.Reroll();
     }
-    public void HandleClickConfirm()
+    public void HandleClickRemove()
     {
-			_isConfirmed = true;
-      _mapActivity.TryReroll();
+			_mapActivity.RemoveSelf();
+
+			EventManager.TriggerEvent(EventName.OnActivityChanged, null);
     }
 
 		#endregion

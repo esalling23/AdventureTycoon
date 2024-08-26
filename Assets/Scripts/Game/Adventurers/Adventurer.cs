@@ -88,6 +88,15 @@ public class Adventurer : MonoBehaviour
 			_activeCoroutine = StartCoroutine(LoopCoroutine());
 		}
 
+		/// <summary>
+		/// Force adventurer to stop current activity and find a new one
+		/// </summary>
+		public void KickOut()
+		{
+			ClearCoroutine();
+			Loop();
+		}
+
 		private IEnumerator LoopCoroutine()
 		{
 			while (true)
@@ -99,8 +108,7 @@ public class Adventurer : MonoBehaviour
 				// If no location - find one
 				if (!_currentLocation)
 				{
-					_activeCoroutine = StartCoroutine(ChangeLocation());
-					yield return _activeCoroutine;
+					yield return StartCoroutine(ChangeLocation());
 				}
 
 				// Attempt to do anything possible at the current location
@@ -108,8 +116,7 @@ public class Adventurer : MonoBehaviour
 
 				// If there's no activity found at the current location, change locations
 				if (nextActivity == null) {
-					_activeCoroutine = StartCoroutine(ChangeLocation());
-					yield return _activeCoroutine;
+					yield return StartCoroutine(ChangeLocation());
 				}
 				else 
 				{
@@ -125,8 +132,7 @@ public class Adventurer : MonoBehaviour
 					});
 
 					// Adventurer does the activity
-					_activeCoroutine = StartCoroutine(PerformActivity(nextActivity));
-					yield return _activeCoroutine; // Wait for the activity to complete
+					yield return StartCoroutine(PerformActivity(nextActivity)); // Wait for the activity to complete
 
 					nextActivity.adventurersPresent.Remove(this);
 					EventManager.TriggerEvent(EventName.OnActivityChanged, new Dictionary<string, object>() {
@@ -241,7 +247,7 @@ public class Adventurer : MonoBehaviour
 			foreach (MapActivity activity in location.activities) {
 				// Debug.Log($"Checking activity {activity.data.Name}. Attempted already? {activity.AttemptLog.ContainsKey(Id)}");
 				if (
-					activity.adventurersPresent.Count > activity.data.Capacity
+					activity.adventurersPresent.Count >= activity.data.Capacity
 					|| activity.data.CostToUse > Gold
 				)
 				{

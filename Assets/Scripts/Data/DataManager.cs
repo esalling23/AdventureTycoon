@@ -95,6 +95,9 @@ public class DataManager : MonoBehaviour
 
 		public Activity GetRandomActivityData(Activity[] activities)
 		{
+			if (activities.Length == 0) {
+				activities = WorldActivities;
+			}
 			int index = Random.Range(0, activities.Length);
 			return GetActivityData(activities, index);
 		}
@@ -102,6 +105,9 @@ public class DataManager : MonoBehaviour
 		public Activity GetRandomActivityData(Activity[] activities, ActivityType type)
 		{
 			Activity[] available = System.Array.FindAll(activities, a => a.type == type);
+			if (available.Length == 0) {
+				available = WorldActivities;
+			}
 			int index = Random.Range(0, available.Length);
 			return GetActivityData(activities, index);
 		}
@@ -111,6 +117,9 @@ public class DataManager : MonoBehaviour
 			Activity[] available = System.Array.FindAll(_worldActivityData, a => {
 				return System.Array.IndexOf(a.appearsInLocationTypes, location.type) > -1;
 			});
+			if (available.Length == 0) {
+				available = WorldActivities;
+			}
 			int index = Random.Range(0, available.Length);
 			return GetActivityData(available, index);
 		}

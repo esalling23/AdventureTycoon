@@ -15,6 +15,7 @@ public class LocationDetailsPanel : LocationDetailItem
 {
     #region Fields
 
+		private List<ActivityListItem> _listItems = new();
 		private MapLocation _activeLocation;
 
 		public ActivityListItem activityListItemPrefab;
@@ -23,6 +24,7 @@ public class LocationDetailsPanel : LocationDetailItem
 
 		public GameObject activitiesListContainer;
 		public LocationDetailsTab activitiesTab;
+		public GameObject activitiesActions;
 
 		public GameObject questListContainer;
 		public LocationDetailsTab questTab;
@@ -47,12 +49,14 @@ public class LocationDetailsPanel : LocationDetailItem
 
 			EventManager.StartListening(EventName.OnActivityChanged, HandleOnActivityChanged);
 			EventManager.StartListening(EventName.OnActivityTypeSelected, HandleOnActivityTypeSelected);
+			EventManager.StartListening(EventName.OnLocationChanged, HandleOnLocationChanged);
     }
 
 		void OnDestroy()
 		{
 			EventManager.StopListening(EventName.OnActivityChanged, HandleOnActivityChanged);
 			EventManager.StopListening(EventName.OnActivityTypeSelected, HandleOnActivityTypeSelected);
+			EventManager.StopListening(EventName.OnLocationChanged, HandleOnLocationChanged);
     }
 
 		private void SetupActivitiesShelf()
@@ -99,7 +103,7 @@ public class LocationDetailsPanel : LocationDetailItem
 
 		private void RefreshList(TabType tabType) {
 			if (!_activeLocation) return;
-
+			
 			// Debug.Log($"Refreshing list of {tabType}");
 			List<MapActivity> list = _activeLocation.activities
 				.Where((MapActivity obj) => {
@@ -116,21 +120,32 @@ public class LocationDetailsPanel : LocationDetailItem
 				container = questListContainer;
 			}
 
+			_listItems = new();
 			// to do - don't delete all, just replace data & remove extras
 			foreach(Transform child in container.transform)
 			{
 				Destroy(child.gameObject);
 			}
 
-			foreach(MapActivity activity in list) {
+			activitiesActions.SetActive(!_activeLocation.IsActivitySlotsFull);
+
+			for(int i = 0; i < _activeLocation.ActivitySlotCount; i++) {
 				ActivityListItem item = Instantiate(
 					activityListItemPrefab,
 					Vector3.zero,
 					Quaternion.identity,
 					container.transform
 				);
+				if (i >= list.Count)
+				{
+					item.DisplayFilled(false);
+				}
+				else
+				{
+					item.SetData(list[i]);
+				}
 
-				item.SetData(activity);
+				_listItems.Add(item);
 			}
 		}
 
@@ -165,6 +180,8 @@ public class LocationDetailsPanel : LocationDetailItem
 				
 				_activeLocation.AddRandomActivity(type);
 				activitiesTypeShelf.SetActive(false);
+
+				RefreshList(lastTabOpen);
 			}
 		}
 
@@ -182,6 +199,14 @@ public class LocationDetailsPanel : LocationDetailItem
 					RefreshList(TabType.Activities);
 				}
 			}
+			else
+			{
+				RefreshList(lastTabOpen);
+			}
+		}
+
+		private void HandleOnLocationChanged(Dictionary<string, object> data) {
+			RefreshList(lastTabOpen);
 		}
 
 		#endregion
