@@ -1,9 +1,21 @@
 using System.Collections.Generic;
 
+public class ActivityAttemptsLog
+{
+	public int count = 0;
+	public bool hasCompleted = false;
+}
+
 public class HistoryLog 
 {
 	public MapLocation location;
-	public Dictionary<System.Guid, int> activityAttemptCount = new Dictionary<System.Guid, int>();
+
+	/// <summary>
+	/// Dict of MapActivity Ids with ActivityAttemptsLog objects for that MapActivity
+	/// </summary>
+	/// <typeparam name="System.Guid">MapActivity Ids</typeparam>
+	/// <typeparam name="ActivityAttemptsLog">Log objects for this MapActivity</typeparam>
+	public Dictionary<System.Guid, ActivityAttemptsLog> activityAttempts = new();
 
 	public System.DateTime timeLastVisit;
 	// other info - timestamps?
@@ -19,14 +31,14 @@ public class HistoryLog
 		timeLastVisit = System.DateTime.Now;
 	}
 
-	public void LogAttemptActivity(MapActivity activity)
+	public void LogAttemptActivity(MapActivity activity, bool isSuccess = false)
 	{
 		LogVisitLocation();
-
-		if (activityAttemptCount.TryGetValue(activity.Id, out int count)) {
-			activityAttemptCount[activity.Id]++;
-		} else {
-			activityAttemptCount.Add(activity.Id, 1);
+		activityAttempts.TryAdd(activity.Id, new ActivityAttemptsLog());
+		// Only set for success
+		if (isSuccess) 
+		{
+			activityAttempts[activity.Id].hasCompleted = true;
 		}
 	}
 }
