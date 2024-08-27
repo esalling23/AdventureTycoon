@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Adventurer : MonoBehaviour
@@ -9,7 +10,7 @@ public class Adventurer : MonoBehaviour
 		private Map _map;
 
 		private System.Guid _id = System.Guid.NewGuid();
-		private int _gold = 100;
+		private int _gold = 1000;
 		private int _happiness = 50;
 		private int _currentHealth;
 		[SerializeField] private int _maxHealth;
@@ -17,6 +18,7 @@ public class Adventurer : MonoBehaviour
 		private int _currentExperience = 0;
 
 		private MapLocation _currentLocation = null;
+		private MapActivity _currentActivity = null;
 		// private List<string> _inventory = new List<string>();
 		private bool _isIdle = false;
 
@@ -24,7 +26,12 @@ public class Adventurer : MonoBehaviour
 
 		private Coroutine _activeCoroutine = null;
 
-		private Dictionary<System.Guid, HistoryLog> _historyLog = new Dictionary<System.Guid, HistoryLog>();
+		/// <summary>
+		/// Dictionary mapping of MapLocation ID and History Log of Adventurer attempts
+		/// </summary>
+		/// <typeparam name="System.Guid">MapLocation ID</typeparam>
+		/// <typeparam name="HistoryLog">Object tracking this MapActivity's attempts by this Adventurer</typeparam>
+		private Dictionary<System.Guid, HistoryLog> _historyLog = new();
 
 		private Renderer _renderer;
 
@@ -38,6 +45,9 @@ public class Adventurer : MonoBehaviour
 		public int Health { get { return _currentHealth; } }
 		public System.Guid Id { get { return _id; } }
 		public bool NeedsRest { get { return _currentHealth < _maxHealth; } }
+		public bool IsIdle { get { return _isIdle; } }
+
+		public Dictionary<System.Guid, HistoryLog> HistoryLog { get { return _historyLog; } }
 
 		#endregion
 
@@ -48,12 +58,14 @@ public class Adventurer : MonoBehaviour
 			_renderer = GetComponent<Renderer>();
 			EventManager.StartListening(EventName.OnActivityChanged, HandleOnActivityChanged);
 			EventManager.StartListening(EventName.OnDayChanged, HandleOnDayChanged);
+			EventManager.StartListening(EventName.OnVIPLeft, HandleOnVIPLeft);
 		}
 
 		public void OnDestroy()
 		{
 			EventManager.StopListening(EventName.OnActivityChanged, HandleOnActivityChanged);
 			EventManager.StopListening(EventName.OnDayChanged, HandleOnDayChanged);
+			EventManager.StopListening(EventName.OnVIPLeft, HandleOnVIPLeft);
 		}
 
     public void Init()
@@ -72,6 +84,11 @@ public class Adventurer : MonoBehaviour
 
 			EventManager.TriggerEvent(EventName.OnAdventurerStatChanged, null);
     }
+
+		public void Kill()
+		{
+			AdventurerManager.Instance.KillAdventurer(this);
+		}
 
 		#region Activity Loop
 
@@ -93,7 +110,10 @@ public class Adventurer : MonoBehaviour
 		/// </summary>
 		public void KickOut()
 		{
+			Debug.Log("Adventurer kicked out of activity");
 			ClearCoroutine();
+			_currentActivity.adventurersPresent.Remove(this);
+			_currentActivity = null;
 			Loop();
 		}
 
@@ -101,9 +121,7 @@ public class Adventurer : MonoBehaviour
 		{
 			while (true)
 			{
-				// Debug.Log($"Looping adventurer {Id}");
-								
-				ClearCoroutine();
+				_currentActivity = null;
 
 				// If no location - find one
 				if (!_currentLocation)
@@ -112,43 +130,46 @@ public class Adventurer : MonoBehaviour
 				}
 
 				// Attempt to do anything possible at the current location
-				FindActivityAtLocation(_currentLocation, out MapActivity nextActivity);
+				FindActivityAtLocation(_currentLocation, out _currentActivity);
 
 				// If there's no activity found at the current location, change locations
-				if (nextActivity == null) {
+				if (_currentActivity == null) {
 					yield return StartCoroutine(ChangeLocation());
 				}
 				else 
 				{
 					_isIdle = false;
-					// Debug.Log($"Adventurer {_id} chose {nextActivity?.Type} activity at {nextActivity?.locationParent}");
+					// Debug.Log($"Adventurer {_id} chose {_currentActivity?.Type} activity at {_currentActivity?.locationParent}");
 
 					GetOrCreateLocationLog(_currentLocation, out HistoryLog log);
-					log.LogAttemptActivity(nextActivity);
+					log.LogAttemptActivity(_currentActivity, false);
 
-					nextActivity.adventurersPresent.Add(this);
+					_currentActivity.adventurersPresent.Add(this);
 					EventManager.TriggerEvent(EventName.OnActivityChanged, new Dictionary<string, object>() {
-						{ "type", nextActivity.Type }
+						{ "type", _currentActivity.Type }
 					});
 
 					// Adventurer does the activity
-					yield return StartCoroutine(PerformActivity(nextActivity)); // Wait for the activity to complete
+					yield return StartCoroutine(PerformActivity(_currentActivity)); // Wait for the activity to complete
 
-					nextActivity.adventurersPresent.Remove(this);
+					_currentActivity.adventurersPresent.Remove(this);
+
 					EventManager.TriggerEvent(EventName.OnActivityChanged, new Dictionary<string, object>() {
-						{ "type", nextActivity.Type }
+						{ "type", _currentActivity.Type }
 					});
 				}
 
 				// Possibility for death during quest activities
 				if (_currentHealth <= 0) {
 					Debug.Log("Adventurer died");
-					AdventurerManager.Instance.KillAdventurer(this);
+					Kill();
 					yield break;
 				}
 
-				// Debug.Log($"Adventurer {Id} ready for next loop");
-				yield return new WaitForSeconds(1f);
+				float minIdleTime = GameManager.Instance.MinutesInDay * 6;
+				float randomIdleTime = Random.Range(minIdleTime, minIdleTime * 2);
+
+				yield return new WaitForSeconds(randomIdleTime);
 			}
 		}
 
@@ -158,7 +179,7 @@ public class Adventurer : MonoBehaviour
 			GameManager.Instance.UpdatePlayerGold(mapActivity.data.CostToUse);
 
 			float timeForActivity = Random.Range(mapActivity.data.MinTimeToUse, mapActivity.data.MaxTimeToUse);
-			Debug.Log($"Attempting {mapActivity.Type} Activity -- ETA {timeForActivity} minutes");
+			// Debug.Log($"Attempting {mapActivity.Type} Activity -- ETA {timeForActivity} minutes");
 			yield return new WaitForSeconds(timeForActivity * 60f);
 
 			// success is 100% by default - only Quest activities can be failed
@@ -173,7 +194,7 @@ public class Adventurer : MonoBehaviour
 			}
 
 			mapActivity.LogAttempt(Id, isSuccessful);
-			Debug.Log($"{mapActivity.Type} Activity Attempt {(isSuccessful ? "Success" : "Failure")}");
+			// Debug.Log($"{mapActivity.Type} Activity Attempt {(isSuccessful ? "Success" : "Failure")}");
 
 			CapStats();
 			EventManager.TriggerEvent(EventName.OnAdventurerStatChanged, null);
@@ -244,7 +265,7 @@ public class Adventurer : MonoBehaviour
 			};
 
 			List<MapActivity> available = new();
-			foreach (MapActivity activity in location.activities) {
+			foreach (MapActivity activity in location.activities.Concat(location.Quests)) {
 				// Debug.Log($"Checking activity {activity.data.Name}. Attempted already? {activity.AttemptLog.ContainsKey(Id)}");
 				if (
 					activity.adventurersPresent.Count >= activity.data.Capacity
@@ -254,17 +275,21 @@ public class Adventurer : MonoBehaviour
 					continue;
 				}
 				
-				if ((activity.Type == ActivityType.Rest && NeedsRest)
-						|| (activity.data is Quest quest && 
-								!activity.AttemptLog.ContainsKey(Id) && 
-								quest.minLevel <= _level)
-				) {
+				if (activity.Type == ActivityType.Rest && NeedsRest)
+				{
 					chosenActivity = activity;
 					break;
-				} 
-				else if (activity.Type == ActivityType.Rest) {
+				} else if (activity.Type == ActivityType.Rest)
+				{
 					// only perform rest activities if we need rest (checked above)
 					continue;
+				}
+				if (activity.data is Quest quest && 
+					!activity.AttemptLog.ContainsKey(Id) &&
+					quest.IsAvailable(this))
+				{
+					chosenActivity = activity;
+					break;
 				}
 				if (activity.data.CostToUse <= Gold)
 				{
@@ -350,7 +375,9 @@ public class Adventurer : MonoBehaviour
 			if (!_currentLocation)
 			{
 				_isIdle = true;
-				// Debug.Log($"Adventurer {_id} could not find anywhere to go :(");
+				
+				MessageManager.Instance.ShowMessage($"{AdventurerManager.Instance.IdleAdventurersCount} Adventurers are Idle");
+				Debug.Log($"Adventurer {_id} could not find anywhere to go :(");
 				yield break;
 			}
 
@@ -358,12 +385,11 @@ public class Adventurer : MonoBehaviour
 			log.LogVisitLocation();
 
 			// Physically move to the new location
-			_activeCoroutine = StartCoroutine(Utils.LerpObject(
+			yield return StartCoroutine(Utils.LerpObject(
 				gameObject.transform, 
 				_currentLocation.transform.position, 
 				1f
 			));
-			yield return _activeCoroutine;
 
 			_renderer.enabled = false;
 		}
@@ -384,6 +410,18 @@ public class Adventurer : MonoBehaviour
 		private void HandleOnDayChanged(Dictionary<string, object> msg)
 		{
 			_happiness--;
+		}
+
+		private void HandleOnVIPLeft(Dictionary<string, object> data)
+		{
+			if (data.TryGetValue("quests", out object quests))
+			{
+				// Kick the adventurer out of current activity is one of this VIP's quests
+				if (((List<MapActivity>) quests).First(mapQuest => mapQuest.Id == _currentActivity.Id) != null)
+				{
+					KickOut();
+				}
+			}
 		}
 
 		#endregion

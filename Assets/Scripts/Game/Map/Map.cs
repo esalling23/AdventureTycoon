@@ -17,14 +17,13 @@ public class Map : MonoBehaviour
 {
 	#region Fields
 
-	[SerializeField] private GameManager _manager;
+	private static Map _instance;
 	private CameraManager _camera;
 
 	// Initialization
 	[SerializeField] private int initLocationCount = 1;
 	[SerializeField] private int initAdventurerCount = 3;
-	[SerializeField] private int initActivityCount = 2;
-	[SerializeField] private int initQuestCount = 1;
+	[SerializeField] private int initActivityCount = 1;
 
 	// Grid
 	public Vector2Int gridSize = new(20, 10);
@@ -57,6 +56,8 @@ public class Map : MonoBehaviour
 
 	#region Properties
 
+	public static Map Instance { get { return _instance; } }
+
 	public MapLocation[] LocationsOnMap { get { return _mapLocationDataIdDict.Values.ToArray(); } }
 	public Dictionary<System.Guid, MapLocation> LocationsOnMapDict { get { return _mapLocationDataIdDict; } }
 	public List<Location> UnusedLocations { get { return _unusedLocations; } }
@@ -65,6 +66,20 @@ public class Map : MonoBehaviour
 	#endregion
 
 	#region Methods
+
+	/// <summary>
+	/// Manages singleton wakeup/destruction
+	/// </summary>
+	private void Awake()
+	{
+		// Singleton management
+		if (_instance != null && _instance != this)
+		{
+			Destroy(this.gameObject);
+		} else {
+			_instance = this;
+		}
+	}
 
 	void Start()
 	{
@@ -192,6 +207,22 @@ public class Map : MonoBehaviour
 	private void DeselectCell() {
 		_selectedIndicator.SetActive(false);
 		_locationDetailsPanel.ToggleOpen(false);
+	}
+
+	public void FindMapActivityWithDataID(System.Guid dataId, out MapActivity foundActivity)
+	{
+		foundActivity = null;
+
+		foreach(MapLocation location in _mapLocationDataIdDict.Values)
+		{
+			MapActivity found = location.activities.Concat(location.Quests)
+				.First(act => act.Id == dataId);
+			if (found != null)
+			{
+				foundActivity = found;
+				break;
+			}
+		}
 	}
 
 	#region Locations
@@ -324,10 +355,6 @@ public class Map : MonoBehaviour
 					// Make sure there's at least 1 activity matching 
 					// the base activity type for this location type
 					newLocation.AddRandomActivity(i == 0);
-				}
-				for (int i = 0; i < initQuestCount; i++)
-				{
-					newLocation.AddRandomQuest();
 				}
 			});
 		}

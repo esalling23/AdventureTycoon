@@ -15,9 +15,11 @@ public class LocationDetailsPanel : LocationDetailItem
 {
     #region Fields
 
-		private List<ActivityListItem> _listItems = new();
+		private List<ActivityListItem> _activityItems = new();
+		private List<VIPListItem> _vipItems = new();
 		private MapLocation _activeLocation;
 
+		public VIPListItem vipListItemPrefab;
 		public ActivityListItem activityListItemPrefab;
 
 		public TabType lastTabOpen = TabType.Activities;
@@ -44,12 +46,16 @@ public class LocationDetailsPanel : LocationDetailItem
     void Start()
     {
 			gameObject.SetActive(false);
+
+			ClearList(activitiesListContainer);
+			ClearList(questListContainer);
 			
 			SetupActivitiesShelf();
 
 			EventManager.StartListening(EventName.OnActivityChanged, HandleOnActivityChanged);
 			EventManager.StartListening(EventName.OnActivityTypeSelected, HandleOnActivityTypeSelected);
 			EventManager.StartListening(EventName.OnLocationChanged, HandleOnLocationChanged);
+			EventManager.StartListening(EventName.OnVIPLeft, HandleOnVIPLeft);
     }
 
 		void OnDestroy()
@@ -57,11 +63,13 @@ public class LocationDetailsPanel : LocationDetailItem
 			EventManager.StopListening(EventName.OnActivityChanged, HandleOnActivityChanged);
 			EventManager.StopListening(EventName.OnActivityTypeSelected, HandleOnActivityTypeSelected);
 			EventManager.StopListening(EventName.OnLocationChanged, HandleOnLocationChanged);
+			EventManager.StopListening(EventName.OnVIPLeft, HandleOnVIPLeft);
     }
 
 		private void SetupActivitiesShelf()
 		{
 			activitiesTypeShelf.SetActive(false);
+			ClearList(activitiesTypeShelf);
 
 			foreach(ActivityType type in _activityTypes)
 			{
@@ -76,7 +84,6 @@ public class LocationDetailsPanel : LocationDetailItem
 
 				item.SetData(data);
 			}
-
 		}
 
 		public void ToggleOpen(bool isOpen) 
@@ -101,51 +108,109 @@ public class LocationDetailsPanel : LocationDetailItem
 			SetData(location.LocationData);
 		}
 
+		private void RefreshLastTab()
+		{
+			RefreshList(lastTabOpen);
+		}
+
 		private void RefreshList(TabType tabType) {
 			if (!_activeLocation) return;
 			
-			// Debug.Log($"Refreshing list of {tabType}");
-			List<MapActivity> list = _activeLocation.activities
-				.Where((MapActivity obj) => {
-					if (tabType == TabType.Quests)
-					{
-						return obj.data is Quest;
-					}
-					return obj.data is Activity;
-				}).ToList();
-
-			GameObject container = activitiesListContainer;
 			if (tabType == TabType.Quests)
 			{
-				container = questListContainer;
+				RefreshVIPs();
 			}
+			else
+			{
+				RefreshActivities();
+			}
+		}
 
-			_listItems = new();
+		private void ClearList(GameObject container)
+		{
 			// to do - don't delete all, just replace data & remove extras
 			foreach(Transform child in container.transform)
 			{
 				Destroy(child.gameObject);
 			}
+		}
+
+		private void RefreshVIPs()
+		{
+			List<MapVIP> vipList = _activeLocation.vips;
+
+			if (_vipItems.Count > vipList.Count)
+			{
+				for (int i = 0; i < _vipItems.Count - vipList.Count; i++)
+				{
+					Destroy(_vipItems[vipList.Count + i].gameObject);
+				}
+				// delete unneeded objects from list
+				_vipItems.RemoveRange(vipList.Count, _vipItems.Count - vipList.Count);
+			}
+			else if (_vipItems.Count < vipList.Count)
+			{
+				// instantiate new ones if we have fewer items than VIPs
+				for (int i = 0; i < vipList.Count - _vipItems.Count; i++)
+				{
+					VIPListItem item = Instantiate(
+						vipListItemPrefab,
+						Vector3.zero,
+						Quaternion.identity,
+						questListContainer.transform
+					);
+
+					_vipItems.Add(item);
+				}
+			}
+
+			// update each item
+			for (int i = 0; i < _vipItems.Count; i++)
+			{
+				_vipItems[i].SetData(vipList[i]);
+			}
+		}
+		private void RefreshActivities()
+		{
+			List<MapActivity> activityList = _activeLocation.activities;
 
 			activitiesActions.SetActive(!_activeLocation.IsActivitySlotsFull);
 
-			for(int i = 0; i < _activeLocation.ActivitySlotCount; i++) {
-				ActivityListItem item = Instantiate(
-					activityListItemPrefab,
-					Vector3.zero,
-					Quaternion.identity,
-					container.transform
-				);
-				if (i >= list.Count)
+			if (_activityItems.Count > _activeLocation.ActivitySlotCount)
+			{
+				for (int i = 0; i < _activityItems.Count - _activeLocation.ActivitySlotCount; i++)
+				{
+					Destroy(_activityItems[_activeLocation.ActivitySlotCount + i].gameObject);
+				}
+				// delete unneeded objects from list
+				_activityItems.RemoveRange(activityList.Count, _activityItems.Count - _activeLocation.ActivitySlotCount);
+			}
+			else if (_activityItems.Count < _activeLocation.ActivitySlotCount)
+			{
+				// instantiate new ones if we have fewer items than activities
+				for (int i = 0; i < _activeLocation.ActivitySlotCount - _activityItems.Count; i++)
+				{
+					ActivityListItem item = Instantiate(
+						activityListItemPrefab,
+						Vector3.zero,
+						Quaternion.identity,
+						activitiesListContainer.transform
+					);
+
+					_activityItems.Add(item);
+				}
+			}
+		
+			for(int i = 0; i < _activityItems.Count; i++) {
+				ActivityListItem item = _activityItems[i];
+				if (i >= activityList.Count)
 				{
 					item.DisplayFilled(false);
 				}
 				else
 				{
-					item.SetData(list[i]);
+					item.SetData(activityList[i]);
 				}
-
-				_listItems.Add(item);
 			}
 		}
 
@@ -181,7 +246,7 @@ public class LocationDetailsPanel : LocationDetailItem
 				_activeLocation.AddRandomActivity(type);
 				activitiesTypeShelf.SetActive(false);
 
-				RefreshList(lastTabOpen);
+				RefreshLastTab();
 			}
 		}
 
@@ -201,12 +266,17 @@ public class LocationDetailsPanel : LocationDetailItem
 			}
 			else
 			{
-				RefreshList(lastTabOpen);
+				RefreshLastTab();
 			}
 		}
 
 		private void HandleOnLocationChanged(Dictionary<string, object> data) {
-			RefreshList(lastTabOpen);
+			RefreshLastTab();
+		}
+
+		private void HandleOnVIPLeft(Dictionary<string, object> data)
+		{
+			RefreshLastTab();
 		}
 
 		#endregion

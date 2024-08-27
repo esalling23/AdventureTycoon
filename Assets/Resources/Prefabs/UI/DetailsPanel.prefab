@@ -274,6 +274,7 @@ MonoBehaviour:
   nameText: {fileID: 3969425920235617217}
   descriptionText: {fileID: 3969425918608295418}
   icon: {fileID: 4602026310458919508}
+  vipListItemPrefab: {fileID: 6099158612071739649, guid: 84431b05b03e34b1891011bdc8c88c5d, type: 3}
   activityListItemPrefab: {fileID: 6426276871493616106, guid: 338a1b1cfa7974c4095297c055895979, type: 3}
   lastTabOpen: 0
   activitiesListContainer: {fileID: 7545741692364888197}
@@ -1533,6 +1534,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 7797983158128610782}
+    - target: {fileID: 2085422544013268655, guid: 2e8c8c8219c834f398348c1fd89564eb, type: 3}
+      propertyPath: m_Name
+      value: VIPListItem
+      objectReference: {fileID: 0}
     - target: {fileID: 2311384834981557100, guid: 2e8c8c8219c834f398348c1fd89564eb, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1813,7 +1818,8 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7482017878672570508, guid: 2e8c8c8219c834f398348c1fd89564eb, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 2e8c8c8219c834f398348c1fd89564eb, type: 3}
 --- !u!114 &3195377274154470403 stripped
 MonoBehaviour:
@@ -1831,6 +1837,28 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 665595964005171120, guid: 2e8c8c8219c834f398348c1fd89564eb, type: 3}
   m_PrefabInstance: {fileID: 5536094032870646833}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &5774952760141853342 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2085422544013268655, guid: 2e8c8c8219c834f398348c1fd89564eb, type: 3}
+  m_PrefabInstance: {fileID: 5536094032870646833}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2379623790905027244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5774952760141853342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34949a22408604119a173361312335b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  icon: {fileID: 0}
+  nameText: {fileID: 0}
+  descriptionText: {fileID: 0}
+  healthBar: {fileID: 0}
+  healthRemainingText: {fileID: 0}
 --- !u!1 &7886561221993311852 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2424794312603732573, guid: 2e8c8c8219c834f398348c1fd89564eb, type: 3}

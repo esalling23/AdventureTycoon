@@ -20,6 +20,7 @@ public class MapLocation : MapObject
 		private System.Guid _id = System.Guid.NewGuid();
 		public Vector2Int coordinates;
 		public List<MapActivity> activities = new();
+		public List<MapVIP> vips = new();
 		private int _slotCount = 1;
 		private int _activityRemovesAvailable = 0;
 		private int _activityRollsAvailable = 0;
@@ -75,6 +76,11 @@ public class MapLocation : MapObject
 			}
 
 			return totalAdventurers;
+		}}
+
+		public MapActivity[] Quests { get { 
+			MapActivity[] quests = vips.SelectMany(v => v.MapQuests).ToArray();
+			return quests;
 		}}
 
 		#endregion
