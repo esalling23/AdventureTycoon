@@ -17,6 +17,7 @@ public class DataManager : MonoBehaviour
 		[Header("All possible activities, locations")]
 		[SerializeField] private Activity[] _worldActivityData;
 		[SerializeField] private Location[] _worldLocationData;
+		[SerializeField] private VIP[] _worldVIPData;
 		[SerializeField] private Quest[] _worldQuestData;
 
 		#endregion
@@ -30,6 +31,7 @@ public class DataManager : MonoBehaviour
 		
 		public Activity[] WorldActivities { get { return _worldActivityData; } }
 		public Location[] WorldLocations { get { return _worldLocationData; } }
+		public VIP[] WorldVIPs { get { return _worldVIPData; } }
 		public Quest[] WorldQuests { get { return _worldQuestData; } }
 
 		#endregion
@@ -57,6 +59,7 @@ public class DataManager : MonoBehaviour
 			_locationTypeDatas = data.locationTypeDefaults;
 			_worldActivityData = data.activities;
 			_activityTypeDatas = data.activityTypeDefaults;
+			_worldVIPData = data.vips;
 			_worldQuestData = data.quests;
 		}
 
@@ -105,23 +108,15 @@ public class DataManager : MonoBehaviour
 		public Activity GetRandomActivityData(Activity[] activities, ActivityType type)
 		{
 			Activity[] available = System.Array.FindAll(activities, a => a.type == type);
-			if (available.Length == 0) {
-				available = WorldActivities;
-			}
-			int index = Random.Range(0, available.Length);
-			return GetActivityData(activities, index);
+			return GetRandomActivityData(available);
 		}
 
-		public Activity GetRandomActivityData(Location location)
+		public Activity GetRandomActivityData(Activity[] activities, ActivityType type, Location location)
 		{
-			Activity[] available = System.Array.FindAll(_worldActivityData, a => {
-				return System.Array.IndexOf(a.appearsInLocationTypes, location.type) > -1;
+			Activity[] available = System.Array.FindAll(activities, a => {
+				return System.Array.IndexOf(a.appearsInLocationTypes, location.type) > -1 && a.type == type;
 			});
-			if (available.Length == 0) {
-				available = WorldActivities;
-			}
-			int index = Random.Range(0, available.Length);
-			return GetActivityData(available, index);
+			return GetRandomActivityData(available);
 		}
 
 		public Location GetLocationData(int index) 
@@ -129,28 +124,10 @@ public class DataManager : MonoBehaviour
 			return _worldLocationData[index];
 		}
 
-		public Location GetRandomLocationData()
-		{
-			int index = Random.Range(0, _worldLocationData.Length);
-			return GetLocationData(index);
-		}
-
-		public Location GetRandomLocationData(LocationType type)
-		{
-			Location[] available = System.Array.FindAll(_worldLocationData, loc => loc.type == type);
-			int index = Random.Range(0, available.Length);
-			return GetLocationData(index);
-		}
-
-		public Quest GetQuestData(int index) 
-		{
-			return _worldQuestData[index];
-		}
-
 		public Quest GetRandomQuestData()
 		{
 			int index = Random.Range(0, _worldQuestData.Length);
-			return GetQuestData(index);
+			return _worldQuestData[index];
 		}
 
 		#endregion

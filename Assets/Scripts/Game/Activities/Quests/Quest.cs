@@ -1,24 +1,42 @@
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 [System.Serializable]
 public class Quest : ActivityBase
 {
 	#region Fields
 
-	// 	prereqs: list of activity (quest) Ids that are required before adventurer can attempt them
-	public List<System.Guid> preReqIds = new();
-	// level: int representing min level an adventurer must be to attempt them
+	/// <summary>
+	/// List of Quest IActivity IDs required before this quest is available to be done by Adventurers
+	/// </summary>
+	public string[] preReqIds;
+	/// <summary>
+	/// Minimum Adventurer level required to be available
+	/// </summary>
 	public int minLevel = 1;
+	/// <summary>
+	/// Caps the level Adventurers can be to attempt this quest
+	/// </summary>
 	public int maxLevel = 5;
+
+	/// <summary>
+	/// Median experience gained from Adventurer successful attempt. 
+	/// Actual experience calculated using this value, the minLevel & maxLevel, and the Adventurer Level
+	/// </summary>
 	public int baseExperience = 100;
-	// reward: int representing gold adventurers earn from success
+
 	public int reward = 100;
-	// items: List of items ?
 
-
+	/// <summary>
+	/// Minimum success probability used for determining success for Adventurers whose level matches the minLevel for this Quest
+	/// </summary>
 	private float _minSuccessProbability = 0.25f;
+	/// <summary>
+	/// Minimum success probability used for determining success for Adventurers whose level matches the maxLevel for this Quest
+	/// </summary>
 	private float _maxSuccessProbability = 0.99f;
+
 	#endregion
 
 	#region Methods
@@ -94,6 +112,32 @@ public class Quest : ActivityBase
 		}
 
 		return isSuccess;
+	}
+
+	public bool IsAvailable(Adventurer adv)
+	{
+		if (minLevel > adv.Level) return false;
+		if (maxLevel < adv.Level) return false;
+
+		List<System.Guid> prereqs = preReqIds.Select(id => System.Guid.Parse(id)).ToList();
+		foreach (System.Guid id in prereqs)
+		{
+			// find the map activity that uses this Activity ID
+			Map.Instance.FindMapActivityWithDataID(id, out MapActivity mapActivity);
+
+			if (mapActivity == null)
+			{
+				// This prereq isn't on the map! Auto-false
+				return false;
+			}
+
+			if (!adv.HistoryLog[mapActivity.locationParent.Id].activityAttempts[mapActivity.Id].hasCompleted)
+			{
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	#endregion

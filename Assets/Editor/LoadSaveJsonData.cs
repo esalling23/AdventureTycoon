@@ -21,6 +21,7 @@ public class LoadSaveJsonData : Editor
 				manager.LocationTypeDefaults,
 				manager.WorldActivities,
 				manager.ActivityTypeDefaults,
+				manager.WorldVIPs,
 				manager.WorldQuests
 			);
 			string jsonData = JsonUtility.ToJson(data);

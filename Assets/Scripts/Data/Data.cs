@@ -6,6 +6,7 @@ public class Data
 	public LocationTypeData[] locationTypeDefaults;
 	public Activity[] activities;
 	public ActivityTypeData[] activityTypeDefaults;
+	public VIP[] vips;
 	public Quest[] quests;
 
 	public Data(
@@ -13,6 +14,7 @@ public class Data
 		LocationTypeData[] locTypeDefaults,
 		Activity[] acts,
 		ActivityTypeData[] actTypeDefaults,
+		VIP[] vips,
 		Quest[] quests
 	)
 	{
@@ -20,6 +22,7 @@ public class Data
 		locationTypeDefaults = locTypeDefaults;
 		activities = acts;
 		activityTypeDefaults = actTypeDefaults;
+		this.vips = vips;
 		this.quests = quests;
 	}
 }
