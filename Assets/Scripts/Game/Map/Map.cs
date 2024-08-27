@@ -115,7 +115,7 @@ public class Map : MonoBehaviour
 				if (Input.GetMouseButtonDown(0))
 				{
 					// Debug.Log($"Clicked on cell coordinates ({cell.Coordinates.x}, {cell.Coordinates.y})");
-					switch(_manager.Mode) {
+					switch(GameManager.Instance.Mode) {
 						case GameMode.Build:
 							if (_activeLocationToBuild != null && !cell.Location) {
 								PlaceLocation(_activeLocationToBuild, cell);
@@ -229,7 +229,7 @@ public class Map : MonoBehaviour
 
 	public void SetLocationToBuild(Location location) 
 	{
-		_manager.SetMode(GameMode.Build);
+		GameManager.Instance.SetMode(GameMode.Build);
 		_activeLocationToBuild = location;
 	}
 	
@@ -258,7 +258,7 @@ public class Map : MonoBehaviour
 			_mapLocationDataIdDict.Add(locationData.Id, newPlacement);
 		}
 		_activeLocationToBuild = null;
-		_manager.SetMode(GameMode.Run);
+		GameManager.Instance.SetMode(GameMode.Run);
 	}
 
 	private MapLocation CreateLocationObject(Location locationData, GridCell cell) 
@@ -271,7 +271,7 @@ public class Map : MonoBehaviour
 		);
 
 		location.SetData(locationData);
-		location.SetSpriteSizeByWidth(cellSize);
+		location.SetSpriteSizeByWidth(cellSize / 2);
 
 		return location; 
 	}
@@ -286,7 +286,7 @@ public class Map : MonoBehaviour
 		);
 
 		location.SetData(locationData);
-		location.SetSpriteSizeByWidth(cellSize);
+		location.SetSpriteSizeByWidth(cellSize / 2);
 
 		return location;
 	}
@@ -315,7 +315,7 @@ public class Map : MonoBehaviour
 			gridSize.x,
 			gridSize.y, 
 			cellSize, 
-			new Vector2(-gridSize.x * 5, -gridSize.y * 5),
+			new Vector2(-gridSize.x * (cellSize / 2), -gridSize.y * (cellSize / 2)),
 			(Grid<GridCell> g, int x, int y) => new GridCell(new Vector2Int(x, y), _terrainTileSprites)
 		);
 
