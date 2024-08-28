@@ -175,7 +175,12 @@ public class MapLocation : MapObject
 			}
     }
 
-		public Activity GetRandomActivity(ActivityType type)
+		/// <summary>
+		/// Gets an unused random activity for this location based on ActivityType
+		/// </summary>
+		/// <param name="type"></param>
+		/// <returns></returns>
+		public Activity GetNewRandomActivity(ActivityType type)
 		{
 			// Debug.Log($"Adding Activity to Location Type {type}");
 			Activity[] unusedActivities = GetUnusedActivities();
@@ -212,7 +217,7 @@ public class MapLocation : MapObject
 			// Debug.Log($"Adding Activity to Location Type {type}");
 			Activity[] unusedActivities = GetUnusedActivities();
 
-			Activity randActivity = DataManager.Instance.GetRandomActivityData(unusedActivities, type);
+			Activity randActivity = DataManager.Instance.GetRandomActivityData(unusedActivities, type, LocationData);
 
 			return CreateMapActivity(randActivity);
 		}
