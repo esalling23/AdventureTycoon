@@ -80,6 +80,9 @@ public class VIPManager : MonoBehaviour
 			newVIP.Init(_currentAvailableVIP, location);
 			location.vips.Add(newVIP);
 
+			// select cell of this location
+			Map.Instance.SelectCell(location.cell);
+
 			EventManager.TriggerEvent(EventName.OnLocationChanged, null);
 
 			_vipDisplay.Close();

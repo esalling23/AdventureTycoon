@@ -187,7 +187,7 @@ public class Map : MonoBehaviour
 		}
 	}
 
-	private void SelectCell(GridCell cell) {
+	public void SelectCell(GridCell cell) {
 		Vector3 centeredCellPos = _mapGrid.GetCenteredCellPosition(cell.Coordinates.x, cell.Coordinates.y);
 		
 		_selectedIndicator.transform.position = centeredCellPos;
