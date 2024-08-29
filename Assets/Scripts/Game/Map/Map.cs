@@ -270,7 +270,7 @@ public class Map : MonoBehaviour
 			transform
 		);
 
-		location.SetData(locationData);
+		location.SetData(locationData, cell);
 		location.SetSpriteSizeByWidth(cellSize / 2);
 
 		return location; 

@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
 using System.Linq;
 
 public enum ActivityRewardType
@@ -104,8 +103,9 @@ public class MapLocation : MapObject
 			return "Map Location ID " + _id.ToString();
 		}
 
-		public void SetData(Location data) {
+		public void SetData(Location data, GridCell cell) {
 			_locationData = data;
+			this.cell = cell;
 			
 			LocationTypeData defaultData = DataManager.Instance.GetLocationTypeData(data.type);
 
@@ -119,23 +119,6 @@ public class MapLocation : MapObject
 			_slotCount = data.activitySlotCount > 0 ? data.activitySlotCount : defaultData.baseActivitySlots;
 		
 			_hud.SetData(this);
-		}
-
-		public MapActivity[] GetAvailableActivities(Adventurer adventurer)
-		{
-			return activities.FindAll(activity => {
-				// Don't repeat quests
-				if (activity.Type == ActivityType.Quest && activity.AttemptLog.ContainsKey(adventurer.Id)) { return false; }
-				
-				// Can only use activities the adventurer has gold to use
-				if (activity.data.CostToUse < adventurer.Gold) {
-					if (!adventurer.NeedsRest && activity.Type == ActivityType.Rest) { return false; }
-					
-					return true;
-				};
-
-				return false;
-			}).ToArray();
 		}
 
 		private Activity[] GetUnusedActivities()
@@ -268,6 +251,21 @@ public class MapLocation : MapObject
 			});
 		}
 
+		public void AddActivityReroll()
+		{
+			_activityRollsAvailable++;
+		}
+		public void AddActivitySlot()
+		{
+			_slotCount++;
+		}
+
+		public void AddActivityRemove()
+		{
+			_activityRemovesAvailable++;
+		}
+
+		#region Event Handlers
 
 		private void HandleOnActivityChanged(Dictionary<string, object> data)
 		{
@@ -284,15 +282,16 @@ public class MapLocation : MapObject
 			// Determine reward type based on weighted probability
 			int chance = Random.Range(1, 101);
 
-			if (chance <= 50) _slotCount++;
-			else if (chance <= 80) _activityRollsAvailable++;
-			else _activityRemovesAvailable++;
+			if (chance <= 50) AddActivitySlot();
+			else if (chance <= 80) AddActivityReroll();
+			else AddActivityRemove();
 
 			EventManager.TriggerEvent(EventName.OnLocationChanged, new Dictionary<string, object>() {});
 
 			MessageManager.Instance.ShowMessage($"Location Rewards Available at {_locationData.name}");
 			// to do - on click of message, pan to location & select
 		}
-
+		
+		#endregion
 		#endregion
 }
