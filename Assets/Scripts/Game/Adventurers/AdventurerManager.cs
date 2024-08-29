@@ -40,6 +40,7 @@ public class AdventurerManager : MonoBehaviour
 			}
 		}
 		public int TotalAdventurers { get { return _adventurersOnMap.Count; } }
+		public int IdleAdventurersCount { get { return _adventurersOnMap.Where(a => a.IsIdle).ToList().Count; } }
 
 		#endregion
 
@@ -78,9 +79,7 @@ public class AdventurerManager : MonoBehaviour
 				CreateAdventurer();
 			}
 			EventManager.TriggerEvent(EventName.OnAdventurerGroupAdded, null);
-			EventManager.TriggerEvent(EventName.OnMessageBroadcast, new Dictionary<string, object>() {
-				{ "message", $"{count} Adventurers Joined Your Map!" }
-			});
+			MessageManager.Instance.ShowMessage($"{count} Adventurers Joined Your Map!");
 		}
 
 		public void CreateAdventurer() 
@@ -114,6 +113,7 @@ public class AdventurerManager : MonoBehaviour
 
 		#region EventHandlers
 
+
 		private void HandleOnDayChanged(Dictionary<string, object> _data = null)
 		{
 			if (AverageHappiness >= minHappinessForGroup)
@@ -130,9 +130,6 @@ public class AdventurerManager : MonoBehaviour
 			}
 			else
 			{
-				EventManager.TriggerEvent(EventName.OnMessageBroadcast, new Dictionary<string, object>() {
-					{ "message", "Happiness Low - No New Adventurers" }
-				});
 			}
 		}
 
