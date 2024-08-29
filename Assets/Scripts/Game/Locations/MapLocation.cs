@@ -67,13 +67,7 @@ public class MapLocation : MapObject
 		}}
 
 		public int TotalAdventurerCount { get {
-			int totalAdventurers = 0;
-
-			foreach (MapActivity activity in activities)
-			{
-				totalAdventurers += activity.adventurersPresent.Count;
-			}
-
+			int totalAdventurers = activities.Sum(activity => activity.adventurersPresent.Count);
 			return totalAdventurers;
 		}}
 
