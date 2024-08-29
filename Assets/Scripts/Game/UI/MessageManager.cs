@@ -1,6 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public class Message : UniqueObject
+{
+	
+
+
+}
+
 public class MessageManager : MonoBehaviour
 {
     #region Fields
@@ -8,6 +15,8 @@ public class MessageManager : MonoBehaviour
 		private static MessageManager _instance;
 
 		[SerializeField] private MessagePopup _messageObj;
+
+		private List<string> _allMessages = new();
 		private bool _isMessageActive = false;
 
 		#endregion
@@ -34,43 +43,21 @@ public class MessageManager : MonoBehaviour
         }
     }
 
-		void Start()
-		{
-			EventManager.StartListening(EventName.OnMessageBroadcast, HandleOnMessageBroadcast);
-		}
-		void OnDestroy()
-		{
-			EventManager.StopListening(EventName.OnMessageBroadcast, HandleOnMessageBroadcast);
-		}
-
 		public void CloseMessage(MessagePopup _message)
 		{
 			// future work - close only this message if multiple showing
 			_isMessageActive = false;
 		}
 
-
-		#region EventHandlers
-
-		private void HandleOnMessageBroadcast(Dictionary<string, object> data)
+		public void ShowMessage(string message)
 		{
-			if (data.TryGetValue("message", out object message))
-			{
-				// Future work may include more than one message? 
-				// Instantiate(
-				// 	_messageObj.gameObject,
-				// 	Vector3.zero,
-				// 	Quaternion.identity,
-				// 	gameObject.transform
-				// );
+			Debug.Log($"Message Displayed: {message.ToString()}");
+			_allMessages.Add(message.ToString());
 
-				// implementing a single-at-a-time message for now
-				_messageObj.ShowMessage(message.ToString());
-				_isMessageActive = true;
-			}
+			// implementing a single-at-a-time message for now
+			_messageObj.ShowMessage(message.ToString());
+			_isMessageActive = true;
 		}
-
-		#endregion
 
 		#endregion
 }

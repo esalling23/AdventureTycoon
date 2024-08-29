@@ -12,7 +12,6 @@ public enum EventName
 	OnDayChanged,
 	OnBuildOptionRolled,
 	OnRollCostChanged,
-	OnMessageBroadcast
 }
 
 
