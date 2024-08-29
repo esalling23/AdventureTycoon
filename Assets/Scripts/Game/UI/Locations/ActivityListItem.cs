@@ -40,6 +40,16 @@ public class ActivityListItem : MonoBehaviour
 
 		#region Methods
 
+		void Start()
+		{
+			EventManager.StartListening(EventName.OnActivityChanged, HandleOnActivityChanged);
+		}
+
+		void OnDestroy()
+		{
+			EventManager.StopListening(EventName.OnActivityChanged, HandleOnActivityChanged);
+		}
+
     public void SetData(MapActivity activity)
     {
 			_mapActivity = activity;
@@ -95,9 +105,21 @@ public class ActivityListItem : MonoBehaviour
     public void HandleClickRemove()
     {
 			_mapActivity.RemoveSelf();
-
-			EventManager.TriggerEvent(EventName.OnActivityChanged, null);
     }
+
+		private void HandleOnActivityChanged(Dictionary<string, object> data) {
+			if (_mapActivity == null) return;
+
+			if (data.TryGetValue("event", out object activityEvent) && data.TryGetValue("id", out object mapActivityId))
+			{
+				System.Enum.TryParse(activityEvent.ToString(), out ActivityChangeEvent evt);
+				
+				if (evt != ActivityChangeEvent.Update) return;
+				if (_mapActivity.Id.CompareTo(mapActivityId) == 0) return;
+				
+				SetData(_mapActivity);
+			}
+		}
 
 		#endregion
 }

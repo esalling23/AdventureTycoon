@@ -135,36 +135,51 @@ public class LocationDetailsPanel : LocationDetailItem
 			}
 		}
 
+		/// <summary>
+		/// Updates a list of game objects in the scene from a list of data it should reflect
+		/// </summary>
+		/// <param name="objectList">The list of game objects</param>
+		/// <param name="dataList">The list of data</param>
+		/// <typeparam name="T">The type of data in the dataList</typeparam>
+		/// <returns></returns>
+		public List<ObjectType> UpdateGameObjectListFromData<ObjectType, DataType>(
+			List<ObjectType> objectList, 
+			List<DataType> dataList, 
+			ObjectType prefab,
+			Transform parentContainer
+		) where ObjectType : MonoBehaviour
+		{
+			while (objectList.Count > dataList.Count)
+			{
+				Destroy(objectList.Last().gameObject);
+				objectList.RemoveAt(objectList.Count - 1);
+			}
+
+			while (objectList.Count < dataList.Count)
+			{
+				ObjectType item = Instantiate(
+					prefab,
+					Vector3.zero,
+					Quaternion.identity,
+					parentContainer
+				);
+
+				objectList.Add(item);
+			}
+			return objectList;
+		}
+
 		private void RefreshVIPs()
 		{
 			List<MapVIP> vipList = _activeLocation.vips;
 
-			if (_vipItems.Count > vipList.Count)
-			{
-				for (int i = 0; i < _vipItems.Count - vipList.Count; i++)
-				{
-					Destroy(_vipItems[vipList.Count + i].gameObject);
-				}
-				// delete unneeded objects from list
-				_vipItems.RemoveRange(vipList.Count, _vipItems.Count - vipList.Count);
-			}
-			else if (_vipItems.Count < vipList.Count)
-			{
-				// instantiate new ones if we have fewer items than VIPs
-				for (int i = 0; i < vipList.Count - _vipItems.Count; i++)
-				{
-					VIPListItem item = Instantiate(
-						vipListItemPrefab,
-						Vector3.zero,
-						Quaternion.identity,
-						questListContainer.transform
-					);
+			_vipItems = UpdateGameObjectListFromData(
+				_vipItems, 
+				vipList,
+				vipListItemPrefab,
+				questListContainer.transform
+			);
 
-					_vipItems.Add(item);
-				}
-			}
-
-			// update each item
 			for (int i = 0; i < _vipItems.Count; i++)
 			{
 				_vipItems[i].SetData(vipList[i]);
@@ -176,19 +191,16 @@ public class LocationDetailsPanel : LocationDetailItem
 
 			activitiesActions.SetActive(!_activeLocation.IsActivitySlotsFull);
 
-			if (_activityItems.Count > _activeLocation.ActivitySlotCount)
-			{
-				for (int i = 0; i < _activityItems.Count - _activeLocation.ActivitySlotCount; i++)
-				{
-					Destroy(_activityItems[_activeLocation.ActivitySlotCount + i].gameObject);
-				}
-				// delete unneeded objects from list
-				_activityItems.RemoveRange(activityList.Count, _activityItems.Count - _activeLocation.ActivitySlotCount);
-			}
-			else if (_activityItems.Count < _activeLocation.ActivitySlotCount)
-			{
-				// instantiate new ones if we have fewer items than activities
-				for (int i = 0; i < _activeLocation.ActivitySlotCount - _activityItems.Count; i++)
+			_activityItems = UpdateGameObjectListFromData(
+				_activityItems, 
+				activityList,
+				activityListItemPrefab,
+				activitiesListContainer.transform
+			);
+		
+			for(int i = 0; i < _activeLocation.ActivitySlotCount; i++) {
+				// Add Empty Slots
+				if (i >= _activityItems.Count)
 				{
 					ActivityListItem item = Instantiate(
 						activityListItemPrefab,
@@ -198,18 +210,11 @@ public class LocationDetailsPanel : LocationDetailItem
 					);
 
 					_activityItems.Add(item);
-				}
-			}
-		
-			for(int i = 0; i < _activityItems.Count; i++) {
-				ActivityListItem item = _activityItems[i];
-				if (i >= activityList.Count)
-				{
 					item.DisplayFilled(false);
 				}
 				else
 				{
-					item.SetData(activityList[i]);
+					_activityItems[i].SetData(activityList[i]);
 				}
 			}
 		}
@@ -251,21 +256,15 @@ public class LocationDetailsPanel : LocationDetailItem
 		}
 
 		private void HandleOnActivityChanged(Dictionary<string, object> data) {
-			if (data.TryGetValue("type", out object activityType))
+			if (_activeLocation == null) return;
+
+			if (data.TryGetValue("event", out object activityEvent) && data.TryGetValue("id", out object mapActivityId))
 			{
-				System.Enum.TryParse(activityType.ToString(), out ActivityType type);
+				System.Enum.TryParse(activityEvent.ToString(), out ActivityChangeEvent evt);
 				
-				if (type == ActivityType.Quest)
-				{
-					RefreshList(TabType.Quests);
-				}
-				else
-				{
-					RefreshList(TabType.Activities);
-				}
-			}
-			else
-			{
+				// Update is handled by ActivityListItem
+				if (evt == ActivityChangeEvent.Update) return;
+
 				RefreshLastTab();
 			}
 		}

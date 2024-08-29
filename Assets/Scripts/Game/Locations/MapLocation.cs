@@ -226,10 +226,12 @@ public class MapLocation : MapObject
 		{
 			if (IsActivitySlotsFull) return null;
 			MapActivity activeActivity = new(activity, this);
+
 			activities.Add(activeActivity);
 
 			EventManager.TriggerEvent(EventName.OnActivityChanged, new Dictionary<string, object>() {
-				{ "type", activeActivity.Type }
+				{ "id", activeActivity.Id },
+				{ "event", ActivityChangeEvent.Create }
 			});
 
 			return activeActivity;
@@ -248,18 +250,24 @@ public class MapLocation : MapObject
 			activities.Add(activeActivity);
 
 			EventManager.TriggerEvent(EventName.OnActivityChanged, new Dictionary<string, object>() {
-				{ "type", ActivityType.Quest }
+				{ "id", activeActivity.Id },
+				{ "event", ActivityChangeEvent.Create }
 			});
 
 			return activeActivity;
 		}
 
-		public void RemoveActivity(IActivity activity) {
+		public void RemoveActivity(System.Guid mapActivityId) {
 			Debug.Log("Removing Map Location Activity");
-			activities = activities.Where(act => act.Id != activity.Id).ToList();
+			MapActivity mapActivity = activities.First(m => m.Id == mapActivityId);
+			activities.Remove(mapActivity);
 
-			EventManager.TriggerEvent(EventName.OnActivityChanged, null);
+			EventManager.TriggerEvent(EventName.OnActivityChanged, new Dictionary<string, object>() {
+				{ "id", mapActivity.Id },
+				{ "event", ActivityChangeEvent.Delete }
+			});
 		}
+
 
 		private void HandleOnActivityChanged(Dictionary<string, object> data)
 		{

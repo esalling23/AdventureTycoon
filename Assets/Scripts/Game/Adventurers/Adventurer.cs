@@ -146,7 +146,8 @@ public class Adventurer : MonoBehaviour
 
 					_currentActivity.adventurersPresent.Add(this);
 					EventManager.TriggerEvent(EventName.OnActivityChanged, new Dictionary<string, object>() {
-						{ "type", _currentActivity.Type }
+						{ "id", _currentActivity.Id },
+						{ "event", ActivityChangeEvent.Update },
 					});
 
 					// Adventurer does the activity
@@ -155,7 +156,8 @@ public class Adventurer : MonoBehaviour
 					_currentActivity.adventurersPresent.Remove(this);
 
 					EventManager.TriggerEvent(EventName.OnActivityChanged, new Dictionary<string, object>() {
-						{ "type", _currentActivity.Type }
+						{ "id", _currentActivity.Id },
+						{ "event", ActivityChangeEvent.Update },
 					});
 				}
 
@@ -400,7 +402,7 @@ public class Adventurer : MonoBehaviour
 
 		private void HandleOnActivityChanged(Dictionary<string, object> msg)
 		{
-			// Attempt loop
+			// To do - delay this a bit
 			if (_isIdle)
 			{
 				Loop();

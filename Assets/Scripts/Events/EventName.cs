@@ -15,3 +15,11 @@ public enum EventName
 	OnRollCostChanged,
 	OnMessageBroadcast
 }
+
+
+public enum ActivityChangeEvent
+{
+	Update,
+	Create,
+	Delete
+}

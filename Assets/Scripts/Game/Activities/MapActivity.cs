@@ -43,7 +43,7 @@ public class MapActivity : UniqueObject
 	}
 	public void RemoveSelf()
 	{
-		locationParent.RemoveActivity(data);
+		locationParent.RemoveActivity(Id);
 	}
 
 	public MapActivity(IActivity activity, MapLocation mapLocation) 
