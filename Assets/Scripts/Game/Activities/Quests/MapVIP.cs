@@ -56,18 +56,29 @@ public class MapVIP : MonoBehaviour
 
 		void HandleOnDayChanged(Dictionary<string, object> data)
 		{			
+			if (_vip == null) return;
+
 			_age++;
 
 			if (_age >= _vip.lifetime)
 			{
-				// kick out adventurers?
-				EventManager.TriggerEvent(EventName.OnVIPLeft, new Dictionary<string, object>() {
-					{ "vipId", Id },
-					{ "activities", _mapQuests }
-				});
-
 				MessageManager.Instance.ShowMessage($"{_vip.name} has left the map");
 				
+				// Kick out adventurers
+				foreach (MapActivity quest in _mapQuests)
+				{
+					while (quest.adventurersPresent.Count > 0)
+					{
+						quest.adventurersPresent.Last().KickOut();
+					}
+				}
+
+				_currentLocation.vips.Remove(this);
+
+				EventManager.TriggerEvent(EventName.OnActivityChanged, new Dictionary<string, object> {
+					{ "event", ActivityChangeEvent.Delete }
+				});
+
 				Destroy(this);
 			}
 		}

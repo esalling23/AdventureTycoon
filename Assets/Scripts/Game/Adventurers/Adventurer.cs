@@ -58,14 +58,12 @@ public class Adventurer : MonoBehaviour
 			_renderer = GetComponent<Renderer>();
 			EventManager.StartListening(EventName.OnActivityChanged, HandleOnActivityChanged);
 			EventManager.StartListening(EventName.OnDayChanged, HandleOnDayChanged);
-			EventManager.StartListening(EventName.OnVIPLeft, HandleOnVIPLeft);
 		}
 
 		public void OnDestroy()
 		{
 			EventManager.StopListening(EventName.OnActivityChanged, HandleOnActivityChanged);
 			EventManager.StopListening(EventName.OnDayChanged, HandleOnDayChanged);
-			EventManager.StopListening(EventName.OnVIPLeft, HandleOnVIPLeft);
 		}
 
     public void Init()
@@ -100,9 +98,9 @@ public class Adventurer : MonoBehaviour
 			}
 		}
 
-		public void Loop()
+		public void Loop(float delay = 0f)
 		{
-			_activeCoroutine = StartCoroutine(LoopCoroutine());
+			_activeCoroutine = StartCoroutine(LoopCoroutine(delay));
 		}
 
 		/// <summary>
@@ -114,14 +112,16 @@ public class Adventurer : MonoBehaviour
 			ClearCoroutine();
 			_currentActivity.adventurersPresent.Remove(this);
 			_currentActivity = null;
-			Loop();
+			Loop(3f);
 		}
 
-		private IEnumerator LoopCoroutine()
+		private IEnumerator LoopCoroutine(float delay = 0f)
 		{
 			while (true)
 			{
 				_currentActivity = null;
+
+				if (delay > 0) yield return new WaitForSeconds(delay);
 
 				// If no location - find one
 				if (!_currentLocation)
@@ -405,25 +405,13 @@ public class Adventurer : MonoBehaviour
 			// To do - delay this a bit
 			if (_isIdle)
 			{
-				Loop();
+				Loop(3f);
 			}
 		}
 
 		private void HandleOnDayChanged(Dictionary<string, object> msg)
 		{
 			_happiness--;
-		}
-
-		private void HandleOnVIPLeft(Dictionary<string, object> data)
-		{
-			if (data.TryGetValue("quests", out object quests))
-			{
-				// Kick the adventurer out of current activity is one of this VIP's quests
-				if (((List<MapActivity>) quests).First(mapQuest => mapQuest.Id == _currentActivity.Id) != null)
-				{
-					KickOut();
-				}
-			}
 		}
 
 		#endregion

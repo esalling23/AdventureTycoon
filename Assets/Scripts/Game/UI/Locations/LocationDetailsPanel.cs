@@ -55,7 +55,6 @@ public class LocationDetailsPanel : LocationDetailItem
 			EventManager.StartListening(EventName.OnActivityChanged, HandleOnActivityChanged);
 			EventManager.StartListening(EventName.OnActivityTypeSelected, HandleOnActivityTypeSelected);
 			EventManager.StartListening(EventName.OnLocationChanged, HandleOnLocationChanged);
-			EventManager.StartListening(EventName.OnVIPLeft, HandleOnVIPLeft);
     }
 
 		void OnDestroy()
@@ -63,7 +62,6 @@ public class LocationDetailsPanel : LocationDetailItem
 			EventManager.StopListening(EventName.OnActivityChanged, HandleOnActivityChanged);
 			EventManager.StopListening(EventName.OnActivityTypeSelected, HandleOnActivityTypeSelected);
 			EventManager.StopListening(EventName.OnLocationChanged, HandleOnLocationChanged);
-			EventManager.StopListening(EventName.OnVIPLeft, HandleOnVIPLeft);
     }
 
 		private void SetupActivitiesShelf()
@@ -221,6 +219,8 @@ public class LocationDetailsPanel : LocationDetailItem
 
 		public void ToggleTab(TabType type)
 		{
+			RefreshList(type);
+			
 			if (type == TabType.Activities)
 			{
 				questTab.SetSelected(false);
@@ -258,7 +258,7 @@ public class LocationDetailsPanel : LocationDetailItem
 		private void HandleOnActivityChanged(Dictionary<string, object> data) {
 			if (_activeLocation == null) return;
 
-			if (data.TryGetValue("event", out object activityEvent) && data.TryGetValue("id", out object mapActivityId))
+			if (data.TryGetValue("event", out object activityEvent))
 			{
 				System.Enum.TryParse(activityEvent.ToString(), out ActivityChangeEvent evt);
 				
@@ -270,11 +270,6 @@ public class LocationDetailsPanel : LocationDetailItem
 		}
 
 		private void HandleOnLocationChanged(Dictionary<string, object> data) {
-			RefreshLastTab();
-		}
-
-		private void HandleOnVIPLeft(Dictionary<string, object> data)
-		{
 			RefreshLastTab();
 		}
 

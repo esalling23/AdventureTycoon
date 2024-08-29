@@ -1,4 +1,4 @@
-using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 
 // An activity that is in a location on the map RIGHT NOW
@@ -32,18 +32,24 @@ public class MapActivity : UniqueObject
 
 	public void Reroll()
 	{
-		data = locationParent.GetRandomActivity(data.Type);
+		data = locationParent.GetNewRandomActivity(data.Type);
 		_attemptLog = new();
-
-		foreach (Adventurer adventurer in adventurersPresent)
-		{
-			adventurer.KickOut();
-		}
-		adventurersPresent.RemoveAll(a => a);
+		KickOutAll();
 	}
 	public void RemoveSelf()
 	{
 		locationParent.RemoveActivity(Id);
+		KickOutAll();
+	}
+
+	public void KickOutAll()
+	{
+		while (adventurersPresent.Count > 0)
+		{
+			adventurersPresent.First().KickOut();
+		}
+		
+		adventurersPresent = new();
 	}
 
 	public MapActivity(IActivity activity, MapLocation mapLocation) 

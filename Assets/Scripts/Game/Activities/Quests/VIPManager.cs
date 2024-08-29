@@ -11,7 +11,8 @@ public class VIPManager : MonoBehaviour
 		private static VIPManager _instance;
 
 		[SerializeField] private MapVIP _mapVIPPrefab;
-		private int _lastVIPDay = 1;
+		private int _lastVIPDay = 0;
+		public int vipSpawnRate = 5;
 		
 		private List<VIP> unusedVIPs = new();
 
@@ -94,12 +95,14 @@ public class VIPManager : MonoBehaviour
 
 		private void HandleOnDayChanged(Dictionary<string, object> _data = null)
 		{
-			if (GameManager.Instance.CurrentDay - _lastVIPDay < 5) return;
+			if (_currentAvailableVIP != null) return;
+			if (GameManager.Instance.CurrentDay - _lastVIPDay <= vipSpawnRate) return;
 			if (unusedVIPs.Count == 0) return;
 
 			// Randomly spawn VIP if it's been long enough since the last one
+			// Always spawn at the first spawn rate matching day
 			int rand = Random.Range(0, 101);
-			if (rand < 50)
+			if (rand < 50 || GameManager.Instance.CurrentDay == vipSpawnRate)
 			{
 				_lastVIPDay = GameManager.Instance.CurrentDay;
 				CreateVIP();
